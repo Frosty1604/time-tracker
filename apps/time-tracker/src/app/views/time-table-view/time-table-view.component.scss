@@ -1,0 +1,10 @@
+table {
+  width: 100%;
+}
+
+mat-form-field.time-field {
+  width: 70px;
+  & + & {
+    margin-left: 1em;
+  }
+}

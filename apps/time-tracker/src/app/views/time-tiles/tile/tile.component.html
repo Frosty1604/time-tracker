@@ -1,0 +1,10 @@
+<div *ngIf="data$ | async as data"
+  class="relative block rounded-xl border border-gray-100 p-4 shadow-xl bg-white"
+>
+  <div class="mt-2 text-gray-500 sm:pr-8">
+    <mat-icon>{{ data.icon }}</mat-icon>
+
+    <h5 class="mt-2 text-xl font-bold text-gray-900">{{ data.title }}</h5>
+    <p class="font-medium text-lg">{{ data.value }}</p>
+  </div>
+</div>
