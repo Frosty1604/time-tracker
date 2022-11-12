@@ -1,6 +1,6 @@
 <table [dataSource]="dataSource" mat-table>
   <ng-container matColumnDef="date">
-    <th *matHeaderCellDef mat-header-cell>Day</th>
+    <th *matHeaderCellDef mat-header-cell>Date</th>
     <td *matCellDef="let element" mat-cell>
       <ng-container *ngIf="element.edit; else dateField">
         <mat-form-field appearance="standard">
@@ -9,8 +9,10 @@
             name="date"
             [matDatepicker]="picker"
             matInput
+            [disabled]="element.value.holiday"
           />
           <mat-datepicker-toggle
+            [disabled]="element.value.holiday"
             matSuffix
             [for]="picker"
           ></mat-datepicker-toggle>
@@ -35,9 +37,10 @@
             (ngModelChange)="startTimeChanged($event, element.value)"
             [(ngModel)]="element.startString"
             name="start"
+            [disabled]="element.value.holiday"
           />
         </mat-form-field>
-        <mat-form-field appearance="standard" class="time-field">
+        <mat-form-field appearance="standard" class="time-field" >
           <mat-label>End</mat-label>
           <input
             type="time"
@@ -46,11 +49,14 @@
             (ngModelChange)="endTimeChanged($event, element.value)"
             [(ngModel)]="element.endString"
             name="end"
+            [disabled]="element.value.holiday"
           />
         </mat-form-field>
       </ng-container>
       <ng-template #timeField>
-        {{ element.value.duration | time }}
+        <ng-container *ngIf="!element.value.holiday; else dayOff">
+          {{ element.value.duration | time }}
+        </ng-container>
       </ng-template>
     </td>
   </ng-container>
@@ -59,7 +65,7 @@
     <td *matCellDef="let element" mat-cell>
       <ng-container *ngIf="element.edit; else pauseField">
         <mat-form-field appearance="standard">
-          <mat-select [(ngModel)]="element.value.pause.minutes" name="pause">
+          <mat-select [(ngModel)]="element.value.pause.minutes" name="pause" [disabled]="element.value.holiday">
             <mat-option
               [value]="pauseTime"
               *ngFor="let pauseTime of pauseOptions"
@@ -69,9 +75,18 @@
         </mat-form-field>
       </ng-container>
       <ng-template #pauseField>
-        {{ element.value.pause | time }}
+        <ng-container *ngIf="!element.value.holiday; else dayOff">
+          {{ element.value.pause | time }}
+        </ng-container>
       </ng-template>
     </td>
+  </ng-container>
+  <ng-container matColumnDef="real">
+    <th *matHeaderCellDef mat-header-cell>Real</th>
+    <td *matCellDef="let element" mat-cell>
+    <ng-container *ngIf="!element.value.holiday; else dayOff">
+      {{ realWorkTime(element.value) }}
+    </ng-container>
   </ng-container>
   <ng-container matColumnDef="holiday">
     <th *matHeaderCellDef mat-header-cell>Holiday</th>
@@ -112,3 +127,4 @@
   <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
   <tr *matRowDef="let row; columns: displayedColumns" mat-row></tr>
 </table>
+<ng-template #dayOff>-</ng-template>

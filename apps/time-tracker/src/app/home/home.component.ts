@@ -4,6 +4,7 @@ import { TimeTableViewComponentModule } from '../views/time-table-view/time-tabl
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { TimeTilesComponent } from '../views/time-tiles/time-tiles.component';
+import { CalendarViewComponent } from '../views/calendar-view/calendar-view.component';
 
 @Component({
   selector: 'tt-home',
@@ -14,6 +15,7 @@ import { TimeTilesComponent } from '../views/time-tiles/time-tiles.component';
     MatIconModule,
     MatButtonModule,
     TimeTilesComponent,
+    CalendarViewComponent,
   ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],

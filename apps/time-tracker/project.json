@@ -1,7 +1,7 @@
 {
   "projectType": "application",
   "sourceRoot": "apps/time-tracker/src",
-  "prefix": "time-tracker",
+  "prefix": "tt",
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:browser",

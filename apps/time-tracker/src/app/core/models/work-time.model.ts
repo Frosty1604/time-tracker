@@ -5,7 +5,7 @@ export interface WorkTimeModel extends EntityModel {
   date: Date;
   start: Time;
   end: Time;
-  duration: Duration;
+  duration: Time;
   pause: Time;
   holiday: boolean;
 }

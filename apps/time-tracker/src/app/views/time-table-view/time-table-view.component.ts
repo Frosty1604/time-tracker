@@ -4,9 +4,10 @@ import { DbService } from '../../core/services/db.service';
 import { map, merge, Observable, scan } from 'rxjs';
 import { WorkTimeModel } from '../../core/models/work-time.model';
 import { DataSource } from '@angular/cdk/collections';
-import { intervalToDuration } from 'date-fns';
+import { formatDuration, intervalToDuration } from 'date-fns';
 import { Time } from '@angular/common';
-import { durationToTime, timeToDate } from '../../utils/time';
+import { durationToDate, timeToDate, timeToTimeString } from '../../utils/time';
+import memoize from 'fast-memoize';
 
 interface RowWrapper {
   value: WorkTimeModel;
@@ -25,13 +26,23 @@ export class TimeTableViewComponent {
   @ViewChild(MatTable)
   table!: MatTable<RowWrapper>;
 
-  displayedColumns = ['date', 'time', 'pause', 'holiday', 'actions'];
+  displayedColumns = ['date', 'time', 'pause', 'real', 'holiday', 'actions'];
   dataSource = new WorkTimeDataSource(this.dbService);
 
   pauseOptions: number[] = [];
 
+  realWorkTime = memoize((workTimeModel: WorkTimeModel) => {
+    return formatDuration(
+      intervalToDuration({
+        start: durationToDate(workTimeModel.duration),
+        end: timeToDate(workTimeModel.pause),
+      }),
+      { format: ['hours', 'minutes'] }
+    );
+  });
+
   constructor(private dbService: DbService) {
-    for (let i = 30; i <= 90; i = i + 5) {
+    for (let i = 0; i <= 120; i = i + 5) {
       this.pauseOptions.push(i);
     }
   }
@@ -80,11 +91,15 @@ export class TimeTableViewComponent {
     workTimeModel.end = this.convertTime(time);
   }
 
-  private calculateWorkDuration(workTimeModel: WorkTimeModel) {
-    return intervalToDuration({
+  private calculateWorkDuration(workTimeModel: WorkTimeModel): Time {
+    const duration = intervalToDuration({
       start: timeToDate(workTimeModel.start),
       end: timeToDate(workTimeModel.end),
     });
+    return {
+      hours: duration.hours ?? 0,
+      minutes: duration.minutes ?? 0,
+    };
   }
 
   private convertTime(time: string): Time {
@@ -114,11 +129,11 @@ class WorkTimeDataSource extends DataSource<RowWrapper> {
   private readonly initialItems$: Observable<RowWrapper[]> = this.dbService
     .getAllData('dayEntry')
     .pipe(
-      map((entries) =>
-        entries.map((value) => ({
-          value,
-          startString: durationToTime(value.start),
-          endString: durationToTime(value.end),
+      map((workTimes) =>
+        workTimes.map((workTime) => ({
+          value: workTime,
+          startString: timeToTimeString(workTime.start),
+          endString: timeToTimeString(workTime.end),
           edit: false,
         }))
       )
@@ -153,8 +168,8 @@ class WorkTimeDataSource extends DataSource<RowWrapper> {
             acc.push(<RowWrapper>{
               value: value.workTime,
               edit: true,
-              startString: durationToTime(value.workTime.start),
-              endString: durationToTime(value.workTime.end),
+              startString: timeToTimeString(value.workTime.start),
+              endString: timeToTimeString(value.workTime.end),
             });
             console.log('added:', value.workTime);
             break;
@@ -176,7 +191,12 @@ class WorkTimeDataSource extends DataSource<RowWrapper> {
             break;
         }
         return acc;
-      }, [])
+      }, []),
+      map((rows) => {
+        return rows.sort(
+          (a, b) => a.value.date.getTime() - b.value.date.getTime()
+        );
+      })
     );
   }
 

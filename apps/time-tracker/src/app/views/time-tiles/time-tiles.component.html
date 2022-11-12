@@ -1,5 +1,5 @@
-<div class="flex flex-row gap-3 flex-grow flex-wrap">
-  <tt-tile class="grow" [data$]="tileWorkDays$"></tt-tile>
-  <tt-tile class="grow" [data$]="tileWorkHours$"></tt-tile>
-  <tt-tile class="grow" [data$]="tileWorkDayOff$"></tt-tile>
+<div class="flex flex-row gap-3">
+  <tt-tile class="flex-1" [data$]="tileOvertime$"></tt-tile>
+  <tt-tile class="flex-1" [data$]="tileAverageWorkTime$"></tt-tile>
+  <tt-tile class="flex-1" [data$]="tileWorkDayOff$"></tt-tile>
 </div>
