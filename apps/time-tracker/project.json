@@ -1,13 +1,12 @@
 {
+  "name": "time-tracker",
   "projectType": "application",
   "sourceRoot": "apps/time-tracker/src",
   "prefix": "tt",
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
-      "outputs": [
-        "{options.outputPath}"
-      ],
+      "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/apps/time-tracker",
         "index": "apps/time-tracker/src/index.html",
@@ -87,9 +86,7 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": [
-        "coverage/apps/time-tracker"
-      ],
+      "outputs": ["{workspaceRoot}/coverage/apps/time-tracker"],
       "options": {
         "jestConfig": "apps/time-tracker/jest.config.ts",
         "passWithNoTests": true
