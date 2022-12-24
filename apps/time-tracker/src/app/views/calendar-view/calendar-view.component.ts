@@ -80,13 +80,18 @@ export class CalendarViewComponent {
         addHours(startOfDay(workTime.date), workTime.end.hours),
         workTime.end.minutes
       ),
-      title: workTime.holiday
-        ? 'Holiday'
+      title: workTime.publicHoliday
+        ? 'Public holiday'
+        : workTime.holiday
+        ? 'Day off'
         : formatDuration(workTime.duration, {
             format: ['hours', 'minutes'],
           }),
-      allDay: workTime.holiday,
-      color: workTime.holiday ? colors['green'] : undefined,
+      allDay: workTime.holiday || workTime.publicHoliday,
+      color:
+        workTime.holiday || workTime.publicHoliday
+          ? colors['green']
+          : undefined,
     };
   }
 }

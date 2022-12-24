@@ -8,4 +8,5 @@ export interface WorkTimeModel extends EntityModel {
   duration: Time;
   pause: Time;
   holiday: boolean;
+  publicHoliday?: boolean;
 }

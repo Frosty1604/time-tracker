@@ -26,7 +26,15 @@ export class TimeTableViewComponent {
   @ViewChild(MatTable)
   table!: MatTable<RowWrapper>;
 
-  displayedColumns = ['date', 'time', 'pause', 'real', 'holiday', 'actions'];
+  displayedColumns = [
+    'date',
+    'time',
+    'pause',
+    'real',
+    'holiday',
+    'publicHoliday',
+    'actions',
+  ] as const;
   dataSource = new WorkTimeDataSource(this.dbService);
 
   pauseOptions: number[] = [];

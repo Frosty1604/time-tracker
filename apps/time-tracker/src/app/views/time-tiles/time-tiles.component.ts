@@ -22,6 +22,8 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TimeTilesComponent {
+  workHoursNeeded = 8;
+
   tileAverageWorkTime$ = this.dbService.getAllData('dayEntry').pipe(
     map((workTimeModels) => {
       const workTimeSum = workTimeModels.reduce((prev, curr) => {
@@ -39,7 +41,7 @@ export class TimeTilesComponent {
       };
     })
   );
-  tileWorkDayOff$ = this.dbService.getAllData('dayEntry').pipe(
+  tileDaysOff$ = this.dbService.getAllData('dayEntry').pipe(
     map((workTimeModels) => {
       const daysOff = workTimeModels.reduce(
         (prev, curr) => (curr.holiday ? prev + 1 : prev),
@@ -52,7 +54,6 @@ export class TimeTilesComponent {
       };
     })
   );
-  workHoursNeeded = 8;
   tileOvertime$ = this.dbService.getAllData('dayEntry').pipe(
     map((workTimeModels) => {
       return workTimeModels.reduce((prev, curr) => {
@@ -81,5 +82,5 @@ export class TimeTilesComponent {
     })
   );
 
-  constructor(private dbService: DbService) {}
+  constructor(private readonly dbService: DbService) {}
 }

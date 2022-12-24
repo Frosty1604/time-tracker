@@ -9,10 +9,10 @@
             name="date"
             [matDatepicker]="picker"
             matInput
-            [disabled]="element.value.holiday"
+            [disabled]="element.value.holiday || element.value.publicHoliday"
           />
           <mat-datepicker-toggle
-            [disabled]="element.value.holiday"
+            [disabled]="element.value.holiday || element.value.publicHoliday"
             matSuffix
             [for]="picker"
           ></mat-datepicker-toggle>
@@ -37,10 +37,10 @@
             (ngModelChange)="startTimeChanged($event, element.value)"
             [(ngModel)]="element.startString"
             name="start"
-            [disabled]="element.value.holiday"
+            [disabled]="element.value.holiday || element.value.publicHoliday"
           />
         </mat-form-field>
-        <mat-form-field appearance="standard" class="time-field" >
+        <mat-form-field appearance="standard" class="time-field">
           <mat-label>End</mat-label>
           <input
             type="time"
@@ -49,12 +49,17 @@
             (ngModelChange)="endTimeChanged($event, element.value)"
             [(ngModel)]="element.endString"
             name="end"
-            [disabled]="element.value.holiday"
+            [disabled]="element.value.holiday || element.value.publicHoliday"
           />
         </mat-form-field>
       </ng-container>
       <ng-template #timeField>
-        <ng-container *ngIf="!element.value.holiday; else dayOff">
+        <ng-container
+          *ngIf="
+            !element.value.holiday && !element.value.publicHoliday;
+            else emptyState
+          "
+        >
           {{ element.value.duration | time }}
         </ng-container>
       </ng-template>
@@ -65,17 +70,26 @@
     <td *matCellDef="let element" mat-cell>
       <ng-container *ngIf="element.edit; else pauseField">
         <mat-form-field appearance="standard">
-          <mat-select [(ngModel)]="element.value.pause.minutes" name="pause" [disabled]="element.value.holiday">
+          <mat-select
+            [(ngModel)]="element.value.pause.minutes"
+            name="pause"
+            [disabled]="element.value.holiday || element.value.publicHoliday"
+          >
             <mat-option
               [value]="pauseTime"
               *ngFor="let pauseTime of pauseOptions"
-            >{{ pauseTime }}</mat-option
+              >{{ pauseTime }}</mat-option
             >
           </mat-select>
         </mat-form-field>
       </ng-container>
       <ng-template #pauseField>
-        <ng-container *ngIf="!element.value.holiday; else dayOff">
+        <ng-container
+          *ngIf="
+            !element.value.holiday && !element.value.publicHoliday;
+            else emptyState
+          "
+        >
           {{ element.value.pause | time }}
         </ng-container>
       </ng-template>
@@ -84,23 +98,43 @@
   <ng-container matColumnDef="real">
     <th *matHeaderCellDef mat-header-cell>Real</th>
     <td *matCellDef="let element" mat-cell>
-    <ng-container *ngIf="!element.value.holiday; else dayOff">
-      {{ realWorkTime(element.value) }}
-    </ng-container>
-  </ng-container>
+      <ng-container
+        *ngIf="
+          !element.value.holiday && !element.value.publicHoliday;
+          else emptyState
+        "
+      >
+        {{ realWorkTime(element.value) }}
+      </ng-container>
+    </td></ng-container
+  >
+
   <ng-container matColumnDef="holiday">
-    <th *matHeaderCellDef mat-header-cell>Holiday</th>
+    <th *matHeaderCellDef mat-header-cell>Day off</th>
+    <td mat-cell *matCellDef="let element">
+      <mat-checkbox
+        [disabled]="element.edit === false || element.value.publicHoliday"
+        [(ngModel)]="element.value.holiday"
+      ></mat-checkbox>
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="publicHoliday">
+    <th *matHeaderCellDef mat-header-cell>Public holiday</th>
     <td mat-cell *matCellDef="let element">
       <mat-checkbox
         [disabled]="element.edit === false"
-        [(ngModel)]="element.value.holiday"
+        [(ngModel)]="element.value.publicHoliday"
       ></mat-checkbox>
     </td>
   </ng-container>
   <ng-container matColumnDef="actions">
     <th *matHeaderCellDef mat-header-cell>Actions</th>
     <td mat-cell *matCellDef="let element">
-      <button *ngIf="element.edit !== true; else saveOrCancel" mat-icon-button [matMenuTriggerFor]="menu">
+      <button
+        *ngIf="element.edit !== true; else saveOrCancel"
+        mat-icon-button
+        [matMenuTriggerFor]="menu"
+      >
         <mat-icon>more_vert</mat-icon>
       </button>
       <ng-template #saveOrCancel>
@@ -127,4 +161,4 @@
   <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
   <tr *matRowDef="let row; columns: displayedColumns" mat-row></tr>
 </table>
-<ng-template #dayOff>-</ng-template>
+<ng-template #emptyState>-</ng-template>

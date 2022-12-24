@@ -16,26 +16,30 @@
         "inlineStyleLanguage": "scss",
         "assets": [
           "apps/time-tracker/src/favicon.ico",
-          "apps/time-tracker/src/assets"
+          "apps/time-tracker/src/assets",
+          "apps/time-tracker/src/manifest.webmanifest"
         ],
         "styles": [
           "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
           "apps/time-tracker/src/styles.scss"
         ],
-        "scripts": []
+        "allowedCommonJsDependencies": ["fast-memoize", "holiday-de"],
+        "scripts": [],
+        "serviceWorker": true,
+        "ngswConfigPath": "apps/time-tracker/ngsw-config.json"
       },
       "configurations": {
         "production": {
           "budgets": [
             {
               "type": "initial",
-              "maximumWarning": "500kb",
-              "maximumError": "1mb"
+              "maximumWarning": "1mb",
+              "maximumError": "2mb"
             },
             {
               "type": "anyComponentStyle",
-              "maximumWarning": "2kb",
-              "maximumError": "4kb"
+              "maximumWarning": "8kb",
+              "maximumError": "16kb"
             }
           ],
           "fileReplacements": [
