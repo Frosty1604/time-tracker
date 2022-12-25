@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, ViewChild } from '@angular/core';
-import { MatTable } from '@angular/material/table';
+import { MatLegacyTable as MatTable } from '@angular/material/legacy-table';
 import { DbService } from '../../core/services/db.service';
 import { map, merge, Observable, scan } from 'rxjs';
 import { WorkTimeModel } from '../../core/models/work-time.model';
