@@ -3,7 +3,7 @@
     <th *matHeaderCellDef mat-header-cell>Date</th>
     <td *matCellDef="let element" mat-cell>
       <ng-container *ngIf="element.edit; else dateField">
-        <mat-form-field appearance="standard">
+        <mat-form-field>
           <input
             [(ngModel)]="element.value['date']"
             name="date"
@@ -28,7 +28,7 @@
     <th *matHeaderCellDef mat-header-cell>Time</th>
     <td *matCellDef="let element" mat-cell>
       <ng-container *ngIf="element.edit; else timeField">
-        <mat-form-field appearance="standard" class="time-field">
+        <mat-form-field class="time-field">
           <mat-label>Start</mat-label>
           <input
             type="time"
@@ -40,7 +40,7 @@
             [disabled]="element.value.holiday || element.value.publicHoliday"
           />
         </mat-form-field>
-        <mat-form-field appearance="standard" class="time-field">
+        <mat-form-field class="time-field">
           <mat-label>End</mat-label>
           <input
             type="time"
@@ -69,7 +69,7 @@
     <th *matHeaderCellDef mat-header-cell>Pause</th>
     <td *matCellDef="let element" mat-cell>
       <ng-container *ngIf="element.edit; else pauseField">
-        <mat-form-field appearance="standard">
+        <mat-form-field>
           <mat-select
             [(ngModel)]="element.value.pause.minutes"
             name="pause"

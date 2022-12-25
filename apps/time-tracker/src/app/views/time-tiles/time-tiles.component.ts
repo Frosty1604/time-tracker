@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DbService } from '../../core/services/db.service';
-import { MatLegacyCardModule as MatCardModule } from '@angular/material/legacy-card';
+import { MatCardModule } from '@angular/material/card';
 import { TileComponent } from './tile/tile.component';
 import { map } from 'rxjs';
 import { durationToDate, timeToDate } from '../../utils/time';

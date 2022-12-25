@@ -14,7 +14,7 @@ import { addHours, addMinutes, formatDuration, startOfDay } from 'date-fns';
 import { EventColor } from 'calendar-utils';
 import { DbService } from '../../core/services/db.service';
 import { map, Observable } from 'rxjs';
-import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
+import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { WorkTimeModel } from '../../core/models/work-time.model';
 import { MatIconModule } from '@angular/material/icon';
