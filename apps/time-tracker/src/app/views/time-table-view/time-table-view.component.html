@@ -2,155 +2,41 @@
   <ng-container matColumnDef="date">
     <th *matHeaderCellDef mat-header-cell>Date</th>
     <td *matCellDef="let element" mat-cell>
-      <ng-container *ngIf="element.edit; else dateField">
-        <mat-form-field>
-          <input
-            [(ngModel)]="element.value['date']"
-            name="date"
-            [matDatepicker]="picker"
-            matInput
-            [disabled]="element.value.holiday || element.value.publicHoliday"
-          />
-          <mat-datepicker-toggle
-            [disabled]="element.value.holiday || element.value.publicHoliday"
-            matSuffix
-            [for]="picker"
-          ></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
-        </mat-form-field>
-      </ng-container>
-      <ng-template #dateField>
-        {{ element.value.date | date: 'EE dd. LLLL YY' }}
-      </ng-template>
+      {{ element.date | date: 'EE dd. LLLL YY' }}
     </td>
   </ng-container>
   <ng-container matColumnDef="time">
     <th *matHeaderCellDef mat-header-cell>Time</th>
     <td *matCellDef="let element" mat-cell>
-      <ng-container *ngIf="element.edit; else timeField">
-        <mat-form-field class="time-field">
-          <mat-label>Start</mat-label>
-          <input
-            type="time"
-            step="300"
-            matInput
-            (ngModelChange)="startTimeChanged($event, element.value)"
-            [(ngModel)]="element.startString"
-            name="start"
-            [disabled]="element.value.holiday || element.value.publicHoliday"
-          />
-        </mat-form-field>
-        <mat-form-field class="time-field">
-          <mat-label>End</mat-label>
-          <input
-            type="time"
-            step="300"
-            matInput
-            (ngModelChange)="endTimeChanged($event, element.value)"
-            [(ngModel)]="element.endString"
-            name="end"
-            [disabled]="element.value.holiday || element.value.publicHoliday"
-          />
-        </mat-form-field>
+      <ng-container
+        *ngIf="!element.holiday && !element.publicHoliday; else emptyState"
+      >
+        {{ element.effectiveTime | time }}
       </ng-container>
-      <ng-template #timeField>
-        <ng-container
-          *ngIf="
-            !element.value.holiday && !element.value.publicHoliday;
-            else emptyState
-          "
-        >
-          {{ element.value.duration | time }}
-        </ng-container>
-      </ng-template>
     </td>
   </ng-container>
   <ng-container matColumnDef="pause">
     <th *matHeaderCellDef mat-header-cell>Pause</th>
     <td *matCellDef="let element" mat-cell>
-      <ng-container *ngIf="element.edit; else pauseField">
-        <mat-form-field>
-          <mat-select
-            [(ngModel)]="element.value.pause.minutes"
-            name="pause"
-            [disabled]="element.value.holiday || element.value.publicHoliday"
-          >
-            <mat-option
-              [value]="pauseTime"
-              *ngFor="let pauseTime of pauseOptions"
-              >{{ pauseTime }}</mat-option
-            >
-          </mat-select>
-        </mat-form-field>
-      </ng-container>
-      <ng-template #pauseField>
-        <ng-container
-          *ngIf="
-            !element.value.holiday && !element.value.publicHoliday;
-            else emptyState
-          "
-        >
-          {{ element.value.pause | time }}
-        </ng-container>
-      </ng-template>
-    </td>
-  </ng-container>
-  <ng-container matColumnDef="real">
-    <th *matHeaderCellDef mat-header-cell>Real</th>
-    <td *matCellDef="let element" mat-cell>
       <ng-container
-        *ngIf="
-          !element.value.holiday && !element.value.publicHoliday;
-          else emptyState
-        "
+        *ngIf="!element.holiday && !element.publicHoliday; else emptyState"
       >
-        {{ realWorkTime(element.value) }}
+        {{ element.pauseTime | time }}
       </ng-container>
-    </td></ng-container
-  >
-
-  <ng-container matColumnDef="holiday">
-    <th *matHeaderCellDef mat-header-cell>Day off</th>
-    <td mat-cell *matCellDef="let element">
-      <mat-checkbox
-        [disabled]="element.edit === false || element.value.publicHoliday"
-        [(ngModel)]="element.value.holiday"
-      ></mat-checkbox>
-    </td>
-  </ng-container>
-  <ng-container matColumnDef="publicHoliday">
-    <th *matHeaderCellDef mat-header-cell>Public holiday</th>
-    <td mat-cell *matCellDef="let element">
-      <mat-checkbox
-        [disabled]="element.edit === false"
-        [(ngModel)]="element.value.publicHoliday"
-      ></mat-checkbox>
     </td>
   </ng-container>
   <ng-container matColumnDef="actions">
     <th *matHeaderCellDef mat-header-cell>Actions</th>
     <td mat-cell *matCellDef="let element">
-      <button
-        *ngIf="element.edit !== true; else saveOrCancel"
-        mat-icon-button
-        [matMenuTriggerFor]="menu"
-      >
+      <button mat-icon-button [matMenuTriggerFor]="menu">
         <mat-icon>more_vert</mat-icon>
       </button>
-      <ng-template #saveOrCancel>
-        <button mat-icon-button (click)="saveRow(element)">
-          <mat-icon>save</mat-icon>
-        </button>
-        <button mat-icon-button (click)="cancelEdit(element)">
-          <mat-icon>close</mat-icon>
-        </button>
-      </ng-template>
       <mat-menu #menu="matMenu">
-        <button mat-menu-item (click)="editRow(element)">
+        <button mat-menu-item (click)="editRow(element.entity)">
           <mat-icon>edit</mat-icon>
           <span>Edit</span>
         </button>
-        <button mat-menu-item (click)="deleteRow(element)">
+        <button mat-menu-item (click)="deleteRow(element.entity)">
           <mat-icon>delete</mat-icon>
           <span>Delete</span>
         </button>

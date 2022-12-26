@@ -12,9 +12,13 @@ import { MatIconModule } from '@angular/material/icon';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TileComponent {
-  @Input() data$?: Observable<{
+  @Input()
+  data$?: Observable<{
     value: string | number;
     title: string;
     icon: string;
+    colors?: string[];
   }>;
+
+  readonly defaultBackground = ['bg-white', 'dark:bg-neutral-700'];
 }

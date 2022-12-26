@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
@@ -10,6 +10,8 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { NavigationComponent } from './navigation/navigation.component';
+import { TimeEntryFormModule } from './time-entry-form/time-entry-form.module';
+import { initDB } from './core/services/database.service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -28,8 +30,14 @@ import { NavigationComponent } from './navigation/navigation.component';
       registrationStrategy: 'registerWhenStable:30000',
     }),
     NavigationComponent,
+    TimeEntryFormModule,
   ],
   providers: [
+    {
+      provide: APP_INITIALIZER,
+      useFactory: () => initDB,
+      multi: true,
+    },
     {
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
       useValue: { appearance: 'outline' },

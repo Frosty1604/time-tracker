@@ -1,0 +1,62 @@
+<form [formGroup]="formGroup" (ngSubmit)="submit()">
+  <header class="flex justify-between">
+    <h2 mat-dialog-title>New entry</h2>
+    <button
+      mat-icon-button
+      type="reset"
+      matTooltip="Reset form"
+      matTooltipPosition="right"
+      tabindex="-1"
+    >
+      <mat-icon>refresh</mat-icon>
+    </button>
+  </header>
+  <main mat-dialog-content>
+    <section class="flex flex-col gap-2">
+      <mat-form-field>
+        <mat-label>Date</mat-label>
+        <input
+          required
+          name="date"
+          [matDatepicker]="picker"
+          matInput
+          formControlName="date"
+        />
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+      <div class="flex gap-4">
+        <mat-form-field>
+          <mat-label>Start</mat-label>
+          <input required formControlName="start" matInput type="time" />
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>End</mat-label>
+          <input required formControlName="end" matInput type="time" />
+        </mat-form-field>
+      </div>
+      <mat-form-field>
+        <mat-label>Pause</mat-label>
+        <mat-select formControlName="pause" required>
+          <mat-option [value]="option" *ngFor="let option of pauseOptions">{{
+            option
+          }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Type</mat-label>
+        <mat-select formControlName="type" required>
+          <mat-option [value]="option" *ngFor="let option of typeOptions">{{
+            option | titlecase
+          }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </section>
+  </main>
+  <footer mat-dialog-actions class="float-right">
+    <button mat-flat-button [mat-dialog-close]="null">Cancel</button>
+    <button mat-raised-button color="primary" type="submit">
+      {{ isEditMode ? 'Save' : 'Add' }}
+    </button>
+  </footer>
+</form>
