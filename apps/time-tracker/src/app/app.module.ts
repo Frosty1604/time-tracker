@@ -10,7 +10,7 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { NavigationComponent } from './navigation/navigation.component';
-import { TimeEntryFormModule } from './time-entry-form/time-entry-form.module';
+import { WorkTimeFormModule } from './work-time-form/work-time-form.module';
 import { initDB } from './core/services/database.service';
 
 @NgModule({
@@ -30,7 +30,7 @@ import { initDB } from './core/services/database.service';
       registrationStrategy: 'registerWhenStable:30000',
     }),
     NavigationComponent,
-    TimeEntryFormModule,
+    WorkTimeFormModule,
   ],
   providers: [
     {

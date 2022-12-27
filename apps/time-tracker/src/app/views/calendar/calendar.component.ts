@@ -48,7 +48,7 @@ const workTypeColors: Record<WorkType, EventColor> = {
 };
 
 @Component({
-  selector: 'tt-calendar-view',
+  selector: 'tt-calendar',
   standalone: true,
   imports: [
     CommonModule,
@@ -59,12 +59,12 @@ const workTypeColors: Record<WorkType, EventColor> = {
     MatButtonToggleModule,
     MatIconModule,
   ],
-  templateUrl: './calendar-view.component.html',
-  styleUrls: ['./calendar-view.component.scss'],
+  templateUrl: './calendar.component.html',
+  styleUrls: ['./calendar.component.scss'],
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CalendarViewComponent {
+export class CalendarComponent {
   private workTimeService = inject(WorkTimeService);
   viewDate: Date = new Date();
   events$: Observable<CalendarEvent[]> = this.workTimeService.find().pipe(

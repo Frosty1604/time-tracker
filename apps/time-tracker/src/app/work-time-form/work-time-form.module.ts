@@ -8,7 +8,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { de } from 'date-fns/locale';
-import { TimeEntryFormComponent } from './time-entry-form.component';
+import { WorkTimeFormComponent } from './work-time-form.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -37,7 +37,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
       },
     ],
   ],
-  exports: [TimeEntryFormComponent],
-  declarations: [TimeEntryFormComponent],
+  exports: [WorkTimeFormComponent],
+  declarations: [WorkTimeFormComponent],
 })
-export class TimeEntryFormModule {}
+export class WorkTimeFormModule {}

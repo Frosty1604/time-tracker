@@ -17,7 +17,7 @@ import { RouterModule } from '@angular/router';
 @Component({
   selector: 'tt-navigation',
   templateUrl: './navigation.component.html',
-  styleUrls: ['./navigation.component.css'],
+  styleUrls: ['./navigation.component.scss'],
   standalone: true,
   imports: [
     CommonModule,

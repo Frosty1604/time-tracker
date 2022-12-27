@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TimeTableViewComponent } from './time-table-view.component';
+import { TileContainerComponent } from './tile-container.component';
 
-describe('OverviewViewComponent', () => {
-  let component: TimeTableViewComponent;
-  let fixture: ComponentFixture<TimeTableViewComponent>;
+describe('TileContainerComponent', () => {
+  let component: TileContainerComponent;
+  let fixture: ComponentFixture<TileContainerComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [TimeTableViewComponent],
+      imports: [TileContainerComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(TimeTableViewComponent);
+    fixture = TestBed.createComponent(TileContainerComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

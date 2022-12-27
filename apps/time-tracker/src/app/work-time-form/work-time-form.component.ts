@@ -15,11 +15,10 @@ import {
 import { WorkTimeService } from '../core/services/work-time.service';
 
 @Component({
-  selector: 'tt-time-entry-form',
-  templateUrl: './time-entry-form.component.html',
-  styleUrls: ['./time-entry-form.component.scss'],
+  templateUrl: './work-time-form.component.html',
+  styleUrls: ['./work-time-form.component.scss'],
 })
-export class TimeEntryFormComponent {
+export class WorkTimeFormComponent {
   readonly pauseOptions: number[] = [];
   readonly typeOptions: WorkType[] = ['normal', 'sick', 'vacation'];
   private readonly data = inject<WorkTime>(MAT_DIALOG_DATA, {
@@ -54,7 +53,7 @@ export class TimeEntryFormComponent {
     }),
   });
   private readonly workTimeService = inject(WorkTimeService);
-  private readonly dialogRef = inject(MatDialogRef<TimeEntryFormComponent>);
+  private readonly dialogRef = inject(MatDialogRef<WorkTimeFormComponent>);
 
   constructor() {
     for (let i = 0; i < 120; i = i + 5) {

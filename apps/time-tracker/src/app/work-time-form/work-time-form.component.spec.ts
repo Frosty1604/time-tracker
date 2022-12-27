@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TimeEntryFormComponent } from './time-entry-form.component';
+import { WorkTimeFormComponent } from './work-time-form.component';
 
-describe('TimeEntryFormComponent', () => {
-  let component: TimeEntryFormComponent;
-  let fixture: ComponentFixture<TimeEntryFormComponent>;
+describe('WorkTimeFormComponent', () => {
+  let component: WorkTimeFormComponent;
+  let fixture: ComponentFixture<WorkTimeFormComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TimeEntryFormComponent],
+      imports: [WorkTimeFormComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(TimeEntryFormComponent);
+    fixture = TestBed.createComponent(WorkTimeFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

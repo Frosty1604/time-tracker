@@ -18,14 +18,14 @@ import {
 import { WorkTimeService } from '../../core/services/work-time.service';
 
 @Component({
-  selector: 'tt-time-tiles',
+  selector: 'tt-tile-container',
   standalone: true,
   imports: [CommonModule, MatCardModule, TileComponent],
-  templateUrl: './time-tiles.component.html',
-  styleUrls: ['./time-tiles.component.scss'],
+  templateUrl: './tile-container.component.html',
+  styleUrls: ['./tile-container.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TimeTilesComponent {
+export class TileContainerComponent {
   private readonly workHoursNeeded = 8;
   private readonly workTimeService = inject(WorkTimeService);
 
