@@ -1,6 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  inject,
   ViewEncapsulation,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -12,12 +13,13 @@ import {
 } from 'angular-calendar';
 import { addHours, addMinutes, formatDuration, startOfDay } from 'date-fns';
 import { EventColor } from 'calendar-utils';
-import { DbService } from '../../core/services/db.service';
 import { map, Observable } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { WorkTimeModel } from '../../core/models/work-time.model';
 import { MatIconModule } from '@angular/material/icon';
+import { WorkTimeService } from '../../core/services/work-time.service';
+import { WorkTime, WorkType } from '../../core/entities/work-time.entity';
+import { calculateWorkDuration } from '../../utils/time';
 
 const colors: Record<string, EventColor> = {
   red: {
@@ -39,8 +41,14 @@ const colors: Record<string, EventColor> = {
   },
 } as const;
 
+const workTypeColors: Record<WorkType, EventColor> = {
+  normal: colors['blue'],
+  vacation: colors['green'],
+  sick: colors['yellow'],
+};
+
 @Component({
-  selector: 'tt-calendar-view',
+  selector: 'tt-calendar',
   standalone: true,
   imports: [
     CommonModule,
@@ -51,16 +59,15 @@ const colors: Record<string, EventColor> = {
     MatButtonToggleModule,
     MatIconModule,
   ],
-  templateUrl: './calendar-view.component.html',
-  styleUrls: ['./calendar-view.component.scss'],
+  templateUrl: './calendar.component.html',
+  styleUrls: ['./calendar.component.scss'],
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CalendarViewComponent {
+export class CalendarComponent {
+  private workTimeService = inject(WorkTimeService);
   viewDate: Date = new Date();
-  events$: Observable<CalendarEvent[]> = this.DBService.getAllData(
-    'dayEntry'
-  ).pipe(
+  events$: Observable<CalendarEvent[]> = this.workTimeService.find().pipe(
     map((workTimes) =>
       workTimes.map((workTime) => {
         return this.convertToEvent(workTime);
@@ -68,9 +75,7 @@ export class CalendarViewComponent {
     )
   );
 
-  constructor(private readonly DBService: DbService) {}
-
-  private convertToEvent(workTime: WorkTimeModel): CalendarEvent {
+  private convertToEvent(workTime: WorkTime): CalendarEvent {
     return {
       start: addMinutes(
         addHours(startOfDay(workTime.date), workTime.start.hours),
@@ -80,18 +85,17 @@ export class CalendarViewComponent {
         addHours(startOfDay(workTime.date), workTime.end.hours),
         workTime.end.minutes
       ),
-      title: workTime.publicHoliday
-        ? 'Public holiday'
-        : workTime.holiday
-        ? 'Day off'
-        : formatDuration(workTime.duration, {
-            format: ['hours', 'minutes'],
-          }),
-      allDay: workTime.holiday || workTime.publicHoliday,
-      color:
-        workTime.holiday || workTime.publicHoliday
-          ? colors['green']
-          : undefined,
+      title:
+        workTime.type === 'normal'
+          ? formatDuration(
+              calculateWorkDuration(workTime.start, workTime.end),
+              {
+                format: ['hours', 'minutes'],
+              }
+            )
+          : workTime.type.toUpperCase(),
+      allDay: workTime.type !== 'normal',
+      color: workTypeColors[workTime.type],
     };
   }
 }

@@ -1,6 +1,7 @@
 <div
   *ngIf="data$ | async as data"
-  class="relative block rounded-xl border border-gray-100 p-4 shadow-xl bg-white dark:bg-neutral-700 dark:border-neutral-800"
+  class="relative block rounded-xl border border-gray-100 p-4 shadow-xl dark:border-slate-300/10"
+  [ngClass]="data.colors ?? defaultBackground"
 >
   <div class="mt-2 text-gray-500 sm:pr-8 dark:text-white">
     <mat-icon>{{ data.icon }}</mat-icon>

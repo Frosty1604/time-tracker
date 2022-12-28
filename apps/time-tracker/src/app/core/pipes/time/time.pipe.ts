@@ -6,7 +6,10 @@ import { Duration, formatDuration } from 'date-fns';
   standalone: true,
 })
 export class TimePipe implements PipeTransform {
-  transform(value: Duration): string {
+  transform(value: Duration, format: 'short' | 'full' = 'full'): string {
+    if (format === 'short') {
+      return `${value.hours}:${value.minutes}`;
+    }
     return formatDuration(value, { format: ['hours', 'minutes'] });
   }
 }

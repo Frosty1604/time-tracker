@@ -1,0 +1,36 @@
+<header class="flex flex-row">
+  <h3 class="text-white flex-1 text-center">
+    {{ viewDate | calendarDate: 'week' + 'ViewTitle':'en' }}
+  </h3>
+  <div class="text-white mb-2">
+    <button
+      [view]="'week'"
+      [(viewDate)]="viewDate"
+      mat-icon-button
+      mwlCalendarPreviousView
+    >
+      <mat-icon>chevron_left</mat-icon>
+    </button>
+    <button [(viewDate)]="viewDate" mat-icon-button mwlCalendarToday>
+      <mat-icon>event</mat-icon>
+    </button>
+    <button
+      [view]="'week'"
+      [(viewDate)]="viewDate"
+      mat-icon-button
+      mwlCalendarNextView
+    >
+      <mat-icon>chevron_right</mat-icon>
+    </button>
+  </div>
+</header>
+<ng-container *ngIf="events$ | async as events">
+  <mwl-calendar-week-view
+    [viewDate]="viewDate"
+    [events]="events"
+    [dayStartHour]="8"
+    [dayEndHour]="20"
+    [weekStartsOn]="1"
+  >
+  </mwl-calendar-week-view>
+</ng-container>
