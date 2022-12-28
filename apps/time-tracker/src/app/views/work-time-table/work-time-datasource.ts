@@ -1,4 +1,8 @@
-import { WorkTime, WorkTimeWithID } from '../../core/entities/work-time.entity';
+import {
+  WorkTime,
+  WorkTimeWithID,
+  WorkType,
+} from '../../core/entities/work-time.entity';
 import { DataSource } from '@angular/cdk/collections';
 import { merge, Observable, scan, Subject } from 'rxjs';
 import { inject } from '@angular/core';
@@ -33,11 +37,13 @@ export interface WorkTimeViewModel {
   date: Date;
   effectiveTime: Duration;
   pauseTime: Time;
+  type: WorkType;
+  isWorkDay: boolean;
   entity: WorkTime;
 }
 
 export class WorkTimeDataSource extends DataSource<WorkTimeViewModel> {
-  private readonly addDataSubject = new Subject<WorkTime>();
+  private readonly addDataSubject = new Subject<WorkTimeWithID>();
   private readonly updateDataSubject = new Subject<WorkTimeWithID>();
   private readonly removeDataSubject = new Subject<number>();
 
@@ -85,7 +91,7 @@ export class WorkTimeDataSource extends DataSource<WorkTimeViewModel> {
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   disconnect() {}
 
-  addData(row: WorkTime) {
+  addData(row: WorkTimeWithID) {
     this.addDataSubject.next(row);
   }
 
@@ -107,6 +113,8 @@ export class WorkTimeDataSource extends DataSource<WorkTimeViewModel> {
         end: timeToDate(workTime.pause),
       }),
       pauseTime: workTime.pause,
+      type: workTime.type,
+      isWorkDay: workTime.type === 'normal',
       entity: workTime,
     };
   }

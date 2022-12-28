@@ -8,21 +8,36 @@
   <ng-container matColumnDef="time">
     <th *matHeaderCellDef mat-header-cell>Time</th>
     <td *matCellDef="let element" mat-cell>
-      <ng-container
-        *ngIf="!element.holiday && !element.publicHoliday; else emptyState"
-      >
-        {{ element.effectiveTime | time }}
+      <ng-container *ngIf="element.isWorkDay; else emptyState">
+        <span
+          [matTooltip]="
+            'From ' +
+            (element.entity.start | time: 'short') +
+            ' to ' +
+            (element.entity.end | time: 'short')
+          "
+          matTooltipPosition="above"
+          >{{ element.effectiveTime | time }}</span
+        >
       </ng-container>
     </td>
   </ng-container>
   <ng-container matColumnDef="pause">
     <th *matHeaderCellDef mat-header-cell>Pause</th>
     <td *matCellDef="let element" mat-cell>
-      <ng-container
-        *ngIf="!element.holiday && !element.publicHoliday; else emptyState"
-      >
+      <ng-container *ngIf="element.isWorkDay; else emptyState">
         {{ element.pauseTime | time }}
       </ng-container>
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="type">
+    <th *matHeaderCellDef mat-header-cell>Type</th>
+    <td *matCellDef="let element" mat-cell>
+      <mat-chip-list>
+        <mat-chip [color]="typeColors[element.type]" selected>{{
+          element.type | titlecase
+        }}</mat-chip>
+      </mat-chip-list>
     </td>
   </ng-container>
   <ng-container matColumnDef="actions">

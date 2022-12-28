@@ -1,41 +1,80 @@
 <form [formGroup]="formGroup" (ngSubmit)="submit()">
   <header class="flex justify-between">
     <h2 mat-dialog-title>New entry</h2>
-    <button
-      mat-icon-button
-      type="reset"
-      matTooltip="Reset form"
-      matTooltipPosition="right"
-      tabindex="-1"
-    >
-      <mat-icon>refresh</mat-icon>
-    </button>
   </header>
   <main mat-dialog-content>
     <section class="flex flex-col gap-2">
-      <mat-form-field>
+      <mat-form-field hideRequiredMarker="true">
         <mat-label>Date</mat-label>
         <input
-          required
           name="date"
           [matDatepicker]="picker"
           matInput
           formControlName="date"
+          id="date"
+          required
         />
-        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <button
+          mat-icon-button
+          (click)="previousDay()"
+          matSuffix
+          matTooltip="Previous day"
+          type="button"
+        >
+          <mat-icon>chevron_left</mat-icon>
+        </button>
+        <button
+          mat-icon-button
+          (click)="nextDay()"
+          matSuffix
+          matTooltip="Next day"
+          type="button"
+        >
+          <mat-icon>chevron_right</mat-icon>
+        </button>
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="picker"
+          matTooltip="Open date picker"
+        ></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
+        <mat-hint>DD.MM.YYYY</mat-hint>
+        <ng-container
+          *ngIf="date?.invalid && (date?.dirty || date?.touched)"
+          ngProjectAs="mat-error"
+        >
+          <mat-error
+            *ngIf="
+              date?.getError('required') &&
+              !date?.getError('matDatepickerParse')
+            "
+            >Date is required.</mat-error
+          >
+          <mat-error *ngIf="date?.getError('matDatepickerParse')"
+            >"{{ date?.getError('matDatepickerParse').text }}" is not a valid
+            date!</mat-error
+          >
+        </ng-container>
       </mat-form-field>
       <div class="flex gap-4">
-        <mat-form-field>
-          <mat-label>Start</mat-label>
+        <mat-form-field hideRequiredMarker="true">
+          <mat-label>Start Time</mat-label>
           <input required formControlName="start" matInput type="time" />
+          <mat-hint>HH:mm</mat-hint>
+          <mat-error *ngIf="start?.getError('required')"
+            >Start time is required.</mat-error
+          >
         </mat-form-field>
-        <mat-form-field>
-          <mat-label>End</mat-label>
+        <mat-form-field hideRequiredMarker="true">
+          <mat-label>End Time</mat-label>
           <input required formControlName="end" matInput type="time" />
+          <mat-hint>HH:mm</mat-hint>
+          <mat-error *ngIf="end?.getError('required')"
+            >End time is required.</mat-error
+          >
         </mat-form-field>
       </div>
-      <mat-form-field>
+      <mat-form-field hideRequiredMarker="true">
         <mat-label>Pause</mat-label>
         <mat-select formControlName="pause" required>
           <mat-option [value]="option" *ngFor="let option of pauseOptions">{{
@@ -43,7 +82,7 @@
           }}</mat-option>
         </mat-select>
       </mat-form-field>
-      <mat-form-field>
+      <mat-form-field hideRequiredMarker="true">
         <mat-label>Type</mat-label>
         <mat-select formControlName="type" required>
           <mat-option [value]="option" *ngFor="let option of typeOptions">{{
@@ -55,7 +94,12 @@
   </main>
   <footer mat-dialog-actions class="float-right">
     <button mat-flat-button [mat-dialog-close]="null">Cancel</button>
-    <button mat-raised-button color="primary" type="submit">
+    <button
+      mat-raised-button
+      color="primary"
+      type="submit"
+      [disabled]="isFormInvalid$ | async"
+    >
       {{ isEditMode ? 'Save' : 'Add' }}
     </button>
   </footer>
