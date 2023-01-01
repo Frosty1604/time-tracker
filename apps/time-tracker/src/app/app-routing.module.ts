@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { CalendarComponent } from './calendar/calendar.component';
+import { ExportComponent } from './export/export.component';
 
 const routes: Routes = [
   {
@@ -16,6 +17,10 @@ const routes: Routes = [
   {
     path: 'calendar',
     loadComponent: () => CalendarComponent,
+  },
+  {
+    path: 'export',
+    loadComponent: () => ExportComponent,
   },
 ];
 
