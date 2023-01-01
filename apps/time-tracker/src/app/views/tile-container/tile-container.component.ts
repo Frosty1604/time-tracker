@@ -59,9 +59,9 @@ export class TileContainerComponent {
         0
       );
       return {
-        title: 'Days Off',
+        title: 'Vacation',
         icon: 'beach_access',
-        value: daysOff,
+        value: daysOff + ' Day(s)',
         colors: [
           'bg-gradient-to-tr',
           `from-red-500`,
@@ -94,7 +94,9 @@ export class TileContainerComponent {
           hours: minutesToHours(overTimeInMinutes),
         },
         { format: ['hours', 'minutes'] }
-      ),
+      )
+        .replace('hours', 'h')
+        .replace('minutes', 'm'),
       colors: [
         'bg-gradient-to-tr',
         `from-blue-500`,

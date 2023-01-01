@@ -20,8 +20,8 @@
           "apps/time-tracker/src/manifest.webmanifest"
         ],
         "styles": [
-          "./node_modules/@angular/material/prebuilt-themes/purple-green.css",
-          "apps/time-tracker/src/styles.scss"
+          "apps/time-tracker/src/styles.scss",
+          "apps/time-tracker/src/material.scss"
         ],
         "allowedCommonJsDependencies": ["fast-memoize", "holiday-de"],
         "scripts": [],

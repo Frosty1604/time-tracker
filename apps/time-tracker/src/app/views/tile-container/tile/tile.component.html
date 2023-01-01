@@ -1,14 +1,15 @@
 <div
   *ngIf="data$ | async as data"
-  class="relative block rounded-xl border border-gray-100 p-4 shadow-xl dark:border-slate-300/10"
+  class="relative block rounded-xl border border-gray-100 px-4 py-6 shadow-xl dark:border-slate-300/10"
   [ngClass]="data.colors ?? defaultBackground"
 >
-  <div class="mt-2 text-gray-500 sm:pr-8 dark:text-white">
+  <div class="text-white flex justify-between items-center">
+    <div>
+      <label class="text-gray-200">
+        {{ data.title }}
+      </label>
+      <h2 class="mt-2">{{ data.value }}</h2>
+    </div>
     <mat-icon>{{ data.icon }}</mat-icon>
-
-    <h5 class="mt-2 text-xl font-bold text-gray-900 dark:text-gray-200">
-      {{ data.title }}
-    </h5>
-    <p class="font-medium text-lg dark:text-white">{{ data.value }}</p>
   </div>
 </div>

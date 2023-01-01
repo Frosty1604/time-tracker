@@ -1,10 +1,11 @@
 <div class="flex flex-col">
   <tt-tile-container></tt-tile-container>
+  <tt-work-time-table #table></tt-work-time-table>
+</div>
+<div class="absolute bottom-5 right-5">
   <div class="my-3">
     <button class="float-right" mat-fab (click)="table.addRow()">
       <mat-icon fontIcon="add"></mat-icon>
     </button>
   </div>
-  <tt-work-time-table #table></tt-work-time-table>
-  <tt-calendar class="mt-3"></tt-calendar>
 </div>

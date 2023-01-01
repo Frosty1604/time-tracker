@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { TileContainerComponent } from '../views/tile-container/tile-container.component';
-import { CalendarComponent } from '../views/calendar/calendar.component';
+import { CalendarComponent } from '../calendar/calendar.component';
 import { WorkTimeTableComponent } from '../views/work-time-table/work-time-table.component';
 
 @Component({

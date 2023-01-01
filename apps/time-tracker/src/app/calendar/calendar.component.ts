@@ -17,9 +17,9 @@ import { map, Observable } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatIconModule } from '@angular/material/icon';
-import { WorkTimeService } from '../../core/services/work-time.service';
-import { WorkTime, WorkType } from '../../core/entities/work-time.entity';
-import { calculateWorkDuration } from '../../utils/time';
+import { WorkTimeService } from '../core/services/work-time.service';
+import { WorkTime, WorkType } from '../core/entities/work-time.entity';
+import { calculateWorkDuration } from '../utils/time';
 
 const colors: Record<string, EventColor> = {
   red: {

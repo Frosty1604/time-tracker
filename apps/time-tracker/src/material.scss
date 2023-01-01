@@ -1,0 +1,90 @@
+@use '@angular/material' as mat;
+
+@include mat.core();
+
+// Define a light theme
+$light-primary: mat.define-palette(mat.$light-blue-palette);
+$light-accent: mat.define-palette(mat.$blue-palette);
+$light-theme: mat.define-light-theme(
+  (
+    color: (
+      primary: $light-primary,
+      accent: $light-accent,
+    ),
+    typograhpy:
+      mat.define-typography-config(
+        $title:
+          mat.define-typography-level(
+            $font-family: 'Raleway',
+            $font-weight: 500,
+            $font-size: 2rem,
+            $line-height: 1,
+            $letter-spacing: normal,
+          ),
+      ),
+  )
+);
+
+// Define a dark theme
+$dark-primary: mat.define-palette(mat.$light-blue-palette);
+$dark-accent: mat.define-palette(mat.$green-palette, 700, 300, 900);
+$dark-theme: mat.define-dark-theme(
+  (
+    color: (
+      primary: $dark-primary,
+      accent: $dark-accent,
+    ),
+    typography:
+      mat.define-typography-config(
+        $title:
+          mat.define-typography-level(
+            $font-family: 'Raleway',
+            $font-weight: 500,
+            $font-size: 2rem,
+            $line-height: 1,
+            $letter-spacing: normal,
+          ),
+      ),
+  )
+);
+
+// Apply the dark theme by default
+@include mat.core-theme($dark-theme);
+// Component themes
+@include mat.button-theme($dark-theme);
+@include mat.chips-theme($dark-theme);
+@include mat.chips-typography(
+  mat.define-typography-config(
+    $body-2: mat.define-typography-level(12px, 12px, 500)
+  )
+);
+@include mat.datepicker-theme($dark-theme);
+@include mat.dialog-theme($dark-theme);
+@include mat.select-theme($dark-theme);
+@include mat.form-field-theme($dark-theme);
+@include mat.list-theme($dark-theme);
+@include mat.menu-theme($dark-theme);
+@include mat.radio-theme($dark-theme);
+@include mat.sidenav-theme($dark-theme);
+@include mat.snack-bar-theme($dark-theme);
+@include mat.table-theme($dark-theme);
+@include mat.toolbar-theme($dark-theme);
+@include mat.tooltip-theme($dark-theme);
+
+@media (prefers-color-scheme: light) {
+  @include mat.core-color($light-theme);
+  // Component colors
+  @include mat.button-color($light-theme);
+  @include mat.chips-color($light-theme);
+  @include mat.datepicker-color($light-theme);
+  @include mat.dialog-color($light-theme);
+  @include mat.form-field-color($light-theme);
+  @include mat.list-color($light-theme);
+  @include mat.menu-color($light-theme);
+  @include mat.radio-color($light-theme);
+  @include mat.select-color($light-theme);
+  @include mat.sidenav-color($light-theme);
+  @include mat.snack-bar-color($light-theme);
+  @include mat.table-color($light-theme);
+  @include mat.tooltip-color($light-theme);
+}

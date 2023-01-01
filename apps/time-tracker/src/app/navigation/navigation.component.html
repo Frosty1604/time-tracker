@@ -9,34 +9,35 @@
   >
     <mat-toolbar>Menu</mat-toolbar>
     <mat-nav-list>
-      <a mat-list-item routerLink="/home" routerLinkActive=""
-        ><mat-icon matListItemIcon>home</mat-icon> Home</a
+      <mat-list-item mat-list-item routerLink="/home" routerLinkActive=""
+        ><mat-icon matListIcon>home</mat-icon>Home</mat-list-item
+      >
+      <a mat-list-item routerLink="/calendar"
+        ><mat-icon matListIcon>calendar_month</mat-icon><span>Calendar</span></a
       >
       <a mat-list-item routerLink="/form"
-        ><mat-icon matListItemIcon>upload</mat-icon>Export</a
+        ><mat-icon matListIcon>upload</mat-icon>Export</a
       >
       <a mat-list-item routerLink="/settings"
-        ><mat-icon matListItemIcon>settings</mat-icon>Settings</a
+        ><mat-icon matListIcon>settings</mat-icon>Settings</a
       >
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content
-    class="bg-gradient-to-tr from-blue-500 to-teal-500 bg-fixed dark:from-stone-900 dark:to-stone-700 dark:bg-gradient-to-tr"
+    class="bg-gradient-to-bl from-white to-gray-200 bg-fixed dark:from-stone-900 dark:to-stone-700 dark:bg-gradient-to-bl"
   >
-    <mat-toolbar color="primary">
+    <mat-toolbar *ngIf="isHandset$ | async">
       <button
         type="button"
         aria-label="Toggle sidenav"
         mat-icon-button
         (click)="drawer.toggle()"
-        *ngIf="isHandset$ | async"
       >
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
-      <span>time-tracker</span>
+      <span>Time Tracker</span>
     </mat-toolbar>
-    <!-- Add Content Here -->
-    <main class="p-4">
+    <main class="p-10">
       <router-outlet></router-outlet>
     </main>
   </mat-sidenav-content>

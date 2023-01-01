@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* You can add global styles to this file, and also import other style files */
 @import './node_modules/angular-calendar/scss/angular-calendar';
 
 html,
@@ -14,7 +13,7 @@ body {
   font-family: Roboto, 'Helvetica Neue', sans-serif;
 }
 
-body {
+@media (prefers-color-scheme: dark) {
   $bg-dark-primary: #424242;
   $bg-dark-secondary: #555;
   $bg-active: #627583;
@@ -23,7 +22,6 @@ body {
   $border-color: rgb(0 0 0 / 60%);
   $weekend-color: #cb1e1e;
 
-  color: $text-color;
   @include cal-theme(
     (
       bg-primary: $bg-dark-primary,
