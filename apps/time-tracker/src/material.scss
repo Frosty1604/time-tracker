@@ -64,6 +64,7 @@ $dark-theme: mat.define-dark-theme(
 @include mat.form-field-theme($dark-theme);
 @include mat.list-theme($dark-theme);
 @include mat.menu-theme($dark-theme);
+@include mat.paginator-theme($dark-theme);
 @include mat.radio-theme($dark-theme);
 @include mat.sidenav-theme($dark-theme);
 @include mat.snack-bar-theme($dark-theme);
@@ -81,6 +82,7 @@ $dark-theme: mat.define-dark-theme(
   @include mat.form-field-color($light-theme);
   @include mat.list-color($light-theme);
   @include mat.menu-color($light-theme);
+  @include mat.paginator-theme($light-theme);
   @include mat.radio-color($light-theme);
   @include mat.select-color($light-theme);
   @include mat.sidenav-color($light-theme);

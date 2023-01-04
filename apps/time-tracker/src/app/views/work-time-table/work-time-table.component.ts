@@ -5,8 +5,8 @@ import {
   ViewChild,
 } from '@angular/core';
 import { MatTable, MatTableModule } from '@angular/material/table';
-import { filter, take } from 'rxjs';
-import { WorkTimeWithID, WorkType } from '../../core/entities/work-time.entity';
+import { filter, Observable, startWith, Subject, take } from 'rxjs';
+import { WorkTime, WorkType } from '../../core/entities/work-time.entity';
 import { MatDialog } from '@angular/material/dialog';
 import { WorkTimeFormComponent } from '../../work-time-form/work-time-form.component';
 import { WorkTimeDataSource, WorkTimeViewModel } from './work-time-datasource';
@@ -18,6 +18,8 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ThemePalette } from '@angular/material/core';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'tt-work-time-table',
@@ -33,12 +35,13 @@ import { ThemePalette } from '@angular/material/core';
     TimePipe,
     MatChipsModule,
     MatTooltipModule,
+    MatPaginatorModule,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WorkTimeTableComponent {
   @ViewChild(MatTable)
-  table!: MatTable<WorkTimeViewModel>;
+  readonly table!: MatTable<WorkTimeViewModel>;
   readonly displayedColumns = [
     'date',
     'time',
@@ -46,35 +49,53 @@ export class WorkTimeTableComponent {
     'type',
     'actions',
   ] as const;
-  readonly dataSource = new WorkTimeDataSource();
-  private readonly dialog = inject(MatDialog);
-  typeColors: Record<WorkType | any, ThemePalette> = {
+  readonly pageSizeOptions = [5, 10, 30, 50, 100] as const;
+  private readonly defaultPageSize = this.pageSizeOptions[1];
+  readonly dataSource = new WorkTimeDataSource({
+    pageSize: this.defaultPageSize,
+    pageIndex: 0,
+    length: 0,
+  });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  readonly typeColors: Record<WorkType | any, ThemePalette> = {
     normal: 'primary',
     sick: 'warn',
     vacation: 'accent',
   };
+  readonly length$ = this.dataSource.count$();
+  private readonly pageEventSubject = new Subject<PageEvent>();
+  pageSize$: Observable<number> = this.pageEventSubject.asObservable().pipe(
+    map(({ pageSize }) => pageSize),
+    startWith(this.defaultPageSize)
+  );
+  private readonly dialog = inject(MatDialog);
 
   addRow() {
     this.openDialog().subscribe((workTime) =>
-      this.dataSource.addData(<WorkTimeWithID>workTime)
+      this.dataSource.addData(<WorkTime>workTime)
     );
   }
 
-  editRow(workTime: WorkTimeWithID) {
+  editRow(workTime: WorkTime) {
     this.openDialog(workTime).subscribe((workTime) =>
-      this.dataSource.updateData(<WorkTimeWithID>workTime)
+      this.dataSource.updateData(<WorkTime>workTime)
     );
   }
 
-  deleteRow(workTime: WorkTimeWithID) {
+  deleteRow(workTime: WorkTime) {
     this.dataSource.removeData(workTime.id);
   }
 
-  private openDialog(workTime?: WorkTimeWithID) {
+  changePage(pageEvent: PageEvent) {
+    this.pageEventSubject.next(pageEvent);
+    this.dataSource.changePage(pageEvent);
+  }
+
+  private openDialog(workTime?: WorkTime) {
     const dialogRef = this.dialog.open<
       WorkTimeFormComponent,
-      WorkTimeWithID,
-      WorkTimeWithID
+      WorkTime,
+      WorkTime
     >(WorkTimeFormComponent, { data: workTime });
     return dialogRef.afterClosed().pipe(
       filter((value) => value != null),

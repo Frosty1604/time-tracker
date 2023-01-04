@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { DatabaseService } from './database.service';
 import { fromPromise } from 'rxjs/internal/observable/innerFrom';
-import { WorkTime, WorkTimeWithID } from '../entities/work-time.entity';
+import { WorkTime, WorkTimePartial } from '../entities/work-time.entity';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -12,13 +12,43 @@ export class WorkTimeService {
   private readonly dbService = inject(DatabaseService);
   private readonly storeName = 'work-time';
 
-  find(): Observable<WorkTimeWithID[]> {
-    return fromPromise(this.dbService.db.getAll(this.storeName)).pipe(
-      map((items) => items as WorkTimeWithID[])
-    );
+  find(
+    query?: number | IDBKeyRange | null | undefined,
+    count?: number
+  ): Observable<WorkTime[]> {
+    return fromPromise(
+      this.dbService.db.getAll(this.storeName, query, count)
+    ).pipe(map((items) => items as WorkTime[]));
   }
 
-  add(workTime: WorkTime): Promise<number> {
+  async findPaged(pageIndex: number, pageSize: number): Promise<WorkTime[]> {
+    const tx = this.dbService.db.transaction(this.storeName);
+    let cursor = await tx.store.index('by-day').openCursor();
+    let advanced = false;
+    let count = 0;
+
+    const skip = pageIndex * pageSize;
+    const length = await tx.store.count();
+    const result: WorkTime[] = [];
+    if (skip >= length) {
+      return [];
+    }
+
+    while (cursor) {
+      if (!advanced && skip > 0) {
+        await cursor.advance(skip);
+        advanced = true;
+      }
+      if (count < pageSize) {
+        result.push(cursor.value as WorkTime);
+      }
+      cursor = await cursor.continue();
+      count++;
+    }
+    return result;
+  }
+
+  insert(workTime: WorkTimePartial): Promise<number> {
     return this.dbService.db.add(this.storeName, {
       ...workTime,
       created: Date.now(),
@@ -26,14 +56,19 @@ export class WorkTimeService {
     });
   }
 
-  update(workTime: WorkTimeWithID): Promise<number> {
+  update(workTime: WorkTime): Promise<number> {
     return this.dbService.db.put(this.storeName, {
       ...workTime,
       updated: Date.now(),
     });
   }
 
-  delete(workTimeId: number) {
-    return this.dbService.db.delete(this.storeName, workTimeId);
+  async delete(workTimeId: number): Promise<number> {
+    void this.dbService.db.delete(this.storeName, workTimeId);
+    return workTimeId;
+  }
+
+  count(): Promise<number> {
+    return this.dbService.db.count(this.storeName);
   }
 }

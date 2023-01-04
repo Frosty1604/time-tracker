@@ -1,10 +1,17 @@
 import {
   WorkTime,
-  WorkTimeWithID,
+  WorkTimePartial,
   WorkType,
 } from '../../core/entities/work-time.entity';
 import { DataSource } from '@angular/cdk/collections';
-import { merge, Observable, scan, Subject } from 'rxjs';
+import {
+  merge,
+  Observable,
+  ReplaySubject,
+  scan,
+  Subject,
+  switchMap,
+} from 'rxjs';
 import { inject } from '@angular/core';
 import { WorkTimeService } from '../../core/services/work-time.service';
 import { map } from 'rxjs/operators';
@@ -15,17 +22,14 @@ import {
   durationToDate,
   timeToDate,
 } from '../../utils/time';
+import { fromPromise } from 'rxjs/internal/observable/innerFrom';
+import { PageEvent } from '@angular/material/paginator';
 
-type RowAction = RowActionAdd | RowActionUpdate | RowActionDelete;
+type RowAction = RowActionUpsert | RowActionDelete;
 
-interface RowActionAdd {
-  action: 'add';
-  workTime: WorkTimeWithID;
-}
-
-interface RowActionUpdate {
-  action: 'update';
-  workTime: WorkTimeWithID;
+interface RowActionUpsert {
+  action: 'upsert';
+  workTime: WorkTime;
 }
 
 interface RowActionDelete {
@@ -39,71 +43,90 @@ export interface WorkTimeViewModel {
   pauseTime: Time;
   type: WorkType;
   isWorkDay: boolean;
-  entity: WorkTime;
+  entity: WorkTimePartial;
 }
 
 export class WorkTimeDataSource extends DataSource<WorkTimeViewModel> {
-  private readonly addDataSubject = new Subject<WorkTimeWithID>();
-  private readonly updateDataSubject = new Subject<WorkTimeWithID>();
+  private readonly upsertDataSubject = new Subject<WorkTime>();
   private readonly removeDataSubject = new Subject<number>();
+  private readonly changePageSubject = new ReplaySubject<PageEvent>(1);
 
   private readonly workTimeService = inject(WorkTimeService);
 
+  constructor(private readonly pageEvent: PageEvent) {
+    super();
+    this.changePageSubject.next(pageEvent);
+  }
+
   connect(): Observable<WorkTimeViewModel[]> {
-    const initialItems$ = this.workTimeService.find();
-    return merge(
-      this.addDataSubject
-        .asObservable()
-        .pipe(
-          map(
-            (workTime) =>
-              ({ action: 'add', workTime: workTime } as RowActionAdd)
-          )
-        ),
-      this.updateDataSubject.pipe(
-        map((workTime) => ({ action: 'update', workTime } as RowActionUpdate))
-      ),
-      this.removeDataSubject.pipe(
-        map((id) => ({ action: 'delete', id } as RowActionDelete))
-      ),
-      initialItems$
-    ).pipe(
-      scan<WorkTimeWithID[] | RowAction, Map<number, WorkTimeWithID>>(
-        (acc, value) => {
-          if (Array.isArray(value)) {
-            value.forEach((item) => acc.set(item.id, item));
-            return acc;
-          }
-          if (value.action === 'update' || value.action === 'add') {
-            acc.set(value.workTime.id, value.workTime);
-          } else if (value.action === 'delete') {
-            acc.delete(value.id);
-          }
+    const initialItems$ = this.changePageSubject.pipe(
+      switchMap(({ pageIndex, pageSize }) =>
+        this.workTimeService.findPaged(pageIndex, pageSize)
+      )
+    );
+    const rowActionUpsert = this.upsertDataSubject.pipe(
+      map((workTime) => ({ action: 'upsert', workTime } as RowActionUpsert))
+    );
+    const rowActionDelete = this.removeDataSubject.pipe(
+      switchMap((id) => this.workTimeService.delete(id)),
+      map((id) => ({ action: 'delete', id } as RowActionDelete))
+    );
+
+    return merge(rowActionUpsert, rowActionDelete, initialItems$).pipe(
+      scan<WorkTime[] | RowAction, Map<number, WorkTime>>((acc, value) => {
+        if (Array.isArray(value)) {
+          acc.clear();
+          value.forEach((item) => acc.set(item.id, item));
           return acc;
-        },
-        new Map<number, WorkTimeWithID>()
+        }
+        if (value.action === 'upsert') {
+          acc.set(value.workTime.id, value.workTime);
+        } else if (value.action === 'delete') {
+          acc.delete(value.id);
+        }
+        return acc;
+      }, new Map<number, WorkTime>()),
+      map((map) =>
+        Array.from(map.values()).sort(
+          (a, b) => a.date.getTime() - b.date.getTime()
+        )
       ),
-      map((map) => Array.from(map.values())),
       map((workTimeItems) => workTimeItems.map(this.workTimeToViewModel))
     );
   }
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  disconnect() {}
-
-  addData(row: WorkTimeWithID) {
-    this.addDataSubject.next(row);
+  disconnect() {
+    this.upsertDataSubject.complete();
+    this.removeDataSubject.complete();
+    this.changePageSubject.complete();
   }
 
-  updateData(row: WorkTimeWithID) {
-    this.updateDataSubject.next(row);
+  addData(row: WorkTime) {
+    this.upsertDataSubject.next(row);
+  }
+
+  updateData(row: WorkTime) {
+    this.upsertDataSubject.next(row);
   }
 
   removeData(id: number) {
     this.removeDataSubject.next(id);
   }
 
-  private workTimeToViewModel(workTime: WorkTime): WorkTimeViewModel {
+  count$(): Observable<number> {
+    return merge(
+      this.upsertDataSubject.pipe(map(() => 1)),
+      this.removeDataSubject.pipe(map(() => -1)),
+      fromPromise(this.workTimeService.count())
+    ).pipe(scan((acc, val) => acc + val));
+  }
+
+  changePage(pageEvent: PageEvent) {
+    this.changePageSubject.next(pageEvent);
+  }
+
+  private workTimeToViewModel(workTime: WorkTimePartial): WorkTimeViewModel {
     return {
       date: workTime.date,
       effectiveTime: intervalToDuration({

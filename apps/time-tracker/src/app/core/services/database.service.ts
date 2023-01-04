@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core';
 import { DBSchema, IDBPDatabase, openDB } from 'idb';
-import { WorkTime } from '../entities/work-time.entity';
+import { WorkTimePartial } from '../entities/work-time.entity';
 
 interface TimeTrackerDB extends DBSchema {
   'work-time': {
     key: number;
-    value: WorkTime;
+    value: WorkTimePartial;
+    indexes: {
+      'by-day': 'date';
+    };
   };
 }
 
@@ -15,10 +18,12 @@ const version = 1;
 async function create(): Promise<IDBPDatabase<TimeTrackerDB>> {
   return openDB<TimeTrackerDB>(name, version, {
     upgrade(db) {
-      db.createObjectStore('work-time', {
+      const store = db.createObjectStore('work-time', {
         keyPath: 'id',
         autoIncrement: true,
       });
+
+      store.createIndex('by-day', 'date', { unique: false });
     },
   });
 }

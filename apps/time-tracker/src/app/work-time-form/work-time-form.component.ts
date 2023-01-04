@@ -3,7 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {
   WorkTime,
-  WorkTimeWithID,
+  WorkTimePartial,
   WorkType,
 } from '../core/entities/work-time.entity';
 import {
@@ -23,7 +23,7 @@ import { addDays, subDays } from 'date-fns';
 export class WorkTimeFormComponent {
   readonly pauseOptions: number[] = [];
   readonly typeOptions: WorkType[] = ['normal', 'sick', 'vacation'];
-  private readonly data = inject<WorkTime>(MAT_DIALOG_DATA, {
+  private readonly data = inject<WorkTimePartial>(MAT_DIALOG_DATA, {
     optional: true,
   });
 
@@ -82,7 +82,7 @@ export class WorkTimeFormComponent {
   }
   async submit() {
     const formData = this.formGroup.value;
-    const workTime: WorkTime = {
+    const workTime: WorkTimePartial = {
       start: stringToTime(formData?.start ? formData.start : ''),
       end: stringToTime(formData?.end ? formData.end : ''),
       pause: minutesToTime(formData?.pause ? formData.pause : 0),
@@ -91,9 +91,9 @@ export class WorkTimeFormComponent {
     };
     if (this.isEditMode) {
       workTime.id = this.data?.id;
-      await this.workTimeService.update(workTime as WorkTimeWithID);
+      await this.workTimeService.update(workTime as WorkTime);
     } else {
-      workTime.id = await this.workTimeService.add(workTime);
+      workTime.id = await this.workTimeService.insert(workTime);
     }
     this.dialogRef.close(workTime);
   }

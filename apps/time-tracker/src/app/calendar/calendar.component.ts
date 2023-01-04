@@ -18,7 +18,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatIconModule } from '@angular/material/icon';
 import { WorkTimeService } from '../core/services/work-time.service';
-import { WorkTime, WorkType } from '../core/entities/work-time.entity';
+import { WorkTimePartial, WorkType } from '../core/entities/work-time.entity';
 import { calculateWorkDuration } from '../utils/time';
 
 const colors: Record<string, EventColor> = {
@@ -75,7 +75,7 @@ export class CalendarComponent {
     )
   );
 
-  private convertToEvent(workTime: WorkTime): CalendarEvent {
+  private convertToEvent(workTime: WorkTimePartial): CalendarEvent {
     return {
       start: addMinutes(
         addHours(startOfDay(workTime.date), workTime.start.hours),

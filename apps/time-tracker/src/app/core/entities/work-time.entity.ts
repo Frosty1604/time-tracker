@@ -1,7 +1,7 @@
 import { BaseEntity } from './base.entity';
 import { Time } from '@angular/common';
 
-export interface WorkTime extends BaseEntity {
+export interface WorkTimePartial extends BaseEntity {
   date: Date;
   start: Time;
   end: Time;
@@ -9,6 +9,6 @@ export interface WorkTime extends BaseEntity {
   type: WorkType;
 }
 
-export type WorkTimeWithID = Required<WorkTime>;
+export type WorkTime = Required<WorkTimePartial>;
 
 export type WorkType = 'normal' | 'vacation' | 'sick';
