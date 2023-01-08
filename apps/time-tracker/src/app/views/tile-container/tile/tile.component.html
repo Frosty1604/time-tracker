@@ -2,9 +2,10 @@
   *ngIf="data$ | async as data"
   class="relative block rounded-xl border border-gray-100 px-4 py-6 shadow-xl dark:border-slate-300/10"
   [ngClass]="data.colors ?? defaultBackground"
+  [matTooltip]="data.tooltip ?? ''"
 >
-  <div class="text-white flex justify-between items-center">
-    <div>
+  <div class="text-white flex justify-between items-center gap-4">
+    <div class="whitespace-nowrap">
       <label class="text-gray-200">
         {{ data.title }}
       </label>

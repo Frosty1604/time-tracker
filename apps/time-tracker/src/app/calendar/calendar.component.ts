@@ -20,6 +20,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { WorkTimeService } from '../core/services/work-time.service';
 import { WorkTimePartial, WorkType } from '../core/entities/work-time.entity';
 import { calculateWorkDuration } from '../utils/time';
+import { fromPromise } from 'rxjs/internal/observable/innerFrom';
 
 const colors: Record<string, EventColor> = {
   red: {
@@ -67,7 +68,9 @@ const workTypeColors: Record<WorkType, EventColor> = {
 export class CalendarComponent {
   private workTimeService = inject(WorkTimeService);
   viewDate: Date = new Date();
-  events$: Observable<CalendarEvent[]> = this.workTimeService.find().pipe(
+  events$: Observable<CalendarEvent[]> = fromPromise(
+    this.workTimeService.find()
+  ).pipe(
     map((workTimes) =>
       workTimes.map((workTime) => {
         return this.convertToEvent(workTime);

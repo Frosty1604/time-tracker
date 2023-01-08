@@ -10,10 +10,20 @@ body {
 }
 body {
   margin: 0;
-  font-family: Roboto, 'Helvetica Neue', sans-serif;
+  font-family: 'Lato', sans-serif;
 }
 
+h1,
+h2,
+h3,
+h4 {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 300;
+}
+
+// Dark specific theming
 @media (prefers-color-scheme: dark) {
+  // Angular calendar
   $bg-dark-primary: #424242;
   $bg-dark-secondary: #555;
   $bg-active: #627583;
@@ -35,4 +45,8 @@ body {
       event-color-secondary: $bg-event,
     )
   );
+
+  input[type='time']::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+  }
 }

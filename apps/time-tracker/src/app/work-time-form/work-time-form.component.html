@@ -59,7 +59,13 @@
       <div class="flex gap-4">
         <mat-form-field hideRequiredMarker="true">
           <mat-label>Start Time</mat-label>
-          <input required formControlName="start" matInput type="time" />
+          <input
+            required
+            formControlName="start"
+            matInput
+            type="time"
+            step="300"
+          />
           <mat-hint>HH:mm</mat-hint>
           <mat-error *ngIf="start?.getError('required')"
             >Start time is required.</mat-error
@@ -67,7 +73,13 @@
         </mat-form-field>
         <mat-form-field hideRequiredMarker="true">
           <mat-label>End Time</mat-label>
-          <input required formControlName="end" matInput type="time" />
+          <input
+            required
+            formControlName="end"
+            matInput
+            type="time"
+            step="300"
+          />
           <mat-hint>HH:mm</mat-hint>
           <mat-error *ngIf="end?.getError('required')"
             >End time is required.</mat-error

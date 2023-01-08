@@ -18,12 +18,12 @@ const version = 1;
 async function create(): Promise<IDBPDatabase<TimeTrackerDB>> {
   return openDB<TimeTrackerDB>(name, version, {
     upgrade(db) {
-      const store = db.createObjectStore('work-time', {
+      const workTimeStore = db.createObjectStore('work-time', {
         keyPath: 'id',
         autoIncrement: true,
       });
 
-      store.createIndex('by-day', 'date', { unique: false });
+      workTimeStore.createIndex('by-day', 'date', { unique: false });
     },
   });
 }

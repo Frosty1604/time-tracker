@@ -8,7 +8,10 @@ import { Duration, formatDuration } from 'date-fns';
 export class TimePipe implements PipeTransform {
   transform(value: Duration, format: 'short' | 'full' = 'full'): string {
     if (format === 'short') {
-      return `${value.hours}:${value.minutes}`;
+      const minutes = ('0' + value.minutes).slice(-2);
+      const hours = ('0' + value.hours).slice(-2);
+
+      return `${hours}:${minutes}`;
     }
     return formatDuration(value, { format: ['hours', 'minutes'] });
   }

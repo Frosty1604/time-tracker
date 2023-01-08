@@ -18,7 +18,11 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ThemePalette } from '@angular/material/core';
-import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import {
+  MAT_PAGINATOR_DEFAULT_OPTIONS,
+  MatPaginatorModule,
+  PageEvent,
+} from '@angular/material/paginator';
 import { map } from 'rxjs/operators';
 
 @Component({
@@ -36,6 +40,12 @@ import { map } from 'rxjs/operators';
     MatChipsModule,
     MatTooltipModule,
     MatPaginatorModule,
+  ],
+  providers: [
+    {
+      provide: MAT_PAGINATOR_DEFAULT_OPTIONS,
+      useValue: { formFieldAppearance: 'standard' },
+    },
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

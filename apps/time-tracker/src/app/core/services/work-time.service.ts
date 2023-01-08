@@ -1,9 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { DatabaseService } from './database.service';
-import { fromPromise } from 'rxjs/internal/observable/innerFrom';
 import { WorkTime, WorkTimePartial } from '../entities/work-time.entity';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -11,14 +9,19 @@ import { map } from 'rxjs/operators';
 export class WorkTimeService {
   private readonly dbService = inject(DatabaseService);
   private readonly storeName = 'work-time';
+  private readonly storeChangedSubject = new Subject<void>();
+  readonly storeChange$ = this.storeChangedSubject.asObservable();
 
-  find(
+  async find(
     query?: number | IDBKeyRange | null | undefined,
     count?: number
-  ): Observable<WorkTime[]> {
-    return fromPromise(
-      this.dbService.db.getAll(this.storeName, query, count)
-    ).pipe(map((items) => items as WorkTime[]));
+  ): Promise<WorkTime[]> {
+    const workTimes = await this.dbService.db.getAll(
+      this.storeName,
+      query,
+      count
+    );
+    return workTimes as WorkTime[];
   }
 
   async findPaged(pageIndex: number, pageSize: number): Promise<WorkTime[]> {
@@ -48,23 +51,28 @@ export class WorkTimeService {
     return result;
   }
 
-  insert(workTime: WorkTimePartial): Promise<number> {
-    return this.dbService.db.add(this.storeName, {
+  async insert(workTime: WorkTimePartial): Promise<number> {
+    const id = this.dbService.db.add(this.storeName, {
       ...workTime,
       created: Date.now(),
       updated: Date.now(),
     });
+    this.storeChangedSubject.next();
+    return id;
   }
 
-  update(workTime: WorkTime): Promise<number> {
-    return this.dbService.db.put(this.storeName, {
+  async update(workTime: WorkTime): Promise<number> {
+    const id = await this.dbService.db.put(this.storeName, {
       ...workTime,
       updated: Date.now(),
     });
+    this.storeChangedSubject.next();
+    return id;
   }
 
   async delete(workTimeId: number): Promise<number> {
     void this.dbService.db.delete(this.storeName, workTimeId);
+    this.storeChangedSubject.next();
     return workTimeId;
   }
 

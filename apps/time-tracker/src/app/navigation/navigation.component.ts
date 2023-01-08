@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import {
   BreakpointObserver,
   Breakpoints,
@@ -11,8 +11,17 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
-import { CommonModule } from '@angular/common';
+import { AsyncPipe, NgForOf, NgIf, NgOptimizedImage } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { SettingsComponent } from '../settings/settings.component';
+import { SettingsService } from '../core/services/settings.service';
+
+interface NavListItem {
+  title: string;
+  icon: string;
+  link: string;
+}
 
 @Component({
   selector: 'tt-navigation',
@@ -20,17 +29,42 @@ import { RouterModule } from '@angular/router';
   styleUrls: ['./navigation.component.scss'],
   standalone: true,
   imports: [
-    CommonModule,
     LayoutModule,
     MatButtonModule,
     MatIconModule,
     MatListModule,
     MatSidenavModule,
     MatToolbarModule,
+    NgOptimizedImage,
     RouterModule,
+    AsyncPipe,
+    NgForOf,
+    NgIf,
   ],
 })
 export class NavigationComponent {
+  readonly navListItems: NavListItem[] = [
+    {
+      title: 'Home',
+      icon: 'home',
+      link: '/home',
+    },
+    {
+      title: 'Calendar',
+      icon: 'calendar_month',
+      link: '/calendar',
+    },
+    {
+      title: 'Export',
+      icon: 'upload',
+      link: '/export',
+    },
+  ];
+
+  private readonly breakpointObserver = inject(BreakpointObserver);
+  private readonly dialog = inject(MatDialog);
+  private readonly settingsService = inject(SettingsService);
+
   isHandset$: Observable<boolean> = this.breakpointObserver
     .observe(Breakpoints.Handset)
     .pipe(
@@ -38,5 +72,9 @@ export class NavigationComponent {
       shareReplay()
     );
 
-  constructor(private breakpointObserver: BreakpointObserver) {}
+  openSettingsDialog() {
+    this.dialog.open(SettingsComponent, {
+      data: this.settingsService.get(),
+    });
+  }
 }

@@ -1,21 +1,25 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
-import { TileComponent } from './tile/tile.component';
-import { map } from 'rxjs';
-import {
-  calculateWorkDuration,
-  durationToDate,
-  timeToDate,
-} from '../../utils/time';
-import {
-  differenceInMinutes,
-  formatDuration,
-  hoursToMinutes,
-  minutesInHour,
-  minutesToHours,
-} from 'date-fns';
+import { TileComponent, TileDetails } from './tile/tile.component';
+import { combineLatest, map, Observable, startWith, switchMap } from 'rxjs';
 import { WorkTimeService } from '../../core/services/work-time.service';
+import { WorkTime } from '../../core/entities/work-time.entity';
+import { SettingsService } from '../../core/services/settings.service';
+import { Settings } from '../../core/entities/settings.entity';
+import {
+  calculateAvgWorkTime,
+  calculateOvertime,
+  calculateVacationDays,
+  makeTileDetails,
+  parseAvgWorkTime,
+  parseOvertime,
+} from '../../utils/worktime';
+
+interface TileData {
+  settings: Settings | undefined;
+  items: WorkTime[];
+}
 
 @Component({
   selector: 'tt-tile-container',
@@ -26,84 +30,60 @@ import { WorkTimeService } from '../../core/services/work-time.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TileContainerComponent {
-  private readonly workHoursNeeded = 8;
+  private readonly previousYear = new Date().getFullYear() - 1;
   private readonly workTimeService = inject(WorkTimeService);
+  private readonly storeChange$ = this.workTimeService.storeChange$;
+  private readonly settings$ = inject(SettingsService).settings$;
+  private readonly workTimes$: Observable<WorkTime[]> = this.storeChange$.pipe(
+    startWith(null),
+    switchMap(() => this.workTimeService.find())
+  );
 
-  tileAverageWorkTime$ = this.workTimeService.find().pipe(
-    map((workTimeModels) => {
-      const workTimeSum = workTimeModels.reduce((prev, curr) => {
-        const duration = calculateWorkDuration(curr.start, curr.end);
-        return (
-          prev + hoursToMinutes(duration.hours ?? 0) + (duration.minutes ?? 0)
-        );
-      }, 0);
-      return {
-        title: 'Average Hours/Day',
-        icon: 'functions',
-        value:
-          (workTimeSum / workTimeModels.length / 60).toPrecision(3) + ' hours',
-        colors: [
-          'bg-gradient-to-tr',
+  private readonly tileViewModel$: Observable<TileData> = combineLatest([
+    this.workTimes$,
+    this.settings$,
+  ]).pipe(map(([items, settings]) => ({ items, settings })));
+  readonly hasEntries$ = this.tileViewModel$.pipe(
+    map((data) => data.items.length > 0)
+  );
+  readonly tileAverageWorkTime$: Observable<TileDetails> =
+    this.tileViewModel$.pipe(
+      map(({ items }) => calculateAvgWorkTime(items)),
+      map((avgTime) => parseAvgWorkTime(avgTime)),
+      map((value) =>
+        makeTileDetails('Average Hours/Day', 'functions', value, [
           `from-purple-500`,
           `to-pink-500`,
-          `dark:from-purple-500`,
-          `dark:to-pink-500`,
-        ],
-      };
-    })
-  );
-  tileDaysOff$ = this.workTimeService.find().pipe(
-    map((workTimeModels) => {
-      const daysOff = workTimeModels.reduce(
-        (prev, curr) => (curr.type === 'vacation' ? prev + 1 : prev),
-        0
-      );
-      return {
-        title: 'Vacation',
-        icon: 'beach_access',
-        value: daysOff + ' Day(s)',
-        colors: [
-          'bg-gradient-to-tr',
-          `from-red-500`,
-          `to-orange-500`,
-          `dark:from-red-500`,
-          `dark:to-orange-500`,
-        ],
-      };
-    })
-  );
-  tileOvertime$ = this.workTimeService.find().pipe(
-    map((workTimeModels) =>
-      workTimeModels.reduce((prev, curr) => {
-        const realWorkTime = differenceInMinutes(
-          durationToDate(calculateWorkDuration(curr.start, curr.end)),
-          timeToDate(curr.pause)
-        );
-        if (curr.date.getDay() === 0 || curr.date.getDay() === 6) {
-          return prev + realWorkTime; // todo make map for working days
-        }
-        return prev + realWorkTime - this.workHoursNeeded * minutesInHour;
-      }, 0)
-    ),
-    map((overTimeInMinutes) => ({
-      title: 'Overtime',
-      icon: 'schedule',
-      value: formatDuration(
-        {
-          minutes: overTimeInMinutes % minutesInHour,
-          hours: minutesToHours(overTimeInMinutes),
-        },
-        { format: ['hours', 'minutes'] }
+        ])
       )
-        .replace('hours', 'h')
-        .replace('minutes', 'm'),
-      colors: [
-        'bg-gradient-to-tr',
-        `from-blue-500`,
-        `to-teal-500`,
-        `dark:from-blue-500`,
-        `dark:to-teal-500`,
-      ],
-    }))
+    );
+
+  readonly tileVacationDays$: Observable<TileDetails> =
+    this.tileViewModel$.pipe(
+      map(({ items, settings }) =>
+        calculateVacationDays(items, settings, this.previousYear)
+      ),
+      map(({ available, total, taken }) =>
+        makeTileDetails(
+          'Vacation left',
+          'beach_access',
+          `${available} Days`,
+          [`from-red-500`, `to-orange-500`],
+          taken + ' of ' + total + ' days taken'
+        )
+      )
+    );
+
+  readonly tileOvertime$: Observable<TileDetails> = this.tileViewModel$.pipe(
+    map(({ items, settings }) => calculateOvertime(items, settings)),
+    map((overTimeInMinutes) => parseOvertime(overTimeInMinutes)),
+    map((overtime) =>
+      makeTileDetails(
+        'Overtime',
+        'schedule',
+        overtime.replace(' hours', 'h').replace(' minutes', 'm'),
+        ['from-blue-500', 'to-teal-500']
+      )
+    )
   );
 }

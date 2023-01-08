@@ -3,14 +3,34 @@
 }
 
 .sidenav {
-  width: 200px;
+  width: 150px;
   .mat-toolbar {
     background: inherit;
   }
 }
 
-.mat-toolbar.mat-primary {
-  position: sticky;
-  top: 0;
-  z-index: 1;
+.nav-list-item {
+  @apply flex flex-col items-center gap-1 p-2 justify-center
+  transition-colors duration-500 ease-in-out
+  text-neutral-500
+  dark:text-neutral-400
+  hover:bg-neutral-200 hover:text-black
+  dark:hover:bg-neutral-800 dark:hover:text-white;
+  height: 80px;
+  h4 {
+    display: none;
+  }
+  &.active {
+    @apply dark:text-white text-black bg-neutral-100 dark:bg-neutral-600;
+    h4 {
+      display: block;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+  }
+  &:hover {
+    mat-icon {
+      @apply animate-wiggle;
+    }
+  }
 }

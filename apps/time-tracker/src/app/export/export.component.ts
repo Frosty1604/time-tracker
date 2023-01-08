@@ -19,7 +19,7 @@ import exportFromJSON from 'export-from-json';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ExportComponent implements OnInit, OnDestroy {
-  private readonly dbData$ = inject(WorkTimeService).find();
+  private readonly workTimeData = inject(WorkTimeService).find();
   private readonly exportSubject = new Subject<void>();
   private readonly onDestroySubject = new Subject<void>();
 
@@ -27,7 +27,7 @@ export class ExportComponent implements OnInit, OnDestroy {
     this.exportSubject
       .asObservable()
       .pipe(
-        switchMap(() => this.dbData$),
+        switchMap(() => this.workTimeData),
         takeUntil(this.onDestroySubject)
       )
       .subscribe((data) => {

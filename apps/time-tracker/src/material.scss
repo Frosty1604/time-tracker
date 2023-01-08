@@ -4,7 +4,7 @@
 
 // Define a light theme
 $light-primary: mat.define-palette(mat.$light-blue-palette);
-$light-accent: mat.define-palette(mat.$blue-palette);
+$light-accent: mat.define-palette(mat.$green-palette, A700, A200, A700);
 $light-theme: mat.define-light-theme(
   (
     color: (
@@ -13,21 +13,14 @@ $light-theme: mat.define-light-theme(
     ),
     typograhpy:
       mat.define-typography-config(
-        $title:
-          mat.define-typography-level(
-            $font-family: 'Raleway',
-            $font-weight: 500,
-            $font-size: 2rem,
-            $line-height: 1,
-            $letter-spacing: normal,
-          ),
+        $font-family: 'Roboto Condensed',
       ),
   )
 );
 
 // Define a dark theme
 $dark-primary: mat.define-palette(mat.$light-blue-palette);
-$dark-accent: mat.define-palette(mat.$green-palette, 700, 300, 900);
+$dark-accent: mat.define-palette(mat.$green-palette, A700, A200, A700);
 $dark-theme: mat.define-dark-theme(
   (
     color: (
@@ -36,11 +29,12 @@ $dark-theme: mat.define-dark-theme(
     ),
     typography:
       mat.define-typography-config(
+        $font-family: 'Lato',
         $title:
           mat.define-typography-level(
             $font-family: 'Raleway',
-            $font-weight: 500,
-            $font-size: 2rem,
+            $font-weight: 300,
+            $font-size: 1.5rem,
             $line-height: 1,
             $letter-spacing: normal,
           ),
@@ -52,12 +46,8 @@ $dark-theme: mat.define-dark-theme(
 @include mat.core-theme($dark-theme);
 // Component themes
 @include mat.button-theme($dark-theme);
+@include mat.checkbox-theme($dark-theme);
 @include mat.chips-theme($dark-theme);
-@include mat.chips-typography(
-  mat.define-typography-config(
-    $body-2: mat.define-typography-level(12px, 12px, 500)
-  )
-);
 @include mat.datepicker-theme($dark-theme);
 @include mat.dialog-theme($dark-theme);
 @include mat.select-theme($dark-theme);
@@ -72,21 +62,30 @@ $dark-theme: mat.define-dark-theme(
 @include mat.toolbar-theme($dark-theme);
 @include mat.tooltip-theme($dark-theme);
 
+// Component typography
+@include mat.chips-typography(
+  mat.define-typography-config(
+    $body-2: mat.define-typography-level(12px, 12px, 500)
+  )
+);
+
 @media (prefers-color-scheme: light) {
   @include mat.core-color($light-theme);
   // Component colors
   @include mat.button-color($light-theme);
+  @include mat.checkbox-color($light-theme);
   @include mat.chips-color($light-theme);
   @include mat.datepicker-color($light-theme);
   @include mat.dialog-color($light-theme);
   @include mat.form-field-color($light-theme);
   @include mat.list-color($light-theme);
   @include mat.menu-color($light-theme);
-  @include mat.paginator-theme($light-theme);
+  @include mat.paginator-color($light-theme);
   @include mat.radio-color($light-theme);
   @include mat.select-color($light-theme);
   @include mat.sidenav-color($light-theme);
   @include mat.snack-bar-color($light-theme);
   @include mat.table-color($light-theme);
+  @include mat.toolbar-color($light-theme);
   @include mat.tooltip-color($light-theme);
 }
