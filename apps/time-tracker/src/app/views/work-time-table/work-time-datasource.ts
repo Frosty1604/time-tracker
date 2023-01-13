@@ -44,6 +44,7 @@ export interface WorkTimeViewModel {
   type: WorkType;
   isWorkDay: boolean;
   entity: WorkTimePartial;
+  notes?: string;
 }
 
 export class WorkTimeDataSource extends DataSource<WorkTimeViewModel> {
@@ -139,6 +140,7 @@ export class WorkTimeDataSource extends DataSource<WorkTimeViewModel> {
       type: workTime.type,
       isWorkDay: workTime.type === 'normal',
       entity: workTime,
+      notes: workTime?.notes,
     };
   }
 }

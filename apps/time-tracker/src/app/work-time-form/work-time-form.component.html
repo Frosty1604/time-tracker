@@ -4,6 +4,17 @@
   </header>
   <main mat-dialog-content>
     <section class="flex flex-col gap-2">
+      <mat-radio-group
+        formControlName="type"
+        class="flex flex-row gap-4 items-start mt-2 mb-4"
+      >
+        <mat-radio-button
+          tabindex="-1"
+          *ngFor="let type of typeOptions"
+          [value]="type"
+          >{{ type | titlecase }}</mat-radio-button
+        >
+      </mat-radio-group>
       <mat-form-field hideRequiredMarker="true">
         <mat-label>Date</mat-label>
         <input
@@ -45,15 +56,14 @@
         >
           <mat-error
             *ngIf="
-              date?.getError('required') &&
-              !date?.getError('matDatepickerParse')
+              date.getError('required') && !date.getError('matDatepickerParse')
             "
-            >Date is required.</mat-error
-          >
-          <mat-error *ngIf="date?.getError('matDatepickerParse')"
-            >"{{ date?.getError('matDatepickerParse').text }}" is not a valid
-            date!</mat-error
-          >
+            >Date is required.
+          </mat-error>
+          <mat-error *ngIf="date.getError('matDatepickerParse')"
+            >"{{ date.getError('matDatepickerParse').text }}" is not a valid
+            date!
+          </mat-error>
         </ng-container>
       </mat-form-field>
       <div class="flex gap-4">
@@ -88,19 +98,26 @@
       </div>
       <mat-form-field hideRequiredMarker="true">
         <mat-label>Pause</mat-label>
-        <mat-select formControlName="pause" required>
-          <mat-option [value]="option" *ngFor="let option of pauseOptions">{{
-            option
-          }}</mat-option>
-        </mat-select>
+        <input
+          required
+          formControlName="pause"
+          matInput
+          type="time"
+          step="300"
+        />
+        <mat-hint>HH:mm</mat-hint>
+        <mat-error *ngIf="pause?.getError('required')"
+          >Pause is required.
+        </mat-error>
       </mat-form-field>
-      <mat-form-field hideRequiredMarker="true">
-        <mat-label>Type</mat-label>
-        <mat-select formControlName="type" required>
-          <mat-option [value]="option" *ngFor="let option of typeOptions">{{
-            option | titlecase
-          }}</mat-option>
-        </mat-select>
+      <mat-form-field>
+        <mat-label>Notes</mat-label>
+        <textarea
+          matInput
+          cdkTextareaAutosize="true"
+          formControlName="notes"
+          (keydown.control.enter)="submit()"
+        ></textarea>
       </mat-form-field>
     </section>
   </main>

@@ -6,12 +6,7 @@ import {
   WorkTimePartial,
   WorkType,
 } from '../core/entities/work-time.entity';
-import {
-  minutesToTime,
-  stringToTime,
-  timeToMinutes,
-  timeToString,
-} from '../utils/time';
+import { stringToTime, timeToString } from '../utils/time';
 import { WorkTimeService } from '../core/services/work-time.service';
 import { distinctUntilChanged, map } from 'rxjs/operators';
 import { addDays, subDays } from 'date-fns';
@@ -21,37 +16,37 @@ import { addDays, subDays } from 'date-fns';
   styleUrls: ['./work-time-form.component.scss'],
 })
 export class WorkTimeFormComponent {
-  readonly pauseOptions: number[] = [];
-  readonly typeOptions: WorkType[] = ['normal', 'sick', 'vacation'];
+  readonly typeOptions: WorkType[] = ['normal', 'vacation', 'sick'];
   private readonly data = inject<WorkTimePartial>(MAT_DIALOG_DATA, {
     optional: true,
   });
-
   readonly isEditMode = this.data != null;
-
   readonly formGroup = new FormGroup({
     date: new FormControl(this.data?.date ?? new Date(), {
       validators: Validators.required,
+      nonNullable: true,
     }),
     start: new FormControl(
       this.data?.start ? timeToString(this.data.start) : '09:30',
-      { validators: Validators.required }
+      { validators: Validators.required, nonNullable: true }
     ),
     end: new FormControl(
       this.data?.end ? timeToString(this.data.end) : '18:00',
-      { validators: Validators.required }
+      { validators: Validators.required, nonNullable: true }
     ),
     pause: new FormControl(
-      this.data?.pause ? timeToMinutes(this.data.pause) : 30,
+      this.data?.pause ? timeToString(this.data.pause) : '00:30',
       {
         validators: Validators.required,
+        nonNullable: true,
       }
     ),
     type: new FormControl<WorkType>(this.data?.type ?? 'normal', {
       validators: Validators.required,
+      nonNullable: true,
     }),
+    notes: new FormControl(this.data?.notes ?? ''),
   });
-
   readonly isFormInvalid$ = this.formGroup.statusChanges.pipe(
     map((status) => status !== 'VALID'),
     distinctUntilChanged()
@@ -60,34 +55,32 @@ export class WorkTimeFormComponent {
   private readonly dialogRef = inject(MatDialogRef<WorkTimeFormComponent>);
 
   get date() {
-    return this.formGroup.get('date');
+    return this.formGroup.controls.date;
   }
   get start() {
-    return this.formGroup.get('start');
+    return this.formGroup.controls.start;
   }
   get end() {
-    return this.formGroup.get('end');
+    return this.formGroup.controls.end;
   }
   get pause() {
-    return this.formGroup.get('pause');
+    return this.formGroup.controls.pause;
   }
   get type() {
-    return this.formGroup.get('type');
+    return this.formGroup.controls.type;
+  }
+  get notes() {
+    return this.formGroup.controls.notes;
   }
 
-  constructor() {
-    for (let i = 0; i < 120; i = i + 5) {
-      this.pauseOptions.push(i);
-    }
-  }
   async submit() {
-    const formData = this.formGroup.value;
     const workTime: WorkTimePartial = {
-      start: stringToTime(formData?.start ? formData.start : ''),
-      end: stringToTime(formData?.end ? formData.end : ''),
-      pause: minutesToTime(formData?.pause ? formData.pause : 0),
-      date: formData.date ?? new Date(),
-      type: formData.type ?? 'normal',
+      start: stringToTime(this.start.value),
+      end: stringToTime(this.end.value),
+      pause: stringToTime(this.pause.value),
+      date: this.date.value,
+      type: this.type.value,
+      notes: this.notes.value ?? undefined,
     };
     if (this.isEditMode) {
       workTime.id = this.data?.id;

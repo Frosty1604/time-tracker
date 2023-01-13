@@ -7,6 +7,7 @@ export interface WorkTimePartial extends BaseEntity {
   end: Time;
   pause: Time;
   type: WorkType;
+  notes?: string | undefined;
 }
 
 export type WorkTime = Required<WorkTimePartial>;
