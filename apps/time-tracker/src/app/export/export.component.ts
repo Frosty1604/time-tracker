@@ -5,7 +5,6 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { Subject, switchMap, takeUntil } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
 import { WorkTimeService } from '../core/services/work-time.service';
@@ -13,9 +12,8 @@ import exportFromJSON from 'export-from-json';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, MatButtonModule],
+  imports: [MatButtonModule],
   templateUrl: './export.component.html',
-  styleUrls: ['./export.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ExportComponent implements OnInit, OnDestroy {

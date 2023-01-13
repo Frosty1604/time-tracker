@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { AsyncPipe, NgClass, NgIf } from '@angular/common';
 
 export interface TileDetails {
   value: string | number;
@@ -15,7 +15,7 @@ export interface TileDetails {
 @Component({
   selector: 'tt-tile',
   standalone: true,
-  imports: [CommonModule, MatIconModule, MatTooltipModule],
+  imports: [MatIconModule, MatTooltipModule, NgIf, AsyncPipe, NgClass],
   templateUrl: './tile.component.html',
   styleUrls: ['./tile.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

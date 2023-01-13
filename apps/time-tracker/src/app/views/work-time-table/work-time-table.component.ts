@@ -8,9 +8,9 @@ import { MatTable, MatTableModule } from '@angular/material/table';
 import { filter, Observable, startWith, Subject, take } from 'rxjs';
 import { WorkTime, WorkType } from '../../core/entities/work-time.entity';
 import { MatDialog } from '@angular/material/dialog';
-import { WorkTimeFormComponent } from '../../work-time-form/work-time-form.component';
+import { WorkTimeFormComponent } from '../work-time-form/work-time-form.component';
 import { WorkTimeDataSource, WorkTimeViewModel } from './work-time-datasource';
-import { CommonModule } from '@angular/common';
+import { AsyncPipe, DatePipe, NgIf, TitleCasePipe } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { TimePipe } from '../../core/pipes/time/time.pipe';
@@ -28,18 +28,20 @@ import { map } from 'rxjs/operators';
 @Component({
   selector: 'tt-work-time-table',
   templateUrl: './work-time-table.component.html',
-  styleUrls: ['./work-time-table.component.scss'],
   standalone: true,
   imports: [
-    CommonModule,
+    AsyncPipe,
+    DatePipe,
     MatButtonModule,
+    MatChipsModule,
     MatIconModule,
     MatMenuModule,
-    MatTableModule,
-    TimePipe,
-    MatChipsModule,
-    MatTooltipModule,
     MatPaginatorModule,
+    MatTableModule,
+    MatTooltipModule,
+    NgIf,
+    TimePipe,
+    TitleCasePipe,
   ],
   providers: [
     {
@@ -57,9 +59,10 @@ export class WorkTimeTableComponent {
     'time',
     'pause',
     'type',
+    'notes',
     'actions',
   ] as const;
-  readonly pageSizeOptions = [5, 10, 30, 50, 100] as const;
+  readonly pageSizeOptions = [5, 10, 30, 60, 100] as const;
   private readonly defaultPageSize = this.pageSizeOptions[1];
   readonly dataSource = new WorkTimeDataSource({
     pageSize: this.defaultPageSize,

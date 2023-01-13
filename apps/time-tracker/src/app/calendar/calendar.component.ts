@@ -1,10 +1,5 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  ViewEncapsulation,
-} from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { AsyncPipe, NgIf } from '@angular/common';
 import {
   CalendarCommonModule,
   CalendarEvent,
@@ -49,20 +44,18 @@ const workTypeColors: Record<WorkType, EventColor> = {
 };
 
 @Component({
-  selector: 'tt-calendar',
   standalone: true,
   imports: [
-    CommonModule,
+    AsyncPipe,
+    CalendarCommonModule,
     CalendarMonthModule,
     CalendarWeekModule,
     MatButtonModule,
-    CalendarCommonModule,
     MatButtonToggleModule,
     MatIconModule,
+    NgIf,
   ],
   templateUrl: './calendar.component.html',
-  styleUrls: ['./calendar.component.scss'],
-  encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CalendarComponent {

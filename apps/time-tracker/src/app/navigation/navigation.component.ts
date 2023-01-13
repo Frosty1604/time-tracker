@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import {
   BreakpointObserver,
   Breakpoints,
@@ -29,18 +29,19 @@ interface NavListItem {
   styleUrls: ['./navigation.component.scss'],
   standalone: true,
   imports: [
+    AsyncPipe,
     LayoutModule,
     MatButtonModule,
     MatIconModule,
     MatListModule,
     MatSidenavModule,
     MatToolbarModule,
-    NgOptimizedImage,
-    RouterModule,
-    AsyncPipe,
     NgForOf,
     NgIf,
+    NgOptimizedImage,
+    RouterModule,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavigationComponent {
   readonly navListItems: NavListItem[] = [

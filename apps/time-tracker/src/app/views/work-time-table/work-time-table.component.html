@@ -1,6 +1,11 @@
-<h2 class="text-3xl mb-3">Time table</h2>
+<header class="flex flex-row justify-between mb-3">
+  <h2 class="text-3xl">Time table</h2>
+  <button mat-raised-button color="primary" (click)="addRow()">
+    Add entry
+  </button>
+</header>
 <div class="shadow-xl">
-  <table [dataSource]="dataSource" mat-table>
+  <table [dataSource]="dataSource" mat-table class="w-full">
     <ng-container matColumnDef="date">
       <th *matHeaderCellDef mat-header-cell>Date</th>
       <td *matCellDef="let element" mat-cell>
@@ -40,6 +45,14 @@
             element.type | titlecase
           }}</mat-chip>
         </mat-chip-list>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="notes">
+      <th *matHeaderCellDef mat-header-cell>Notes</th>
+      <td *matCellDef="let element" mat-cell>
+        <ng-container *ngIf="element.notes; else emptyState">{{
+          element?.notes
+        }}</ng-container>
       </td>
     </ng-container>
     <ng-container matColumnDef="actions">

@@ -31,7 +31,6 @@ import { weekDays } from '../utils/worktime';
     TitleCasePipe,
   ],
   templateUrl: './settings.component.html',
-  styleUrls: ['./settings.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SettingsComponent {

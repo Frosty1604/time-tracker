@@ -20,7 +20,7 @@ $light-theme: mat.define-light-theme(
 
 // Define a dark theme
 $dark-primary: mat.define-palette(mat.$light-blue-palette);
-$dark-accent: mat.define-palette(mat.$green-palette, A700, A200, A700);
+$dark-accent: mat.define-palette(mat.$purple-palette, A700, A200, A400);
 $dark-theme: mat.define-dark-theme(
   (
     color: (

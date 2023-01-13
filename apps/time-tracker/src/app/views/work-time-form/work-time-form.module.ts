@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { AsyncPipe, NgForOf, NgIf, TitleCasePipe } from '@angular/common';
 import { MatDateFnsModule } from '@angular/material-date-fns-adapter';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -13,10 +13,10 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatRadioModule } from '@angular/material/radio';
 
 @NgModule({
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     MatDateFnsModule,
     MatInputModule,
@@ -27,6 +27,11 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatButtonModule,
     MatIconModule,
     MatTooltipModule,
+    MatRadioModule,
+    NgForOf,
+    TitleCasePipe,
+    AsyncPipe,
+    NgIf,
   ],
   providers: [
     [

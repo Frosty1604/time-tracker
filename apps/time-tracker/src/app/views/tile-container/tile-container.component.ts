@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { AsyncPipe, NgIf } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { TileComponent, TileDetails } from './tile/tile.component';
 import { combineLatest, map, Observable, startWith, switchMap } from 'rxjs';
@@ -24,9 +24,8 @@ interface TileData {
 @Component({
   selector: 'tt-tile-container',
   standalone: true,
-  imports: [CommonModule, MatCardModule, TileComponent],
+  imports: [AsyncPipe, MatCardModule, NgIf, TileComponent],
   templateUrl: './tile-container.component.html',
-  styleUrls: ['./tile-container.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TileContainerComponent {

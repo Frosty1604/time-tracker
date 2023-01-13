@@ -1,19 +1,19 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {
   WorkTime,
   WorkTimePartial,
   WorkType,
-} from '../core/entities/work-time.entity';
-import { stringToTime, timeToString } from '../utils/time';
-import { WorkTimeService } from '../core/services/work-time.service';
+} from '../../core/entities/work-time.entity';
+import { stringToTime, timeToString } from '../../utils/time';
+import { WorkTimeService } from '../../core/services/work-time.service';
 import { distinctUntilChanged, map } from 'rxjs/operators';
 import { addDays, subDays } from 'date-fns';
 
 @Component({
   templateUrl: './work-time-form.component.html',
-  styleUrls: ['./work-time-form.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WorkTimeFormComponent {
   readonly typeOptions: WorkType[] = ['normal', 'vacation', 'sick'];
