@@ -1,8 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { OverviewComponent } from './routes/overview/overview.component';
-import { CalendarComponent } from './routes/calendar/calendar.component';
-import { ExportComponent } from './routes/export/export.component';
 
 const routes: Routes = [
   {
@@ -12,15 +9,24 @@ const routes: Routes = [
   },
   {
     path: 'overview',
-    component: OverviewComponent,
+    loadComponent: () =>
+      import('./routes/overview/overview.component').then(
+        (mod) => mod.OverviewComponent
+      ),
   },
   {
     path: 'calendar',
-    loadComponent: () => CalendarComponent,
+    loadComponent: () =>
+      import('./routes/calendar/calendar.component').then(
+        (mod) => mod.CalendarComponent
+      ),
   },
   {
     path: 'export',
-    loadComponent: () => ExportComponent,
+    loadComponent: () =>
+      import('./routes/export/export.component').then(
+        (mod) => mod.ExportComponent
+      ),
   },
 ];
 
