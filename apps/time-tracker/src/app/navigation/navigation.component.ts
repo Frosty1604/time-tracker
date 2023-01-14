@@ -14,7 +14,7 @@ import { MatListModule } from '@angular/material/list';
 import { AsyncPipe, NgForOf, NgIf, NgOptimizedImage } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { SettingsComponent } from '../settings/settings.component';
+import { SettingsComponent } from '../routes/settings/settings.component';
 import { SettingsService } from '../core/services/settings.service';
 
 interface NavListItem {
@@ -46,9 +46,9 @@ interface NavListItem {
 export class NavigationComponent {
   readonly navListItems: NavListItem[] = [
     {
-      title: 'Home',
-      icon: 'home',
-      link: '/home',
+      title: 'Overview',
+      icon: 'donut_large',
+      link: '/overview',
     },
     {
       title: 'Calendar',

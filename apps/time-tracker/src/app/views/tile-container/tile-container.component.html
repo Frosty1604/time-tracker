@@ -1,5 +1,14 @@
 <div class="flex flex-row gap-5 mb-6 flex-wrap" *ngIf="hasEntries$ | async">
-  <tt-tile class="flex-1 min-w-fit" [data$]="tileOvertime$"></tt-tile>
-  <tt-tile class="flex-1 min-w-fit" [data$]="tileAverageWorkTime$"></tt-tile>
-  <tt-tile class="flex-1 min-w-fit" [data$]="tileVacationDays$"></tt-tile>
+  <tt-tile-details
+    class="flex-1 min-w-fit"
+    [data$]="tileOvertime$"
+  ></tt-tile-details>
+  <tt-tile-details
+    class="flex-1 min-w-fit"
+    [data$]="tileAverageWorkTime$"
+  ></tt-tile-details>
+  <tt-tile-details
+    class="flex-1 min-w-fit"
+    [data$]="tileVacationDays$"
+  ></tt-tile-details>
 </div>

@@ -13,14 +13,14 @@ export interface TileDetails {
 }
 
 @Component({
-  selector: 'tt-tile',
+  selector: 'tt-tile-details',
   standalone: true,
-  imports: [MatIconModule, MatTooltipModule, NgIf, AsyncPipe, NgClass],
-  templateUrl: './tile.component.html',
-  styleUrls: ['./tile.component.scss'],
+  imports: [AsyncPipe, MatIconModule, MatTooltipModule, NgClass, NgIf],
+  templateUrl: './tile-details.component.html',
+  styleUrls: ['./tile-details.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TileComponent {
+export class TileDetailsComponent {
   @Input()
   data$?: Observable<TileDetails>;
 

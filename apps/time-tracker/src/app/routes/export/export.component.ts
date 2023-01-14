@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { Subject, switchMap, takeUntil } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
-import { WorkTimeService } from '../core/services/work-time.service';
+import { WorkTimeService } from '../../core/services/work-time.service';
 import exportFromJSON from 'export-from-json';
 
 @Component({

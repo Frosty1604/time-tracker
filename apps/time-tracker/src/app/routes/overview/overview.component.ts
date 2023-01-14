@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { TileContainerComponent } from '../views/tile-container/tile-container.component';
-import { WorkTimeTableComponent } from '../views/work-time-table/work-time-table.component';
+import { TileContainerComponent } from '../../views/tile-container/tile-container.component';
+import { WorkTimeTableComponent } from '../../views/work-time-table/work-time-table.component';
 
 @Component({
   standalone: true,
@@ -12,7 +12,7 @@ import { WorkTimeTableComponent } from '../views/work-time-table/work-time-table
     TileContainerComponent,
     WorkTimeTableComponent,
   ],
-  templateUrl: './home.component.html',
+  templateUrl: './overview.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HomeComponent {}
+export class OverviewComponent {}

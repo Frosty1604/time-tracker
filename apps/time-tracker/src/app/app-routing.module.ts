@@ -1,18 +1,18 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { HomeComponent } from './home/home.component';
-import { CalendarComponent } from './calendar/calendar.component';
-import { ExportComponent } from './export/export.component';
+import { OverviewComponent } from './routes/overview/overview.component';
+import { CalendarComponent } from './routes/calendar/calendar.component';
+import { ExportComponent } from './routes/export/export.component';
 
 const routes: Routes = [
   {
     path: '',
-    redirectTo: '/home',
+    redirectTo: '/overview',
     pathMatch: 'full',
   },
   {
-    path: 'home',
-    component: HomeComponent,
+    path: 'overview',
+    component: OverviewComponent,
   },
   {
     path: 'calendar',

@@ -1,7 +1,10 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { AsyncPipe, NgIf } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
-import { TileComponent, TileDetails } from './tile/tile.component';
+import {
+  TileDetails,
+  TileDetailsComponent,
+} from '../tile-details/tile-details.component';
 import { combineLatest, map, Observable, startWith, switchMap } from 'rxjs';
 import { WorkTimeService } from '../../core/services/work-time.service';
 import { WorkTime } from '../../core/entities/work-time.entity';
@@ -24,7 +27,7 @@ interface TileData {
 @Component({
   selector: 'tt-tile-container',
   standalone: true,
-  imports: [AsyncPipe, MatCardModule, NgIf, TileComponent],
+  imports: [AsyncPipe, MatCardModule, NgIf, TileDetailsComponent],
   templateUrl: './tile-container.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
