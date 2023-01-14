@@ -23,7 +23,7 @@
           "apps/time-tracker/src/styles.scss",
           "apps/time-tracker/src/material.scss"
         ],
-        "allowedCommonJsDependencies": ["fast-memoize", "holiday-de"],
+        "allowedCommonJsDependencies": ["holiday-de"],
         "scripts": [],
         "serviceWorker": true,
         "ngswConfigPath": "apps/time-tracker/ngsw-config.json"
