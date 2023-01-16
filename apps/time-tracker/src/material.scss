@@ -56,6 +56,7 @@ $dark-theme: mat.define-dark-theme(
 @include mat.menu-theme($dark-theme);
 @include mat.paginator-theme($dark-theme);
 @include mat.radio-theme($dark-theme);
+@include mat.ripple-theme($dark-theme);
 @include mat.sidenav-theme($dark-theme);
 @include mat.snack-bar-theme($dark-theme);
 @include mat.table-theme($dark-theme);
@@ -82,6 +83,7 @@ $dark-theme: mat.define-dark-theme(
   @include mat.menu-color($light-theme);
   @include mat.paginator-color($light-theme);
   @include mat.radio-color($light-theme);
+  @include mat.ripple-color($light-theme);
   @include mat.select-color($light-theme);
   @include mat.sidenav-color($light-theme);
   @include mat.snack-bar-color($light-theme);

@@ -3,11 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   {
-    path: '',
-    redirectTo: '/overview',
-    pathMatch: 'full',
-  },
-  {
     path: 'overview',
     loadComponent: () =>
       import('./routes/overview/overview.component').then(
@@ -27,6 +22,11 @@ const routes: Routes = [
       import('./routes/export/export.component').then(
         (mod) => mod.ExportComponent
       ),
+  },
+  {
+    path: '',
+    redirectTo: '/overview',
+    pathMatch: 'full',
   },
 ];
 

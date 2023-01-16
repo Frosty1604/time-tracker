@@ -16,6 +16,7 @@ import { RouterModule } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { SettingsComponent } from '../routes/settings/settings.component';
 import { SettingsService } from '../core/services/settings.service';
+import { MatRippleModule } from '@angular/material/core';
 
 interface NavListItem {
   title: string;
@@ -34,6 +35,7 @@ interface NavListItem {
     MatButtonModule,
     MatIconModule,
     MatListModule,
+    MatRippleModule,
     MatSidenavModule,
     MatToolbarModule,
     NgForOf,
