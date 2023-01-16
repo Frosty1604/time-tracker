@@ -1,15 +1,13 @@
 <header class="flex flex-row justify-between mb-3">
   <h2 class="text-3xl">Time table</h2>
-  <button mat-raised-button color="primary" (click)="addRow()">
-    Add entry
-  </button>
+  <button mat-raised-button color="accent" (click)="addRow()">Add entry</button>
 </header>
 <div class="shadow-xl">
   <table [dataSource]="dataSource" mat-table class="w-full">
     <ng-container matColumnDef="date">
       <th *matHeaderCellDef mat-header-cell>Date</th>
       <td *matCellDef="let element" mat-cell>
-        {{ element.date | date: 'EE dd. LLLL YY' }}
+        {{ element.date | date : 'EE dd. LLLL YY' }}
       </td>
     </ng-container>
     <ng-container matColumnDef="time">
@@ -19,9 +17,9 @@
           <span
             [matTooltip]="
               'From ' +
-              (element.entity.start | time: 'short') +
+              (element.entity.start | time : 'short') +
               ' to ' +
-              (element.entity.end | time: 'short')
+              (element.entity.end | time : 'short')
             "
             matTooltipPosition="above"
             >{{ element.effectiveTime | time }}</span
@@ -41,9 +39,12 @@
       <th *matHeaderCellDef mat-header-cell>Type</th>
       <td *matCellDef="let element" mat-cell>
         <mat-chip-list>
-          <mat-chip [color]="typeColors[element.type]" selected>{{
-            element.type | titlecase
-          }}</mat-chip>
+          <mat-chip
+            class="chip-type"
+            [ngClass]="element.type"
+            [selected]="element.type === 'normal'"
+            >{{ element.type | titlecase }}</mat-chip
+          >
         </mat-chip-list>
       </td>
     </ng-container>

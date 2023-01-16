@@ -6,18 +6,23 @@ import {
 } from '@angular/core';
 import { MatTable, MatTableModule } from '@angular/material/table';
 import { filter, Observable, startWith, Subject, take } from 'rxjs';
-import { WorkTime, WorkType } from '../../core/entities/work-time.entity';
+import { WorkTime } from '../../core/entities/work-time.entity';
 import { MatDialog } from '@angular/material/dialog';
 import { WorkTimeFormComponent } from '../work-time-form/work-time-form.component';
 import { WorkTimeDataSource, WorkTimeViewModel } from './work-time-datasource';
-import { AsyncPipe, DatePipe, NgIf, TitleCasePipe } from '@angular/common';
+import {
+  AsyncPipe,
+  DatePipe,
+  NgClass,
+  NgIf,
+  TitleCasePipe,
+} from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { TimePipe } from '../../core/pipes/time/time.pipe';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { ThemePalette } from '@angular/material/core';
 import {
   MAT_PAGINATOR_DEFAULT_OPTIONS,
   MatPaginatorModule,
@@ -28,6 +33,7 @@ import { map } from 'rxjs/operators';
 @Component({
   selector: 'tt-work-time-table',
   templateUrl: './work-time-table.component.html',
+  styleUrls: ['./work-time-table.component.scss'],
   standalone: true,
   imports: [
     AsyncPipe,
@@ -39,6 +45,7 @@ import { map } from 'rxjs/operators';
     MatPaginatorModule,
     MatTableModule,
     MatTooltipModule,
+    NgClass,
     NgIf,
     TimePipe,
     TitleCasePipe,
@@ -69,12 +76,6 @@ export class WorkTimeTableComponent {
     pageIndex: 0,
     length: 0,
   });
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  readonly typeColors: Record<WorkType | any, ThemePalette> = {
-    normal: 'primary',
-    sick: 'warn',
-    vacation: 'accent',
-  };
   readonly length$ = this.dataSource.count$();
   private readonly pageEventSubject = new Subject<PageEvent>();
   pageSize$: Observable<number> = this.pageEventSubject.asObservable().pipe(

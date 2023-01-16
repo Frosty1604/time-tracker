@@ -1,0 +1,9 @@
+.chip-type {
+  color: white;
+  &.vacation {
+    @apply bg-green-500;
+  }
+  &.sick {
+    @apply bg-red-500;
+  }
+}
