@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
   selector: 'tt-root',
-  templateUrl: './app.component.html',
+  template: `<tt-navigation></tt-navigation>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent {}

@@ -44,7 +44,7 @@ interface NavListItem {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavigationComponent {
-  readonly navListItems: NavListItem[] = [
+  readonly navListItems: ReadonlyArray<NavListItem> = [
     {
       title: 'Overview',
       icon: 'donut_large',
@@ -60,7 +60,7 @@ export class NavigationComponent {
       icon: 'upload',
       link: '/export',
     },
-  ];
+  ] as const;
 
   private readonly breakpointObserver = inject(BreakpointObserver);
   private readonly dialog = inject(MatDialog);

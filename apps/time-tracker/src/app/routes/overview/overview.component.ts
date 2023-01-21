@@ -12,7 +12,15 @@ import { WorkTimeTableComponent } from '../../views/work-time-table/work-time-ta
     TileContainerComponent,
     WorkTimeTableComponent,
   ],
-  templateUrl: './overview.component.html',
+  template: `<div class="flex flex-col">
+      <tt-tile-container></tt-tile-container>
+      <tt-work-time-table #table></tt-work-time-table>
+    </div>
+    <div class="fixed bottom-5 right-5">
+      <button mat-fab (click)="table.addRow()">
+        <mat-icon fontIcon="add"></mat-icon>
+      </button>
+    </div>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OverviewComponent {}
