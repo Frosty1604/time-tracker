@@ -95,6 +95,21 @@
         "jestConfig": "apps/time-tracker/jest.config.ts",
         "passWithNoTests": true
       }
+    },
+    "build-pages": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["nx build --prod", "zx ./tools/scripts/build-gh-pages.mjs"],
+        "parallel": false
+      }
+    },
+    "serve-pwa": {
+      "executor": "nx:run-commands",
+      "outputs": [],
+      "options": {
+        "commands": ["nx build", "http-server -S -C cert.pem -c-1 dist/apps/time-tracker"],
+        "parallel": false
+      }
     }
   },
   "tags": []
