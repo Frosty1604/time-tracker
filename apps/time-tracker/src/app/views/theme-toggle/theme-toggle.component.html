@@ -1,0 +1,3 @@
+<ng-container *ngIf="{isDarkTheme: showDarkTheme$ | async} as data">
+  <mat-icon (click)="toggleTheme()" class="material-icons-outlined" [fontIcon]="data.isDarkTheme? 'light_mode_outline' : 'dark_mode_outline'"></mat-icon>
+</ng-container>

@@ -12,9 +12,17 @@ $light-theme: mat.define-light-theme(
       accent: $light-accent,
     ),
     typograhpy:
-      mat.define-typography-config(
-        $font-family: 'Roboto Condensed',
-      ),
+    mat.define-typography-config(
+      $font-family: 'Lato',
+      $title:
+        mat.define-typography-level(
+          $font-family: 'Raleway',
+          $font-weight: 300,
+          $font-size: 1.5rem,
+          $line-height: 1,
+          $letter-spacing: normal,
+        ),
+    ),
   )
 );
 
@@ -42,25 +50,26 @@ $dark-theme: mat.define-dark-theme(
   )
 );
 
-// Apply the dark theme by default
-@include mat.core-theme($dark-theme);
+// Apply the light theme by default
+@include mat.core-theme($light-theme);
 // Component themes
-@include mat.button-theme($dark-theme);
-@include mat.checkbox-theme($dark-theme);
-@include mat.chips-theme($dark-theme);
-@include mat.datepicker-theme($dark-theme);
-@include mat.dialog-theme($dark-theme);
-@include mat.select-theme($dark-theme);
-@include mat.form-field-theme($dark-theme);
-@include mat.list-theme($dark-theme);
-@include mat.menu-theme($dark-theme);
-@include mat.paginator-theme($dark-theme);
-@include mat.radio-theme($dark-theme);
-@include mat.sidenav-theme($dark-theme);
-@include mat.snack-bar-theme($dark-theme);
-@include mat.table-theme($dark-theme);
-@include mat.toolbar-theme($dark-theme);
-@include mat.tooltip-theme($dark-theme);
+@include mat.button-theme($light-theme);
+@include mat.checkbox-theme($light-theme);
+@include mat.chips-theme($light-theme);
+@include mat.datepicker-theme($light-theme);
+@include mat.dialog-theme($light-theme);
+@include mat.select-theme($light-theme);
+@include mat.form-field-theme($light-theme);
+@include mat.list-theme($light-theme);
+@include mat.menu-theme($light-theme);
+@include mat.paginator-theme($light-theme);
+@include mat.radio-theme($light-theme);
+@include mat.sidenav-theme($light-theme);
+@include mat.slide-toggle-theme($light-theme);
+@include mat.snack-bar-theme($light-theme);
+@include mat.table-theme($light-theme);
+@include mat.toolbar-theme($light-theme);
+@include mat.tooltip-theme($light-theme);
 
 // Component typography
 @include mat.chips-typography(
@@ -69,23 +78,24 @@ $dark-theme: mat.define-dark-theme(
   )
 );
 
-@media (prefers-color-scheme: light) {
-  @include mat.core-color($light-theme);
+html.dark {
+  @include mat.core-color($dark-theme);
   // Component colors
-  @include mat.button-color($light-theme);
-  @include mat.checkbox-color($light-theme);
-  @include mat.chips-color($light-theme);
-  @include mat.datepicker-color($light-theme);
-  @include mat.dialog-color($light-theme);
-  @include mat.form-field-color($light-theme);
-  @include mat.list-color($light-theme);
-  @include mat.menu-color($light-theme);
-  @include mat.paginator-color($light-theme);
-  @include mat.radio-color($light-theme);
-  @include mat.select-color($light-theme);
-  @include mat.sidenav-color($light-theme);
-  @include mat.snack-bar-color($light-theme);
-  @include mat.table-color($light-theme);
-  @include mat.toolbar-color($light-theme);
-  @include mat.tooltip-color($light-theme);
+  @include mat.button-color($dark-theme);
+  @include mat.checkbox-color($dark-theme);
+  @include mat.chips-color($dark-theme);
+  @include mat.datepicker-color($dark-theme);
+  @include mat.dialog-color($dark-theme);
+  @include mat.form-field-color($dark-theme);
+  @include mat.list-color($dark-theme);
+  @include mat.menu-color($dark-theme);
+  @include mat.paginator-color($dark-theme);
+  @include mat.radio-color($dark-theme);
+  @include mat.select-color($dark-theme);
+  @include mat.sidenav-color($dark-theme);
+  @include mat.slide-toggle-color($dark-theme);
+  @include mat.snack-bar-color($dark-theme);
+  @include mat.table-color($dark-theme);
+  @include mat.toolbar-color($dark-theme);
+  @include mat.tooltip-color($dark-theme);
 }

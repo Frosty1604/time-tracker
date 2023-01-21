@@ -7,30 +7,35 @@
     [mode]="(isHandset$ | async) ? 'over' : 'side'"
     [opened]="(isHandset$ | async) === false"
   >
-    <div class="flex flex-col mt-4 mb-4 p-4 items-center text-3xl gap-2">
-      <!--suppress RequiredAttributes -->
-      <img
-        alt="Logo"
-        ngSrc="../../assets/icons/icon-144x144.png"
-        height="72"
-        width="72"
-        priority
-      />
-    </div>
-    <div class="flex flex-col gap-4">
-      <a
-        *ngFor="let item of navListItems"
-        [routerLink]="item.link"
-        routerLinkActive="active"
-        class="nav-list-item"
-      >
-        <mat-icon matListIcon>{{ item.icon }}</mat-icon>
-        <h4 class="font-semibold text-sm">{{ item.title }}</h4></a
-      >
-      <a (click)="openSettingsDialog()" class="nav-list-item cursor-pointer">
-        <mat-icon matListIcon>settings</mat-icon>
-        <h4 class="font-semibold">Settings</h4>
-      </a>
+    <div class="flex flex-col justify-between content-between h-full">
+      <div>
+        <div class="flex flex-col mt-4 mb-4 p-4 items-center text-3xl gap-2">
+          <!--suppress RequiredAttributes -->
+          <img
+            alt="Logo"
+            ngSrc="../../assets/icons/icon-144x144.png"
+            height="72"
+            width="72"
+            priority
+          />
+        </div>
+        <div class="flex flex-col gap-4">
+        </div>
+          <a
+            *ngFor="let item of navListItems"
+            [routerLink]="item.link"
+            routerLinkActive="active"
+            class="nav-list-item"
+          >
+            <mat-icon matListIcon>{{ item.icon }}</mat-icon>
+            <h4 class="font-semibold text-sm">{{ item.title }}</h4></a
+          >
+          <a (click)="openSettingsDialog()" class="nav-list-item cursor-pointer">
+            <mat-icon matListIcon>settings</mat-icon>
+            <h4 class="font-semibold">Settings</h4>
+          </a>
+      </div>
+      <tt-theme-toggle class="self-center mb-4 cursor-pointer text-gray-400"></tt-theme-toggle>
     </div>
   </mat-sidenav>
   <mat-sidenav-content

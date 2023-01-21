@@ -22,7 +22,7 @@ h4 {
 }
 
 // Dark specific theming
-@media (prefers-color-scheme: dark) {
+html.dark {
   // Angular calendar
   $bg-dark-primary: #424242;
   $bg-dark-secondary: #555;

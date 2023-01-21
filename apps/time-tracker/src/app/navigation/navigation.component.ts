@@ -16,6 +16,7 @@ import { RouterModule } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { SettingsComponent } from '../routes/settings/settings.component';
 import { SettingsService } from '../core/services/settings.service';
+import { ThemeToggleComponent } from '../views/theme-toggle/theme-toggle.component';
 
 interface NavListItem {
   title: string;
@@ -40,6 +41,7 @@ interface NavListItem {
     NgIf,
     NgOptimizedImage,
     RouterModule,
+    ThemeToggleComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
