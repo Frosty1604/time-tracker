@@ -136,7 +136,9 @@ export function parseOvertime(overtime: Minutes) {
       hours: hourGreaterZero ? -minutesToHours(absOvertime) : 0,
     };
   }
-  return formatDuration(duration, { format: ['hours', 'minutes'] });
+  return overtime === 0
+    ? '0 hours 0 minutes'
+    : formatDuration(duration, { format: ['hours', 'minutes'] });
 }
 
 type Minutes = number;

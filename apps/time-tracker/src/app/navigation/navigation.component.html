@@ -6,12 +6,13 @@
     [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
     [mode]="(isHandset$ | async) ? 'over' : 'side'"
     [opened]="(isHandset$ | async) === false"
+    [class.handset]="(isHandset$ | async) === false"
   >
     <div class="flex flex-col mt-4 mb-4 p-4 items-center text-3xl gap-2">
       <!--suppress RequiredAttributes -->
       <img
         alt="Logo"
-        ngSrc="../../assets/icons/icon-144x144.png"
+        ngSrc="assets/icons/icon-144x144.png"
         height="72"
         width="72"
         priority
@@ -23,19 +24,25 @@
         [routerLink]="item.link"
         routerLinkActive="active"
         class="nav-list-item"
+        matRipple
+        [matRippleCentered]="true"
+        [matRippleUnbounded]="true"
+        [matRippleRadius]="60"
       >
         <mat-icon matListIcon>{{ item.icon }}</mat-icon>
-        <h4 class="font-semibold text-sm">{{ item.title }}</h4></a
+        <h4 class="font-normal text-sm">{{ item.title }}</h4></a
       >
-      <a (click)="openSettingsDialog()" class="nav-list-item cursor-pointer">
+      <a (click)="openSettingsDialog()" class="nav-list-item cursor-pointer"
+         matRipple
+         [matRippleCentered]="true"
+         [matRippleUnbounded]="true"
+         [matRippleRadius]="60">
         <mat-icon matListIcon>settings</mat-icon>
         <h4 class="font-semibold">Settings</h4>
       </a>
     </div>
   </mat-sidenav>
-  <mat-sidenav-content
-    class="bg-gradient-to-bl from-white to-gray-200 bg-fixed dark:from-stone-900 dark:to-stone-700 dark:bg-gradient-to-bl"
-  >
+  <mat-sidenav-content>
     <mat-toolbar *ngIf="isHandset$ | async">
       <button
         type="button"
