@@ -99,7 +99,12 @@
     "build-pages": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": ["nx build --prod", "zx ./tools/scripts/build-gh-pages.mjs"],
+        "commands": [
+          "nx build --prod --output-path docs --base-href /time-tracker/",
+          "zx ./tools/scripts/build-gh-pages.mjs",
+          "git add .",
+          "git commit -m 'deploy new version'"
+        ],
         "parallel": false
       }
     },
@@ -107,7 +112,10 @@
       "executor": "nx:run-commands",
       "outputs": [],
       "options": {
-        "commands": ["nx build", "http-server -S -C cert.pem -c-1 dist/apps/time-tracker"],
+        "commands": [
+          "nx build",
+          "http-server -S -C cert.pem -c-1 dist/apps/time-tracker"
+        ],
         "parallel": false
       }
     }

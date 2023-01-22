@@ -1,10 +1,15 @@
 #!/usr/bin/env zx
 
-import * as fs from "fs";
-import path from "path";
+import * as fs from 'fs';
+import path from 'path';
 
-const pathToIndex = 'dist/apps/time-tracker'
+const pathToPages = 'docs/';
 
-await fs.cp(path.join(`${pathToIndex}`, 'index.html') , path.join(`${pathToIndex}`, '404.html'), {force: true, errorOnExist: false},err => {
-  console.error(err)
-})
+await fs.cp(
+  path.join(`${pathToPages}`, 'index.html'),
+  path.join(`${pathToPages}`, '404.html'),
+  { force: true, errorOnExist: false },
+  (err) => {
+    console.error(err);
+  }
+);
