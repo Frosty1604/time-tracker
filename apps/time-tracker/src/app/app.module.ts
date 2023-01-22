@@ -12,6 +12,7 @@ import { environment } from '../environments/environment';
 import { NavigationComponent } from './navigation/navigation.component';
 import { WorkTimeFormModule } from './views/work-time-form/work-time-form.module';
 import { initDB } from './core/services/database.service';
+import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [AppComponent],
@@ -42,6 +43,7 @@ import { initDB } from './core/services/database.service';
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
       useValue: { appearance: 'outline' },
     },
+    { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { duration: 3000 } },
   ],
   bootstrap: [AppComponent],
 })

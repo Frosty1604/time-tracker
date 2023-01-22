@@ -1,3 +1,32 @@
-<p class="mb-2">Save your data to an CSV file and download it.</p>
-<button mat-raised-button color="primary" (click)="exportData()">Export</button>
-<input type="file" (change)="fileChange($event)" />
+<div *ngIf="viewModel$ | async as viewModel" class="flex flex-col gap-4">
+  <div>
+    <h3 class="text-lg mb-4">Export</h3>
+    <p class="mb-2">Save your data into a JSON file and download it.</p>
+    <button mat-raised-button color="primary" (click)="exportData()">
+      Export
+    </button>
+  </div>
+  <div>
+    <h3 class="text-lg my-4">Import</h3>
+    <input
+      type="file"
+      (change)="handleFileChange($event)"
+      #fileUpload
+      class="hidden"
+    />
+    <div class="my-2">
+      <span class="mr-2">{{ viewModel.fileName || 'Choose file' }}</span>
+      <button mat-mini-fab color="accent" (click)="fileUpload.click()">
+        <mat-icon>upload_file</mat-icon>
+      </button>
+    </div>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="importData()"
+      [disabled]="viewModel.disableImport"
+    >
+      Import
+    </button>
+  </div>
+</div>

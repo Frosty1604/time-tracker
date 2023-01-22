@@ -1,68 +1,139 @@
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  OnDestroy,
-  OnInit,
-} from '@angular/core';
-import { Subject, switchMap, takeUntil } from 'rxjs';
+  exhaustMap,
+  filter,
+  forkJoin,
+  merge,
+  Observable,
+  scan,
+  startWith,
+  Subject,
+  switchMap,
+  tap,
+  zip,
+} from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
 import { WorkTimeService } from '../../core/services/work-time.service';
 import exportFromJSON from 'export-from-json';
 import { MatInputModule } from '@angular/material/input';
-import { WorkTimePartial } from '../../core/entities/work-time.entity';
+import { MatIconModule } from '@angular/material/icon';
+import {
+  WorkTime,
+  WorkTimePartial,
+} from '../../core/entities/work-time.entity';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { map } from 'rxjs/operators';
+import { AsyncPipe, NgIf } from '@angular/common';
+
+interface ViewModel {
+  fileName: string;
+  disableImport: boolean;
+}
 
 @Component({
   standalone: true,
-  imports: [MatButtonModule, MatInputModule],
+  imports: [
+    MatButtonModule,
+    MatInputModule,
+    MatIconModule,
+    MatSnackBarModule,
+    AsyncPipe,
+    NgIf,
+  ],
   templateUrl: './export.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ExportComponent implements OnInit, OnDestroy {
+export class ExportComponent {
+  private readonly snackbarService = inject(MatSnackBar);
   private readonly workTimeService = inject(WorkTimeService);
   private readonly exportSubject = new Subject<void>();
-  private readonly onDestroySubject = new Subject<void>();
+  private readonly fileSubject = new Subject<File | null>();
+  private readonly importSubject = new Subject<void>();
+  fileName$: Observable<string> = this.fileSubject.pipe(
+    map((file) => file?.name ?? '')
+  );
+  disableImport$: Observable<boolean> = this.fileSubject.pipe(
+    map((file) => file == null),
+    startWith(true)
+  );
 
-  ngOnInit(): void {
-    this.exportSubject
-      .asObservable()
-      .pipe(
-        switchMap(() => this.workTimeService.find()),
-        takeUntil(this.onDestroySubject)
+  export$ = this.exportSubject.asObservable().pipe(
+    switchMap(() => this.workTimeService.find()),
+    map((data) => this.export(data))
+  );
+
+  import$ = zip([
+    this.importSubject,
+    this.fileSubject.pipe(filter((file) => file != null)) as Observable<File>,
+  ]).pipe(
+    switchMap(([, file]) => file.text()),
+    switchMap((fileContent) => this.parseJson(fileContent)),
+    exhaustMap((workTimeEntries: WorkTimePartial[]) =>
+      forkJoin(
+        workTimeEntries.map((workTime) => {
+          delete workTime.id;
+          workTime.date = new Date(workTime.date);
+          return this.workTimeService.insert(workTime);
+        })
       )
-      .subscribe((data) => {
-        exportFromJSON({
-          data,
-          fileName: 'timetracker-db',
-          exportType: 'json',
-          fileNameFormatter: (name) =>
-            `${new Date().toLocaleDateString()}-${name}`,
-        });
-      });
-  }
-
-  ngOnDestroy() {
-    this.onDestroySubject.next();
-  }
+    ),
+    map((entries) => entries.length),
+    tap((count) => {
+      this.snackbarService.open(`Imported ${count} entries successfully`);
+    })
+  );
+  viewModel$: Observable<ViewModel> = merge(
+    this.fileName$.pipe(map((fileName) => ({ fileName }))),
+    this.disableImport$.pipe(map((disableImport) => ({ disableImport }))),
+    this.export$.pipe(map(() => ({}))),
+    this.import$.pipe(map(() => ({ fileName: '', disableImport: true })))
+  ).pipe(
+    scan(
+      (state: ViewModel, command: Partial<ViewModel>) => {
+        return {
+          ...state,
+          ...command,
+        };
+      },
+      {
+        disableImport: true,
+        fileName: '',
+      }
+    )
+  );
 
   exportData() {
     this.exportSubject.next();
   }
 
-  async fileChange($event: Event) {
+  importData() {
+    this.importSubject.next();
+  }
+
+  handleFileChange($event: Event) {
     const file = ($event.target as HTMLInputElement).files?.[0];
     if (file) {
-      const json = await file.text();
-      try {
-        const dbData: WorkTimePartial[] = JSON.parse(json);
-        for (const workTime of dbData) {
-          delete workTime.id;
-          workTime.date = new Date(workTime.date);
-          await this.workTimeService.insert(workTime);
-        }
-      } catch (e) {
-        console.error(e);
-      }
+      this.fileSubject.next(file);
     }
+  }
+
+  private export(data: WorkTime[]) {
+    exportFromJSON({
+      data,
+      fileName: 'timetracker-db',
+      exportType: 'json',
+      fileNameFormatter: (name) => `${new Date().toLocaleDateString()}-${name}`,
+    });
+  }
+
+  private parseJson(json: string): Promise<WorkTimePartial[]> {
+    return new Promise((resolve, reject) => {
+      try {
+        const parsedJson = JSON.parse(json);
+        resolve(parsedJson);
+      } catch (e) {
+        reject(e);
+      }
+    });
   }
 }
