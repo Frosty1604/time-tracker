@@ -18,6 +18,7 @@ import {
   parseAvgWorkTime,
   parseOvertime,
 } from '../../utils/worktime';
+import { shareReplay } from 'rxjs/operators';
 
 interface TileData {
   settings: Settings | undefined;
@@ -44,7 +45,11 @@ export class TileContainerComponent {
   private readonly tileViewModel$: Observable<TileData> = combineLatest([
     this.workTimes$,
     this.settings$,
-  ]).pipe(map(([items, settings]) => ({ items, settings })));
+  ]).pipe(
+    map(([items, settings]) => ({ items, settings })),
+    shareReplay({ refCount: false, bufferSize: 1 })
+  );
+
   readonly hasEntries$ = this.tileViewModel$.pipe(
     map((data) => data.items.length > 0)
   );
