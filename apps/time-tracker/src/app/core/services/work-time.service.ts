@@ -24,9 +24,17 @@ export class WorkTimeService {
     return workTimes as WorkTime[];
   }
 
-  async findPaged(pageIndex: number, pageSize: number): Promise<WorkTime[]> {
+  async findPaged(
+    pageIndex: number,
+    pageSize: number,
+    sort: 'asc' | 'desc' = 'desc'
+  ): Promise<WorkTime[]> {
     const tx = this.dbService.db.transaction(this.storeName);
-    let cursor = await tx.store.index('by-day').openCursor();
+
+    let cursor = await tx.store
+      .index('by-day')
+      .openCursor(null, sort === 'desc' ? 'prev' : 'next');
+
     let advanced = false;
     let count = 0;
 

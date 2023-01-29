@@ -87,16 +87,14 @@ export class WorkTimeDataSource extends DataSource<WorkTimeViewModel> {
         }
         return acc;
       }, new Map<number, WorkTime>()),
-      map((map) =>
-        Array.from(map.values()).sort(
-          (a, b) => a.date.getTime() - b.date.getTime()
-        )
+      map((map) => Array.from(map.values())),
+      map((workTimeItems) =>
+        workTimeItems.sort((a, b) => b.date.getTime() - a.date.getTime())
       ),
       map((workTimeItems) => workTimeItems.map(this.workTimeToViewModel))
     );
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   disconnect() {
     this.upsertDataSubject.complete();
     this.removeDataSubject.complete();
