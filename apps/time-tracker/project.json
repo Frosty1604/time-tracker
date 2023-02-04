@@ -100,10 +100,13 @@
       "executor": "nx:run-commands",
       "options": {
         "commands": [
+          "git checkout gh-pages",
+          "git rebase master",
           "nx build --prod --output-path docs --base-href /time-tracker/",
           "zx ./tools/scripts/build-gh-pages.mjs",
           "git add .",
-          "git commit -m 'deploy new version'"
+          "git commit --amend -no-edit",
+          "git push --force"
         ],
         "parallel": false
       }

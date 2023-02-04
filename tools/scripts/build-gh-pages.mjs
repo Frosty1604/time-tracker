@@ -1,7 +1,5 @@
 #!/usr/bin/env zx
-
-import * as fs from 'fs';
-import path from 'path';
+import 'zx/globals';
 
 const pathToPages = 'docs/';
 
