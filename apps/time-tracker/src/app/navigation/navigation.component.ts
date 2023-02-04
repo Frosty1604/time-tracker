@@ -50,7 +50,7 @@ export class NavigationComponent {
     {
       title: 'Overview',
       icon: 'donut_large',
-      link: '/',
+      link: '/overview',
     },
     {
       title: 'Calendar',
