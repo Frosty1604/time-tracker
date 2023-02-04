@@ -9,17 +9,28 @@
         {{ element.date | date : 'EE dd. LLLL YY' }}
       </td>
     </ng-container>
-    <ng-container matColumnDef="time">
-      <th *matHeaderCellDef mat-header-cell>Time</th>
+    <ng-container matColumnDef="start">
+      <th *matHeaderCellDef mat-header-cell>Start</th>
+      <td *matCellDef="let element" mat-cell>
+        <ng-container *ngIf="element.isWorkDay; else emptyState">
+          {{ element.startTime | time : 'short' }}
+        </ng-container>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="end">
+      <th *matHeaderCellDef mat-header-cell>End</th>
+      <td *matCellDef="let element" mat-cell>
+        <ng-container *ngIf="element.isWorkDay; else emptyState">
+          {{ element.endTime | time : 'short' }}
+        </ng-container>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="total">
+      <th *matHeaderCellDef mat-header-cell>Total</th>
       <td *matCellDef="let element" mat-cell>
         <ng-container *ngIf="element.isWorkDay; else emptyState">
           <span
-            [matTooltip]="
-              'From ' +
-              (element.entity.start | time : 'short') +
-              ' to ' +
-              (element.entity.end | time : 'short')
-            "
+            matTooltip="Worked for {{ element.effectiveTime | time }}"
             matTooltipPosition="above"
             >{{ element.effectiveTime | time }}</span
           >

@@ -5,7 +5,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { MatTable, MatTableModule } from '@angular/material/table';
-import { filter, Observable, startWith, Subject, take } from 'rxjs';
+import { filter, Observable, startWith, Subject, take, tap } from 'rxjs';
 import { WorkTime } from '../../core/entities/work-time.entity';
 import { MatDialog } from '@angular/material/dialog';
 import { WorkTimeFormComponent } from '../work-time-form/work-time-form.component';
@@ -61,27 +61,42 @@ import { map } from 'rxjs/operators';
 export class WorkTimeTableComponent {
   @ViewChild(MatTable)
   readonly table!: MatTable<WorkTimeViewModel>;
+
   readonly displayedColumns = [
     'date',
-    'time',
+    'start',
+    'end',
     'pause',
+    'total',
     'type',
     'notes',
     'actions',
   ] as const;
   readonly pageSizeOptions = [5, 10, 30, 60, 100] as const;
-  private readonly defaultPageSize = this.pageSizeOptions[1];
+
+  private readonly pageSizeKey = 'pageSize';
+
+  private readonly defaultPageSize = localStorage.getItem(this.pageSizeKey)
+    ? Number(localStorage.getItem(this.pageSizeKey))
+    : this.pageSizeOptions[0];
+
   readonly dataSource = new WorkTimeDataSource({
     pageSize: this.defaultPageSize,
     pageIndex: 0,
     length: 0,
   });
+
   readonly length$ = this.dataSource.count$();
+
   private readonly pageEventSubject = new Subject<PageEvent>();
-  pageSize$: Observable<number> = this.pageEventSubject.asObservable().pipe(
-    map(({ pageSize }) => pageSize),
-    startWith(this.defaultPageSize)
-  );
+
+  readonly pageSize$: Observable<number> = this.pageEventSubject
+    .asObservable()
+    .pipe(
+      map(({ pageSize }) => pageSize),
+      tap((pageSize) => this.savePageSize(pageSize)),
+      startWith(this.defaultPageSize)
+    );
   private readonly dialog = inject(MatDialog);
 
   addRow() {
@@ -115,5 +130,9 @@ export class WorkTimeTableComponent {
       filter((value) => value != null),
       take(1)
     );
+  }
+
+  private savePageSize(pageSize: number) {
+    localStorage.setItem(this.pageSizeKey, pageSize.toString());
   }
 }

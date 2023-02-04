@@ -40,6 +40,8 @@ interface RowActionDelete {
 export interface WorkTimeViewModel {
   date: Date;
   effectiveTime: Duration;
+  startTime: Time;
+  endTime: Time;
   pauseTime: Time;
   type: WorkType;
   isWorkDay: boolean;
@@ -134,6 +136,8 @@ export class WorkTimeDataSource extends DataSource<WorkTimeViewModel> {
         ),
         end: timeToDate(workTime.pause),
       }),
+      startTime: workTime.start,
+      endTime: workTime.end,
       pauseTime: workTime.pause,
       type: workTime.type,
       isWorkDay: workTime.type === 'normal',

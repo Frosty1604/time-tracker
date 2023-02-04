@@ -22,6 +22,24 @@ h4 {
   font-weight: 300;
 }
 
+$scrollbar-size: 6px;
+
+::-webkit-scrollbar {
+  height: $scrollbar-size;
+  width: $scrollbar-size;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #424242;
+  //-webkit-border-radius: 1ex;
+  -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.75);
+}
+
+::-webkit-scrollbar-corner {
+  background: #424242;
+}
+
 // Dark specific theming
 @media (prefers-color-scheme: dark) {
   // Angular calendar
@@ -54,4 +72,9 @@ h4 {
 
 button.mat-mini-fab .mat-icon {
   vertical-align: top;
+}
+
+th.mat-header-cell,
+td.mat-cell {
+  user-select: none;
 }
