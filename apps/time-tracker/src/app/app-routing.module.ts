@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   {
-    path: 'overview',
+    path: '',
     loadComponent: () =>
       import('./routes/overview/overview.component').then(
         (mod) => mod.OverviewComponent
@@ -24,8 +24,8 @@ const routes: Routes = [
       ),
   },
   {
-    path: '',
-    redirectTo: '/overview',
+    path: '/overview',
+    redirectTo: '/',
     pathMatch: 'full',
   },
 ];
