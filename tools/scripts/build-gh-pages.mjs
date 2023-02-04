@@ -3,6 +3,8 @@ import 'zx/globals';
 
 const pathToPages = 'docs/';
 
+await fs.createFile(path.join(pathToPages, '.nojekyll'));
+
 await fs.cp(
   path.join(`${pathToPages}`, 'index.html'),
   path.join(`${pathToPages}`, '404.html'),
