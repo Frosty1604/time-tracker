@@ -22,6 +22,7 @@
       <a
         *ngFor="let item of navListItems"
         [routerLink]="item.link"
+        [routerLinkActiveOptions]="{ exact: true }"
         routerLinkActive="active"
         class="nav-list-item"
         matRipple
@@ -32,11 +33,14 @@
         <mat-icon matListIcon>{{ item.icon }}</mat-icon>
         <h4 class="font-normal text-sm">{{ item.title }}</h4></a
       >
-      <a (click)="openSettingsDialog()" class="nav-list-item cursor-pointer"
-         matRipple
-         [matRippleCentered]="true"
-         [matRippleUnbounded]="true"
-         [matRippleRadius]="60">
+      <a
+        (click)="openSettingsDialog()"
+        class="nav-list-item cursor-pointer"
+        matRipple
+        [matRippleCentered]="true"
+        [matRippleUnbounded]="true"
+        [matRippleRadius]="60"
+      >
         <mat-icon matListIcon>settings</mat-icon>
         <h4 class="font-semibold">Settings</h4>
       </a>
