@@ -12,9 +12,9 @@ import {
   minutesInHour,
   minutesToHours,
 } from 'date-fns';
-import { TileDetails } from '../views/tile-details/tile-details.component';
-import { WorkTime } from '../core/entities/work-time.entity';
-import { Settings } from '../core/entities/settings.entity';
+import { TileDetails } from '../../views/tile-details/tile-details.component';
+import { WorkTime } from '../../core/entities/work-time.entity';
+import { Settings } from '../../core/entities/settings.entity';
 
 export const weekDays = [
   'monday',

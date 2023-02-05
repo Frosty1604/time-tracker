@@ -17,7 +17,7 @@ import {
   makeTileDetails,
   parseAvgWorkTime,
   parseOvertime,
-} from '../../utils/worktime';
+} from '../../shared/utils/worktime';
 import { shareReplay } from 'rxjs/operators';
 
 interface TileData {

@@ -6,7 +6,7 @@ import {
   WorkTimePartial,
   WorkType,
 } from '../../core/entities/work-time.entity';
-import { stringToTime, timeToString } from '../../utils/time';
+import { stringToTime, timeToString } from '../../shared/utils/time';
 import { WorkTimeService } from '../../core/services/work-time.service';
 import { distinctUntilChanged, map } from 'rxjs/operators';
 import { addDays, subDays } from 'date-fns';

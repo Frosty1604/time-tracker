@@ -17,7 +17,7 @@ import {
   WorkTimePartial,
   WorkType,
 } from '../../core/entities/work-time.entity';
-import { calculateWorkDuration } from '../../utils/time';
+import { calculateWorkDuration } from '../../shared/utils/time';
 import { fromPromise } from 'rxjs/internal/observable/innerFrom';
 
 const colors: Record<string, EventColor> = {

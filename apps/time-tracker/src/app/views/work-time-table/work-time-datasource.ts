@@ -21,7 +21,7 @@ import {
   calculateWorkDuration,
   durationToDate,
   timeToDate,
-} from '../../utils/time';
+} from '../../shared/utils/time';
 import { fromPromise } from 'rxjs/internal/observable/innerFrom';
 import { PageEvent } from '@angular/material/paginator';
 

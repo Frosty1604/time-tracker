@@ -11,7 +11,6 @@
         "outputPath": "dist/apps/time-tracker",
         "index": "apps/time-tracker/src/index.html",
         "main": "apps/time-tracker/src/main.ts",
-        "polyfills": "apps/time-tracker/src/polyfills.ts",
         "tsConfig": "apps/time-tracker/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
         "assets": [
