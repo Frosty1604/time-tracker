@@ -1,26 +1,28 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { RouterModule, Routes, TitleStrategy } from '@angular/router';
+import { CustomTitleStrategy } from './core/services/custom-title-strategy.service';
+import { OverviewComponent } from './routes/overview/overview.component';
 
 const routes: Routes = [
   {
     path: 'overview',
-    loadComponent: () =>
-      import('./routes/overview/overview.component').then(
-        (mod) => mod.OverviewComponent
-      ),
+    title: 'Overview',
+    component: OverviewComponent,
   },
   {
     path: 'calendar',
+    title: 'Calendar',
     loadComponent: () =>
       import('./routes/calendar/calendar.component').then(
         (mod) => mod.CalendarComponent
       ),
   },
   {
-    path: 'export',
+    path: 'backup',
+    title: 'Import/Export Database',
     loadComponent: () =>
-      import('./routes/export/export.component').then(
-        (mod) => mod.ExportComponent
+      import('./routes/backup/backup.component').then(
+        (mod) => mod.BackupComponent
       ),
   },
   {
@@ -33,5 +35,11 @@ const routes: Routes = [
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
+  providers: [
+    {
+      provide: TitleStrategy,
+      useClass: CustomTitleStrategy,
+    },
+  ],
 })
 export class AppRoutingModule {}

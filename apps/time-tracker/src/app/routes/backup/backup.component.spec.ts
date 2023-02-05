@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ExportComponent } from './export.component';
+import { BackupComponent } from './backup.component';
 
 describe('ExportCsvComponent', () => {
-  let component: ExportComponent;
-  let fixture: ComponentFixture<ExportComponent>;
+  let component: BackupComponent;
+  let fixture: ComponentFixture<BackupComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ExportComponent],
+      imports: [BackupComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ExportComponent);
+    fixture = TestBed.createComponent(BackupComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

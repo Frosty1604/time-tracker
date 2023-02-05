@@ -122,6 +122,16 @@
         ],
         "parallel": false
       }
+    },
+    "bundle-size": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "nx run time-tracker:build:development --stats-json",
+          "webpack-bundle-analyzer dist/apps/time-tracker/stats.json"
+        ],
+        "parallel": false
+      }
     }
   },
   "tags": []

@@ -40,29 +40,35 @@ interface ViewModel {
     AsyncPipe,
     NgIf,
   ],
-  templateUrl: './export.component.html',
+  templateUrl: './backup.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ExportComponent {
+export class BackupComponent {
   private readonly snackbarService = inject(MatSnackBar);
+
   private readonly workTimeService = inject(WorkTimeService);
+
   private readonly exportSubject = new Subject<void>();
+
   private readonly fileSubject = new Subject<File | null>();
+
   private readonly importSubject = new Subject<void>();
-  fileName$: Observable<string> = this.fileSubject.pipe(
+
+  private readonly fileName$: Observable<string> = this.fileSubject.pipe(
     map((file) => file?.name ?? '')
   );
-  disableImport$: Observable<boolean> = this.fileSubject.pipe(
+
+  private readonly disableImport$: Observable<boolean> = this.fileSubject.pipe(
     map((file) => file == null),
     startWith(true)
   );
 
-  export$ = this.exportSubject.asObservable().pipe(
+  private readonly export$ = this.exportSubject.asObservable().pipe(
     switchMap(() => this.workTimeService.find()),
     map((data) => this.export(data))
   );
 
-  import$ = zip([
+  private readonly import$ = zip([
     this.importSubject,
     this.fileSubject.pipe(filter((file) => file != null)) as Observable<File>,
   ]).pipe(
@@ -82,7 +88,8 @@ export class ExportComponent {
       this.snackbarService.open(`Imported ${count} entries successfully`);
     })
   );
-  viewModel$: Observable<ViewModel> = merge(
+
+  readonly viewModel$: Observable<ViewModel> = merge(
     this.fileName$.pipe(map((fileName) => ({ fileName }))),
     this.disableImport$.pipe(map((disableImport) => ({ disableImport }))),
     this.export$.pipe(map(() => ({}))),
@@ -132,6 +139,9 @@ export class ExportComponent {
         const parsedJson = JSON.parse(json);
         resolve(parsedJson);
       } catch (e) {
+        if (e instanceof Error) {
+          this.snackbarService.open(e.message, 'Dismiss');
+        }
         reject(e);
       }
     });

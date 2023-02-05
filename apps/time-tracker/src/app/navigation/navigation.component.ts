@@ -58,9 +58,9 @@ export class NavigationComponent {
       link: '/calendar',
     },
     {
-      title: 'Export',
-      icon: 'upload',
-      link: '/export',
+      title: 'Backup',
+      icon: 'local_police',
+      link: '/backup',
     },
   ] as const;
 

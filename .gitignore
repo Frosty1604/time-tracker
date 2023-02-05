@@ -43,3 +43,6 @@ Thumbs.db
 # HTTPS for localhost
 cert.pem
 key.pem
+
+# NX
+migrations.json
