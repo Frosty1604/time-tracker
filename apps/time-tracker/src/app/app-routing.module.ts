@@ -5,7 +5,7 @@ import { OverviewComponent } from './routes/overview/overview.component';
 
 const routes: Routes = [
   {
-    path: 'overview',
+    path: '',
     title: 'Overview',
     component: OverviewComponent,
   },
@@ -26,9 +26,8 @@ const routes: Routes = [
       ),
   },
   {
-    path: '',
-    redirectTo: '/overview',
-    pathMatch: 'full',
+    path: '**',
+    component: OverviewComponent,
   },
 ];
 
