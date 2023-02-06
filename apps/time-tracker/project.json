@@ -96,11 +96,11 @@
         "passWithNoTests": true
       }
     },
-    "build-pages": {
+    "deploy": {
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          "git branch --delete gh-pages",
+          "git branch -D gh-pages",
           "git branch gh-pages",
           "git checkout gh-pages",
           "nx build --prod --output-path docs --base-href=/time-tracker/",
