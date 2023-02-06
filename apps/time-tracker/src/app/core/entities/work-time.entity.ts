@@ -12,4 +12,5 @@ export interface WorkTimePartial extends BaseEntity {
 
 export type WorkTime = Required<WorkTimePartial>;
 
-export type WorkType = 'normal' | 'vacation' | 'sick';
+export const workTypes = ['normal', 'remote', 'vacation', 'sick'] as const;
+export type WorkType = (typeof workTypes)[number];

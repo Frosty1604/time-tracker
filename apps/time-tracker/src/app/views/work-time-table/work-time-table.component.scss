@@ -6,4 +6,7 @@
   &.sick {
     @apply bg-red-500;
   }
+  &.remote {
+    @apply bg-orange-500;
+  }
 }

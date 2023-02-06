@@ -140,7 +140,7 @@ export class WorkTimeDataSource extends DataSource<WorkTimeViewModel> {
       endTime: workTime.end,
       pauseTime: workTime.pause,
       type: workTime.type,
-      isWorkDay: workTime.type === 'normal',
+      isWorkDay: workTime.type === 'normal' || workTime.type === 'remote',
       entity: workTime,
       notes: workTime?.notes,
     };

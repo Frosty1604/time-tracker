@@ -14,7 +14,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { SettingsService } from '../../core/services/settings.service';
 import { Settings } from '../../core/entities/settings.entity';
-import { weekDays } from '../../utils/worktime';
+import { weekDays } from '../../utils/work-time';
 
 @Component({
   standalone: true,

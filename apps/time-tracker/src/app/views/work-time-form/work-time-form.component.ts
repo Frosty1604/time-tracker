@@ -5,6 +5,7 @@ import {
   WorkTime,
   WorkTimePartial,
   WorkType,
+  workTypes,
 } from '../../core/entities/work-time.entity';
 import { stringToTime, timeToString } from '../../utils/time';
 import { WorkTimeService } from '../../core/services/work-time.service';
@@ -17,7 +18,7 @@ import { SettingsService } from '../../core/services/settings.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WorkTimeFormComponent {
-  readonly typeOptions: WorkType[] = ['normal', 'vacation', 'sick'];
+  readonly typeOptions: ReadonlyArray<WorkType> = workTypes;
 
   private readonly data = inject<WorkTimePartial>(MAT_DIALOG_DATA, {
     optional: true,

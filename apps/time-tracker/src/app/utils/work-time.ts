@@ -83,7 +83,7 @@ export function calculateOvertime(
   previousYear: number = new Date().getFullYear() - 1
 ) {
   let overtime = items
-    .filter(({ type }) => type === 'normal')
+    .filter(({ type }) => type === 'normal' || type === 'remote')
     .reduce((prev, curr) => {
       const realWorkTimeInMinutes = differenceInMinutes(
         durationToDate(calculateWorkDuration(curr.start, curr.end)),
@@ -132,7 +132,7 @@ export function parseOvertime(overtime: Minutes) {
     duration = {
       minutes: hourGreaterZero
         ? absOvertime % minutesInHour
-        : -overtime % minutesInHour,
+        : overtime % minutesInHour,
       hours: hourGreaterZero ? -minutesToHours(absOvertime) : 0,
     };
   }

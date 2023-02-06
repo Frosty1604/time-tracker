@@ -29,7 +29,7 @@ const colors: Record<string, EventColor> = {
     primary: '#1e90ff',
     secondary: '#D1E8FF',
   },
-  yellow: {
+  orange: {
     primary: '#e3bc08',
     secondary: '#FDF1BA',
   },
@@ -43,7 +43,8 @@ const colors: Record<string, EventColor> = {
 const workTypeColors: Record<WorkType, EventColor> = {
   normal: colors['blue'],
   vacation: colors['green'],
-  sick: colors['yellow'],
+  sick: colors['red'],
+  remote: colors['orange'],
 };
 
 @Component({
@@ -85,7 +86,7 @@ export class CalendarComponent {
         workTime.end.minutes
       ),
       title:
-        workTime.type === 'normal'
+        workTime.type === 'normal' || workTime.type === 'remote'
           ? formatDuration(
               calculateWorkDuration(workTime.start, workTime.end),
               {
@@ -93,7 +94,7 @@ export class CalendarComponent {
               }
             )
           : workTime.type.toUpperCase(),
-      allDay: workTime.type !== 'normal',
+      allDay: workTime.type !== 'normal' && workTime.type !== 'remote',
       color: workTypeColors[workTime.type],
     };
   }
