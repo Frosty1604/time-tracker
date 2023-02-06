@@ -10,6 +10,7 @@ import { stringToTime, timeToString } from '../../utils/time';
 import { WorkTimeService } from '../../core/services/work-time.service';
 import { distinctUntilChanged, map } from 'rxjs/operators';
 import { addDays, subDays } from 'date-fns';
+import { SettingsService } from '../../core/services/settings.service';
 
 @Component({
   templateUrl: './work-time-form.component.html',
@@ -17,25 +18,36 @@ import { addDays, subDays } from 'date-fns';
 })
 export class WorkTimeFormComponent {
   readonly typeOptions: WorkType[] = ['normal', 'vacation', 'sick'];
+
   private readonly data = inject<WorkTimePartial>(MAT_DIALOG_DATA, {
     optional: true,
   });
+
   readonly isEditMode = this.data != null;
+
+  private readonly settings = inject(SettingsService).get();
+
   readonly formGroup = new FormGroup({
     date: new FormControl(this.data?.date ?? new Date(), {
       validators: Validators.required,
       nonNullable: true,
     }),
     start: new FormControl(
-      this.data?.start ? timeToString(this.data.start) : '09:30',
+      this.data?.start
+        ? timeToString(this.data.start)
+        : this.settings.defaultTimes.start,
       { validators: Validators.required, nonNullable: true }
     ),
     end: new FormControl(
-      this.data?.end ? timeToString(this.data.end) : '18:00',
+      this.data?.end
+        ? timeToString(this.data.end)
+        : this.settings.defaultTimes.end,
       { validators: Validators.required, nonNullable: true }
     ),
     pause: new FormControl(
-      this.data?.pause ? timeToString(this.data.pause) : '00:30',
+      this.data?.pause
+        ? timeToString(this.data.pause)
+        : this.settings.defaultTimes.pause,
       {
         validators: Validators.required,
         nonNullable: true,
@@ -47,11 +59,14 @@ export class WorkTimeFormComponent {
     }),
     notes: new FormControl(this.data?.notes ?? ''),
   });
+
   readonly isFormInvalid$ = this.formGroup.statusChanges.pipe(
     map((status) => status !== 'VALID'),
     distinctUntilChanged()
   );
+
   private readonly workTimeService = inject(WorkTimeService);
+
   private readonly dialogRef = inject(MatDialogRef<WorkTimeFormComponent>);
 
   get date() {

@@ -23,7 +23,7 @@ export class SettingsService {
         remainingVacationDays: 0,
       },
     },
-    vacationDaysPerYear: 0,
+    vacationDaysPerYear: 24,
     workDays: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'],
     workTimePerDay: '08:00',
   };
