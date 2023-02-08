@@ -1,7 +1,9 @@
-import { NgModule } from '@angular/core';
+import { importProvidersFrom, NgModule } from '@angular/core';
 import { RouterModule, Routes, TitleStrategy } from '@angular/router';
 import { CustomTitleStrategy } from './core/services/custom-title-strategy.service';
 import { OverviewComponent } from './routes/overview/overview.component';
+import { CalendarModule, DateAdapter } from 'angular-calendar';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 
 const routes: Routes = [
   {
@@ -12,6 +14,14 @@ const routes: Routes = [
   {
     path: 'calendar',
     title: 'Calendar',
+    providers: [
+      importProvidersFrom(
+        CalendarModule.forRoot({
+          provide: DateAdapter,
+          useFactory: adapterFactory,
+        })
+      ),
+    ],
     loadComponent: () =>
       import('./routes/calendar/calendar.component').then(
         (mod) => mod.CalendarComponent
