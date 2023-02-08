@@ -6,12 +6,13 @@
     <section class="flex flex-col gap-2">
       <mat-radio-group
         formControlName="type"
-        class="flex flex-row gap-4 items-start mt-2 mb-4"
+        class="flex flex-row flex-wrap gap-4 items-start mt-2 mb-4"
       >
         <mat-radio-button
           tabindex="-1"
           *ngFor="let type of typeOptions"
           [value]="type"
+          class="flex-1"
           >{{ type | titlecase }}</mat-radio-button
         >
       </mat-radio-group>
@@ -31,6 +32,7 @@
           matSuffix
           matTooltip="Previous day"
           type="button"
+          tabindex="-1"
         >
           <mat-icon>chevron_left</mat-icon>
         </button>
@@ -40,6 +42,7 @@
           matSuffix
           matTooltip="Next day"
           type="button"
+          tabindex="-1"
         >
           <mat-icon>chevron_right</mat-icon>
         </button>
@@ -66,8 +69,8 @@
           </mat-error>
         </ng-container>
       </mat-form-field>
-      <div class="flex gap-4">
-        <mat-form-field hideRequiredMarker="true">
+      <div class="flex flex-wrap gap-4">
+        <mat-form-field hideRequiredMarker="true" class="flex-1">
           <mat-label>Start Time</mat-label>
           <input
             required
@@ -81,7 +84,7 @@
             >Start time is required.</mat-error
           >
         </mat-form-field>
-        <mat-form-field hideRequiredMarker="true">
+        <mat-form-field hideRequiredMarker="true" class="flex-1">
           <mat-label>End Time</mat-label>
           <input
             required

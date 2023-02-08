@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+} from '@angular/core';
 import {
   BreakpointObserver,
   Breakpoints,
@@ -13,7 +18,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { AsyncPipe, NgForOf, NgIf, NgOptimizedImage } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { SettingsComponent } from '../routes/settings/settings.component';
 import { SettingsService } from '../core/services/settings.service';
 import { MatRippleModule } from '@angular/material/core';
@@ -45,7 +50,7 @@ interface NavListItem {
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NavigationComponent {
+export class NavigationComponent implements AfterViewInit {
   readonly navListItems: ReadonlyArray<NavListItem> = [
     {
       title: 'Overview',
@@ -68,16 +73,37 @@ export class NavigationComponent {
   private readonly dialog = inject(MatDialog);
   private readonly settingsService = inject(SettingsService);
 
-  isHandset$: Observable<boolean> = this.breakpointObserver
+  readonly isHandset$: Observable<boolean> = this.breakpointObserver
     .observe(Breakpoints.Handset)
     .pipe(
       map((result) => result.matches),
       shareReplay()
     );
 
+  private dialogConfig?: MatDialogConfig;
+
+  ngAfterViewInit(): void {
+    this.isHandset$
+      .pipe(
+        map((isHandset) =>
+          isHandset
+            ? {
+                width: '95vw',
+                maxWidth: '95vw',
+                panelClass: 'mat-dialog-mobile',
+              }
+            : {}
+        )
+      )
+      .subscribe((config) => {
+        this.dialogConfig = config;
+      });
+  }
+
   openSettingsDialog() {
     this.dialog.open(SettingsComponent, {
       data: this.settingsService.get(),
+      ...this.dialogConfig,
     });
   }
 }

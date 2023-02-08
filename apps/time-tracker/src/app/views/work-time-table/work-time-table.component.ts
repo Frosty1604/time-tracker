@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   inject,
@@ -7,7 +8,7 @@ import {
 import { MatTable, MatTableModule } from '@angular/material/table';
 import { filter, Observable, startWith, Subject, take, tap } from 'rxjs';
 import { WorkTime } from '../../core/entities/work-time.entity';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { WorkTimeFormComponent } from '../work-time-form/work-time-form.component';
 import { WorkTimeDataSource, WorkTimeViewModel } from './work-time-datasource';
 import {
@@ -29,6 +30,7 @@ import {
   PageEvent,
 } from '@angular/material/paginator';
 import { map } from 'rxjs/operators';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 @Component({
   selector: 'tt-work-time-table',
@@ -58,9 +60,13 @@ import { map } from 'rxjs/operators';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class WorkTimeTableComponent {
+export class WorkTimeTableComponent implements AfterViewInit {
   @ViewChild(MatTable)
   readonly table!: MatTable<WorkTimeViewModel>;
+
+  private readonly breakpointObserver = inject(BreakpointObserver);
+
+  private dialogConfig?: MatDialogConfig;
 
   readonly displayedColumns = [
     'date',
@@ -72,6 +78,7 @@ export class WorkTimeTableComponent {
     'notes',
     'actions',
   ] as const;
+
   readonly pageSizeOptions = [5, 10, 30, 60, 100] as const;
 
   private readonly pageSizeKey = 'pageSize';
@@ -99,6 +106,26 @@ export class WorkTimeTableComponent {
     );
   private readonly dialog = inject(MatDialog);
 
+  ngAfterViewInit(): void {
+    this.breakpointObserver
+      .observe(Breakpoints.Handset)
+      .pipe(
+        map((breakpoint) => breakpoint.matches),
+        map((isHandset) =>
+          isHandset
+            ? {
+                width: '95vw',
+                maxWidth: '95vw',
+                panelClass: 'mat-dialog-mobile',
+              }
+            : {}
+        )
+      )
+      .subscribe((config) => {
+        this.dialogConfig = config;
+      });
+  }
+
   addRow() {
     this.openDialog().subscribe((workTime) =>
       this.dataSource.addData(<WorkTime>workTime)
@@ -125,7 +152,10 @@ export class WorkTimeTableComponent {
       WorkTimeFormComponent,
       WorkTime,
       WorkTime
-    >(WorkTimeFormComponent, { data: workTime });
+    >(WorkTimeFormComponent, {
+      data: workTime,
+      ...this.dialogConfig,
+    });
     return dialogRef.afterClosed().pipe(
       filter((value) => value != null),
       take(1)

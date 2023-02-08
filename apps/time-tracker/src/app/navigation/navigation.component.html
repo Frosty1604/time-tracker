@@ -9,7 +9,6 @@
     [class.handset]="(isHandset$ | async) === false"
   >
     <div class="flex flex-col mt-4 mb-4 p-4 items-center text-3xl gap-2">
-      <!--suppress RequiredAttributes -->
       <img alt="Logo" ngSrc="assets/logo.png" height="72" width="72" priority />
     </div>
     <div class="flex flex-col gap-4">
@@ -25,7 +24,7 @@
         [matRippleRadius]="60"
       >
         <mat-icon matListIcon>{{ item.icon }}</mat-icon>
-        <h4 class="font-normal text-sm">{{ item.title }}</h4></a
+        <h4>{{ item.title }}</h4></a
       >
       <a
         (click)="openSettingsDialog()"
@@ -36,23 +35,39 @@
         [matRippleRadius]="60"
       >
         <mat-icon matListIcon>settings</mat-icon>
-        <h4 class="font-semibold">Settings</h4>
+        <h4>Settings</h4>
       </a>
     </div>
   </mat-sidenav>
   <mat-sidenav-content>
-    <mat-toolbar *ngIf="isHandset$ | async">
-      <button
-        type="button"
-        aria-label="Toggle sidenav"
-        mat-icon-button
-        (click)="drawer.toggle()"
+    <mat-toolbar *ngIf="isHandset$ | async" class="gap-2">
+      <a
+        *ngFor="let item of navListItems"
+        [routerLink]="item.link"
+        [routerLinkActiveOptions]="{ exact: true }"
+        routerLinkActive="active"
+        class="nav-list-item"
+        matRipple
+        [matRippleCentered]="true"
+        [matRippleUnbounded]="true"
+        [matRippleRadius]="25"
       >
-        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
-      </button>
-      <span>Time Tracker</span>
+        <mat-icon matListIcon>{{ item.icon }}</mat-icon>
+        <h4>{{ item.title }}</h4>
+      </a>
+      <a
+        (click)="openSettingsDialog()"
+        class="nav-list-item cursor-pointer"
+        matRipple
+        [matRippleCentered]="true"
+        [matRippleUnbounded]="true"
+        [matRippleRadius]="60"
+      >
+        <mat-icon matListIcon>settings</mat-icon>
+        <h4>Settings</h4>
+      </a>
     </mat-toolbar>
-    <main class="p-10">
+    <main class="p-5 sm:p-10">
       <router-outlet></router-outlet>
     </main>
   </mat-sidenav-content>

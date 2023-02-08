@@ -35,14 +35,18 @@ import { weekDays } from '../../utils/work-time';
 })
 export class SettingsComponent {
   readonly lastYear = new Date().getFullYear() - 1;
+
   readonly weekDays = weekDays;
+
   private readonly fb = inject(FormBuilder);
   private readonly settingsService = inject(SettingsService);
   private readonly dialogRef = inject(MatDialogRef<SettingsComponent>);
   private readonly data = inject<Settings>(MAT_DIALOG_DATA, {
     optional: true,
   });
+
   readonly isEditMode = this.data != null;
+
   readonly formGroup: FormGroup = this.fb.group({
     start: [this.data?.defaultTimes.start ?? '08:30'],
     end: [this.data?.defaultTimes.end ?? '17:15'],
@@ -70,6 +74,7 @@ export class SettingsComponent {
 
   async submit() {
     const formData = this.formGroup?.value;
+
     const settings: Settings = {
       workTimePerDay: formData.workTimePerDay,
       defaultTimes: {
@@ -86,6 +91,7 @@ export class SettingsComponent {
         },
       },
     };
+
     if (this.isEditMode) {
       await this.settingsService.upsert(settings);
     } else {
