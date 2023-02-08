@@ -1,12 +1,25 @@
 <header class="flex flex-row justify-end mb-3">
-  <button mat-raised-button color="accent" (click)="addRow()">Add entry</button>
+  <button
+    *ngIf="(isSmall$ | async) === false"
+    mat-raised-button
+    color="accent"
+    (click)="addRow()"
+  >
+    Add entry
+  </button>
 </header>
 <div class="shadow-xl">
   <table [dataSource]="dataSource" mat-table class="w-full">
     <ng-container matColumnDef="date">
       <th *matHeaderCellDef mat-header-cell>Date</th>
       <td *matCellDef="let element" mat-cell>
-        {{ element.date | date : 'EE dd. LLLL YY' }}
+        <ng-container
+          [ngTemplateOutlet]="(isSmall$ | async) ? short : long"
+        ></ng-container>
+        <ng-template #long>{{
+          element.date | date : 'EE dd. LLLL YY'
+        }}</ng-template>
+        <ng-template #short>{{ element.date | date : 'dd.MM.' }}</ng-template>
       </td>
     </ng-container>
     <ng-container matColumnDef="start">
@@ -25,15 +38,11 @@
         </ng-container>
       </td>
     </ng-container>
-    <ng-container matColumnDef="total">
-      <th *matHeaderCellDef mat-header-cell>Total</th>
+    <ng-container matColumnDef="worked">
+      <th *matHeaderCellDef mat-header-cell>Worked</th>
       <td *matCellDef="let element" mat-cell>
         <ng-container *ngIf="element.isWorkDay; else emptyState">
-          <span
-            matTooltip="Worked for {{ element.effectiveTime | time }}"
-            matTooltipPosition="above"
-            >{{ element.effectiveTime | time }}</span
-          >
+          <span>{{ element.effectiveTime | time }}</span>
         </ng-container>
       </td>
     </ng-container>
@@ -41,7 +50,7 @@
       <th *matHeaderCellDef mat-header-cell>Pause</th>
       <td *matCellDef="let element" mat-cell>
         <ng-container *ngIf="element.isWorkDay; else emptyState">
-          {{ element.pauseTime | time }}
+          {{ element.pauseTime | time : 'short' }}
         </ng-container>
       </td>
     </ng-container>
@@ -85,8 +94,8 @@
       </td>
     </ng-container>
 
-    <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
-    <tr *matRowDef="let row; columns: displayedColumns" mat-row></tr>
+    <tr *matHeaderRowDef="displayedColumns$ | async" mat-header-row></tr>
+    <tr *matRowDef="let row; columns: displayedColumns$ | async" mat-row></tr>
   </table>
   <mat-paginator
     [length]="length$ | async"

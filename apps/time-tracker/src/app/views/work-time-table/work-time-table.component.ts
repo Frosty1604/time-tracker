@@ -16,6 +16,7 @@ import {
   DatePipe,
   NgClass,
   NgIf,
+  NgTemplateOutlet,
   TitleCasePipe,
 } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
@@ -29,7 +30,7 @@ import {
   MatPaginatorModule,
   PageEvent,
 } from '@angular/material/paginator';
-import { map } from 'rxjs/operators';
+import { map, shareReplay } from 'rxjs/operators';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 @Component({
@@ -49,6 +50,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
     MatTooltipModule,
     NgClass,
     NgIf,
+    NgTemplateOutlet,
     TimePipe,
     TitleCasePipe,
   ],
@@ -68,16 +70,26 @@ export class WorkTimeTableComponent implements AfterViewInit {
 
   private dialogConfig?: MatDialogConfig;
 
-  readonly displayedColumns = [
-    'date',
-    'start',
-    'end',
-    'pause',
-    'total',
-    'type',
-    'notes',
-    'actions',
-  ] as const;
+  isSmall$ = this.breakpointObserver.observe(Breakpoints.Handset).pipe(
+    map((breakpoint) => breakpoint.matches),
+    shareReplay()
+  );
+  displayedColumns$: Observable<string[]> = this.isSmall$.pipe(
+    map((isHandsetPortrait) =>
+      isHandsetPortrait
+        ? ['date', 'start', 'end', 'pause', 'type', 'actions']
+        : [
+            'date',
+            'start',
+            'end',
+            'pause',
+            'worked',
+            'type',
+            'notes',
+            'actions',
+          ]
+    )
+  );
 
   readonly pageSizeOptions = [5, 10, 30, 60, 100] as const;
 
