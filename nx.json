@@ -42,7 +42,9 @@
       "unitTestRunner": "jest"
     },
     "@nrwl/angular:component": {
-      "style": "scss"
+      "style": "scss",
+      "standalone": true,
+      "changeDetection": "OnPush"
     }
   },
   "defaultProject": "time-tracker",
