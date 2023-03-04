@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Settings } from '../entities/settings.entity';
+import { Settings } from '../interfaces/settings';
 import { startWith, Subject } from 'rxjs';
 
 @Injectable({
@@ -27,6 +27,7 @@ export class SettingsService {
     workDays: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'],
     workTimePerDay: '08:00',
   };
+
   get(): Settings {
     const settings = localStorage.getItem(this.key);
     if (!settings) {

@@ -1,7 +1,7 @@
 import { importProvidersFrom, NgModule } from '@angular/core';
 import { RouterModule, Routes, TitleStrategy } from '@angular/router';
 import { CustomTitleStrategy } from './core/services/custom-title-strategy.service';
-import { OverviewComponent } from './routes/overview/overview.component';
+import { OverviewComponent } from './pages/overview/overview.component';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 
@@ -23,7 +23,7 @@ const routes: Routes = [
       ),
     ],
     loadComponent: () =>
-      import('./routes/calendar/calendar.component').then(
+      import('./pages/calendar/calendar.component').then(
         (mod) => mod.CalendarComponent
       ),
   },
@@ -31,7 +31,7 @@ const routes: Routes = [
     path: 'backup',
     title: 'Import/Export Database',
     loadComponent: () =>
-      import('./routes/backup/backup.component').then(
+      import('./pages/backup/backup.component').then(
         (mod) => mod.BackupComponent
       ),
   },

@@ -7,8 +7,8 @@ import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { AppRoutingModule } from './app-routing.module';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
-import { NavigationComponent } from './navigation/navigation.component';
-import { WorkTimeFormModule } from './views/work-time-form/work-time-form.module';
+import { NavigationComponent } from './features/components/navigation/navigation.component';
+import { WorkTimeFormModule } from './features/components/work-time-form/work-time-form.module';
 import { initDB } from './core/services/database.service';
 import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
 

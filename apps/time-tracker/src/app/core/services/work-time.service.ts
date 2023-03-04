@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { DatabaseService } from './database.service';
-import { WorkTime, WorkTimePartial } from '../entities/work-time.entity';
+import { WorkTime, WorkTimePartial } from '../interfaces/work-time';
 import { Subject } from 'rxjs';
 
 @Injectable({

@@ -2,10 +2,10 @@
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "npmScope": "time-tracker",
   "affected": {
-    "defaultBase": "main"
+    "defaultBase": "master"
   },
   "cli": {
-    "packageManager": "npm"
+    "packageManager": "yarn"
   },
   "tasksRunnerOptions": {
     "default": {

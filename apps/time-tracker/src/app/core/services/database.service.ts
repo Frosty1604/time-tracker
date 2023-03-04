@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { DBSchema, IDBPDatabase, openDB } from 'idb';
-import { WorkTimePartial } from '../entities/work-time.entity';
+import { WorkTimePartial } from '../interfaces/work-time';
 
 interface TimeTrackerDB extends DBSchema {
   'work-time': {
