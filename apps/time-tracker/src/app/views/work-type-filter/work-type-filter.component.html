@@ -1,0 +1,9 @@
+<button mat-icon-button matTooltip="Filter" [matMenuTriggerFor]="menu">
+  <mat-icon>filter_list</mat-icon>
+</button>
+<mat-menu #menu="matMenu">
+  <div *ngFor="let workType of workTypes" mat-menu-item>
+    <mat-checkbox [(ngModel)]="checkedWorkTypes[workType]"></mat-checkbox>
+    {{ workType | titlecase }}
+  </div>
+</mat-menu>

@@ -29,6 +29,7 @@ import {
   PageEvent,
 } from '@angular/material/paginator';
 import { map } from 'rxjs/operators';
+import { WorkTypeFilterComponent } from '../work-type-filter/work-type-filter.component';
 
 @Component({
   selector: 'tt-work-time-table',
@@ -49,6 +50,7 @@ import { map } from 'rxjs/operators';
     NgIf,
     TimePipe,
     TitleCasePipe,
+    WorkTypeFilterComponent,
   ],
   providers: [
     {
