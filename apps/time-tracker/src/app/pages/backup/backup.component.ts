@@ -12,13 +12,16 @@ import {
   tap,
   zip,
 } from 'rxjs';
-import { MatButtonModule } from '@angular/material/button';
+import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
 import { WorkTimeService } from '../../core/services/work-time.service';
 import exportFromJSON from 'export-from-json';
-import { MatInputModule } from '@angular/material/input';
+import { MatLegacyInputModule as MatInputModule } from '@angular/material/legacy-input';
 import { MatIconModule } from '@angular/material/icon';
 import { WorkTime, WorkTimePartial } from '../../core/interfaces/work-time';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import {
+  MatLegacySnackBar as MatSnackBar,
+  MatLegacySnackBarModule as MatSnackBarModule,
+} from '@angular/material/legacy-snack-bar';
 import { map } from 'rxjs/operators';
 import { AsyncPipe, NgIf } from '@angular/common';
 

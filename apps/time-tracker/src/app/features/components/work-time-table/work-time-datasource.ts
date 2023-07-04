@@ -18,7 +18,7 @@ import {
   durationToDate,
   timeToDate,
 } from '../../../utils/time.util';
-import { PageEvent } from '@angular/material/paginator';
+import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
 import { WorkTimeViewModel } from '../../interfaces/work-time.view-model';
 
 type RowAction = RowActionUpsert | RowActionDelete;

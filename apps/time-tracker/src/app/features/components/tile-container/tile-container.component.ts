@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { AsyncPipe, NgIf } from '@angular/common';
-import { MatCardModule } from '@angular/material/card';
+import { MatLegacyCardModule as MatCardModule } from '@angular/material/legacy-card';
 import { TileDetailsComponent } from '../tile-details/tile-details.component';
 import { combineLatest, map, Observable, startWith, switchMap } from 'rxjs';
 import { WorkTimeService } from '../../../core/services/work-time.service';
