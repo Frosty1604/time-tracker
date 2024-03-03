@@ -2,19 +2,15 @@ import {
   AfterViewInit,
   ChangeDetectionStrategy,
   Component,
+  computed,
   inject,
+  Signal,
   ViewChild,
 } from '@angular/core';
-import {
-  MatLegacyTable as MatTable,
-  MatLegacyTableModule as MatTableModule,
-} from '@angular/material/legacy-table';
-import { filter, Observable, startWith, Subject, take, tap } from 'rxjs';
+import { MatTable, MatTableModule } from '@angular/material/table';
+import { filter, first, Observable, startWith, Subject, tap } from 'rxjs';
 import { WorkTime } from '../../../core/interfaces/work-time';
-import {
-  MatLegacyDialog as MatDialog,
-  MatLegacyDialogConfig as MatDialogConfig,
-} from '@angular/material/legacy-dialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { WorkTimeFormComponent } from '../work-time-form/work-time-form.component';
 import { WorkTimeDataSource } from './work-time-datasource';
 import {
@@ -25,20 +21,21 @@ import {
   NgTemplateOutlet,
   TitleCasePipe,
 } from '@angular/common';
-import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
+import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { TimePipe } from '../../../core/pipes/time/time.pipe';
-import { MatLegacyMenuModule as MatMenuModule } from '@angular/material/legacy-menu';
-import { MatLegacyChipsModule as MatChipsModule } from '@angular/material/legacy-chips';
-import { MatLegacyTooltipModule as MatTooltipModule } from '@angular/material/legacy-tooltip';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import {
-  MAT_LEGACY_PAGINATOR_DEFAULT_OPTIONS as MAT_PAGINATOR_DEFAULT_OPTIONS,
-  MatLegacyPaginatorModule as MatPaginatorModule,
-  LegacyPageEvent as PageEvent,
-} from '@angular/material/legacy-paginator';
-import { map, shareReplay } from 'rxjs/operators';
+  MAT_PAGINATOR_DEFAULT_OPTIONS,
+  MatPaginatorModule,
+  PageEvent,
+} from '@angular/material/paginator';
+import { map } from 'rxjs/operators';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { WorkTimeViewModel } from '../../interfaces/work-time.view-model';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'tt-work-time-table',
@@ -64,7 +61,7 @@ import { WorkTimeViewModel } from '../../interfaces/work-time.view-model';
   providers: [
     {
       provide: MAT_PAGINATOR_DEFAULT_OPTIONS,
-      useValue: { formFieldAppearance: 'standard' },
+      useValue: { formFieldAppearance: 'outline' },
     },
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -77,25 +74,15 @@ export class WorkTimeTableComponent implements AfterViewInit {
 
   private dialogConfig?: MatDialogConfig;
 
-  isSmall$ = this.breakpointObserver.observe(Breakpoints.Handset).pipe(
-    map((breakpoint) => breakpoint.matches),
-    shareReplay()
+  isSmall = toSignal(
+    this.breakpointObserver
+      .observe(Breakpoints.Handset)
+      .pipe(map((breakpoint) => breakpoint.matches)),
   );
-  displayedColumns$: Observable<string[]> = this.isSmall$.pipe(
-    map((isHandsetPortrait) =>
-      isHandsetPortrait
-        ? ['date', 'start', 'end', 'pause', 'type', 'actions']
-        : [
-            'date',
-            'start',
-            'end',
-            'pause',
-            'worked',
-            'type',
-            'notes',
-            'actions',
-          ]
-    )
+  displayedColumns: Signal<string[]> = computed(() =>
+    this.isSmall()
+      ? ['date', 'start', 'end', 'pause', 'type', 'actions']
+      : ['date', 'start', 'end', 'pause', 'worked', 'type', 'notes', 'actions'],
   );
 
   readonly pageSizeOptions = [5, 10, 30, 60, 100] as const;
@@ -121,7 +108,7 @@ export class WorkTimeTableComponent implements AfterViewInit {
     .pipe(
       map(({ pageSize }) => pageSize),
       tap((pageSize) => this.savePageSize(pageSize)),
-      startWith(this.defaultPageSize)
+      startWith(this.defaultPageSize),
     );
   private readonly dialog = inject(MatDialog);
 
@@ -137,8 +124,8 @@ export class WorkTimeTableComponent implements AfterViewInit {
                 maxWidth: '95vw',
                 panelClass: 'mat-dialog-mobile',
               }
-            : {}
-        )
+            : {},
+        ),
       )
       .subscribe((config) => {
         this.dialogConfig = config;
@@ -147,13 +134,13 @@ export class WorkTimeTableComponent implements AfterViewInit {
 
   addRow() {
     this.openDialog().subscribe((workTime) =>
-      this.dataSource.addData(<WorkTime>workTime)
+      this.dataSource.addData(<WorkTime>workTime),
     );
   }
 
   editRow(workTime: WorkTime) {
     this.openDialog(workTime).subscribe((workTime) =>
-      this.dataSource.updateData(<WorkTime>workTime)
+      this.dataSource.updateData(<WorkTime>workTime),
     );
   }
 
@@ -176,8 +163,8 @@ export class WorkTimeTableComponent implements AfterViewInit {
       ...this.dialogConfig,
     });
     return dialogRef.afterClosed().pipe(
+      first(),
       filter((value) => value != null),
-      take(1)
     );
   }
 

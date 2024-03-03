@@ -1,6 +1,6 @@
 <header class="flex flex-row justify-end mb-3">
   <button
-    *ngIf="(isSmall$ | async) === false"
+    *ngIf="!isSmall()"
     mat-raised-button
     color="accent"
     (click)="addRow()"
@@ -14,19 +14,19 @@
       <th *matHeaderCellDef mat-header-cell>Date</th>
       <td *matCellDef="let element" mat-cell>
         <ng-container
-          [ngTemplateOutlet]="(isSmall$ | async) ? short : long"
+          [ngTemplateOutlet]="isSmall() ? short : long"
         ></ng-container>
         <ng-template #long>{{
-          element.date | date : 'EE dd. LLLL YY'
+          element.date | date: 'EE dd. LLLL YY'
         }}</ng-template>
-        <ng-template #short>{{ element.date | date : 'dd.MM.' }}</ng-template>
+        <ng-template #short>{{ element.date | date: 'dd.MM.' }}</ng-template>
       </td>
     </ng-container>
     <ng-container matColumnDef="start">
       <th *matHeaderCellDef mat-header-cell>Start</th>
       <td *matCellDef="let element" mat-cell>
         <ng-container *ngIf="element.isWorkDay; else emptyState">
-          {{ element.startTime | time : 'short' }}
+          {{ element.startTime | time: 'short' }}
         </ng-container>
       </td>
     </ng-container>
@@ -34,7 +34,7 @@
       <th *matHeaderCellDef mat-header-cell>End</th>
       <td *matCellDef="let element" mat-cell>
         <ng-container *ngIf="element.isWorkDay; else emptyState">
-          {{ element.endTime | time : 'short' }}
+          {{ element.endTime | time: 'short' }}
         </ng-container>
       </td>
     </ng-container>
@@ -50,21 +50,18 @@
       <th *matHeaderCellDef mat-header-cell>Pause</th>
       <td *matCellDef="let element" mat-cell>
         <ng-container *ngIf="element.isWorkDay; else emptyState">
-          {{ element.pauseTime | time : 'short' }}
+          {{ element.pauseTime | time: 'short' }}
         </ng-container>
       </td>
     </ng-container>
     <ng-container matColumnDef="type">
       <th *matHeaderCellDef mat-header-cell>Type</th>
       <td *matCellDef="let element" mat-cell>
-        <mat-chip-list>
-          <mat-chip
-            class="chip-type"
-            [ngClass]="element.type"
-            [selected]="element.type === 'normal'"
-            >{{ element.type | titlecase }}</mat-chip
-          >
-        </mat-chip-list>
+        <mat-chip-listbox>
+          <mat-chip-option class="chip-type" [ngClass]="element.type">{{
+            element.type | titlecase
+          }}</mat-chip-option>
+        </mat-chip-listbox>
       </td>
     </ng-container>
     <ng-container matColumnDef="notes">
@@ -94,8 +91,8 @@
       </td>
     </ng-container>
 
-    <tr *matHeaderRowDef="displayedColumns$ | async" mat-header-row></tr>
-    <tr *matRowDef="let row; columns: displayedColumns$ | async" mat-row></tr>
+    <tr *matHeaderRowDef="displayedColumns()" mat-header-row></tr>
+    <tr *matRowDef="let row; columns: displayedColumns()" mat-row></tr>
   </table>
   <mat-paginator
     [length]="length$ | async"

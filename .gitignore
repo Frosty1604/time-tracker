@@ -46,3 +46,5 @@ key.pem
 
 # NX
 migrations.json
+
+.nx/cache

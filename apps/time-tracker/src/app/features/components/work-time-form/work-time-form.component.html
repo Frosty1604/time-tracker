@@ -2,7 +2,7 @@
   <header class="flex justify-between">
     <h2 mat-dialog-title>New entry</h2>
   </header>
-  <main mat-dialog-content>
+  <mat-dialog-content>
     <section class="flex flex-col gap-2">
       <mat-radio-group
         formControlName="type"
@@ -123,8 +123,8 @@
         ></textarea>
       </mat-form-field>
     </section>
-  </main>
-  <footer mat-dialog-actions class="float-right">
+  </mat-dialog-content>
+  <mat-dialog-actions align="end" class="!px-6 !pb-6">
     <button mat-flat-button [mat-dialog-close]="null">Cancel</button>
     <button
       mat-raised-button
@@ -134,5 +134,5 @@
     >
       {{ isEditMode ? 'Save' : 'Add' }}
     </button>
-  </footer>
+  </mat-dialog-actions>
 </form>

@@ -6,7 +6,7 @@
   "prefix": "tt",
   "targets": {
     "build": {
-      "executor": "@angular-devkit/build-angular:browser",
+      "executor": "@angular-devkit/build-angular:browser-esbuild",
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/apps/time-tracker",
@@ -66,10 +66,10 @@
       "executor": "@angular-devkit/build-angular:dev-server",
       "configurations": {
         "production": {
-          "browserTarget": "time-tracker:build:production"
+          "buildTarget": "time-tracker:build:production"
         },
         "development": {
-          "browserTarget": "time-tracker:build:development"
+          "buildTarget": "time-tracker:build:development"
         }
       },
       "defaultConfiguration": "development"
@@ -77,24 +77,17 @@
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",
       "options": {
-        "browserTarget": "time-tracker:build"
+        "buildTarget": "time-tracker:build"
       }
     },
     "lint": {
-      "executor": "@nx/linter:eslint",
-      "options": {
-        "lintFilePatterns": [
-          "apps/time-tracker/**/*.ts",
-          "apps/time-tracker/**/*.html"
-        ]
-      }
+      "executor": "@nx/eslint:lint"
     },
     "test": {
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/apps/time-tracker"],
       "options": {
-        "jestConfig": "apps/time-tracker/jest.config.ts",
-        "passWithNoTests": true
+        "jestConfig": "apps/time-tracker/jest.config.ts"
       }
     },
     "deploy": {

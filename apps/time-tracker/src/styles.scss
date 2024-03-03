@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@import './node_modules/angular-calendar/scss/angular-calendar';
+@import '../../../node_modules/angular-calendar/scss/angular-calendar';
 
 html,
 body {
@@ -70,12 +70,12 @@ $scrollbar-size: 6px;
   }
 }
 
-button.mat-mini-fab .mat-icon {
+button.mat-mdc-mini-fab .mat-icon {
   vertical-align: top;
 }
 
-th.mat-header-cell,
-td.mat-cell {
+th.mat-mdc-header-cell,
+td.mat-mdc-cell {
   user-select: none;
 }
 
@@ -87,8 +87,18 @@ a {
   -webkit-tap-highlight-color: transparent;
 }
 
+// Style to fix the weird border with angular material
+.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field
+  .mdc-notched-outline__notch {
+  border-right-style: hidden;
+}
+
+.mat-mdc-input-element {
+  box-shadow: none !important;
+}
+
 .mat-dialog-mobile {
-  .mat-dialog-content {
+  .mat-mdc-dialog-content {
     max-height: 80vh;
   }
 }

@@ -9,7 +9,7 @@ import {
 import { addHours, addMinutes, formatDuration, startOfDay } from 'date-fns';
 import { EventColor } from 'calendar-utils';
 import { map, Observable } from 'rxjs';
-import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
+import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatIconModule } from '@angular/material/icon';
 import { WorkTimeService } from '../../core/services/work-time.service';

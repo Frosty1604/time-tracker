@@ -7,9 +7,9 @@
 //  If you specify typography styles for the components you use elsewhere, you should delete this line.
 //  If you don't need the default component typographies but still want the hierarchy styles,
 //  you can delete this line and instead use:
-//    `@include mat.legacy-typography-hierarchy(mat.define-legacy-typography-config());`
-@include mat.all-legacy-component-typographies();
-@include mat.legacy-core();
+//    `@include mat.legacy-typography-hierarchy(mat.define-typography-config());`
+@include mat.all-component-typographies();
+@include mat.core();
 
 // Define a light theme
 $light-primary: mat.define-palette(mat.$light-blue-palette);
@@ -21,7 +21,7 @@ $light-theme: mat.define-light-theme(
       accent: $light-accent,
     ),
     typograhpy:
-      mat.define-legacy-typography-config(
+      mat.define-typography-config(
         $font-family: 'Roboto Condensed',
       ),
   )
@@ -37,9 +37,9 @@ $dark-theme: mat.define-dark-theme(
       accent: $dark-accent,
     ),
     typography:
-      mat.define-legacy-typography-config(
+      mat.define-typography-config(
         $font-family: 'Lato',
-        $title:
+        $headline-6:
           mat.define-typography-level(
             $font-family: 'Raleway',
             $font-weight: 300,
@@ -52,49 +52,53 @@ $dark-theme: mat.define-dark-theme(
 );
 
 // Apply the dark theme by default
-@include mat.legacy-core-theme($dark-theme);
+@include mat.core-theme($dark-theme);
 // Component themes
-@include mat.legacy-button-theme($dark-theme);
-@include mat.legacy-checkbox-theme($dark-theme);
-@include mat.legacy-chips-theme($dark-theme);
+@include mat.button-theme($dark-theme);
+@include mat.fab-theme($dark-theme);
+@include mat.icon-button-theme($dark-theme);
+@include mat.checkbox-theme($dark-theme);
+@include mat.chips-theme($dark-theme);
 @include mat.datepicker-theme($dark-theme);
-@include mat.legacy-dialog-theme($dark-theme);
-@include mat.legacy-select-theme($dark-theme);
-@include mat.legacy-form-field-theme($dark-theme);
-@include mat.legacy-list-theme($dark-theme);
-@include mat.legacy-menu-theme($dark-theme);
-@include mat.legacy-paginator-theme($dark-theme);
-@include mat.legacy-radio-theme($dark-theme);
+@include mat.dialog-theme($dark-theme);
+@include mat.select-theme($dark-theme);
+@include mat.form-field-theme($dark-theme);
+@include mat.list-theme($dark-theme);
+@include mat.menu-theme($dark-theme);
+@include mat.paginator-theme($dark-theme);
+@include mat.radio-theme($dark-theme);
 @include mat.sidenav-theme($dark-theme);
-@include mat.legacy-snack-bar-theme($dark-theme);
-@include mat.legacy-table-theme($dark-theme);
+@include mat.snack-bar-theme($dark-theme);
+@include mat.table-theme($dark-theme);
 @include mat.toolbar-theme($dark-theme);
-@include mat.legacy-tooltip-theme($dark-theme);
+@include mat.tooltip-theme($dark-theme);
 
 // Component typography
-@include mat.legacy-chips-typography(
-  mat.define-legacy-typography-config(
-    $body-2: mat.define-typography-level(12px, 12px, 500)
+@include mat.chips-typography(
+  mat.define-typography-config(
+    $subtitle-2: mat.define-typography-level(12px, 12px, 500)
   )
 );
 
 @media (prefers-color-scheme: light) {
-  @include mat.legacy-core-color($light-theme);
+  @include mat.core-color($light-theme);
   // Component colors
-  @include mat.legacy-button-color($light-theme);
-  @include mat.legacy-checkbox-color($light-theme);
-  @include mat.legacy-chips-color($light-theme);
+  @include mat.button-color($light-theme);
+  @include mat.fab-color($light-theme);
+  @include mat.icon-button-color($light-theme);
+  @include mat.checkbox-color($light-theme);
+  @include mat.chips-color($light-theme);
   @include mat.datepicker-color($light-theme);
-  @include mat.legacy-dialog-color($light-theme);
-  @include mat.legacy-form-field-color($light-theme);
-  @include mat.legacy-list-color($light-theme);
-  @include mat.legacy-menu-color($light-theme);
-  @include mat.legacy-paginator-color($light-theme);
-  @include mat.legacy-radio-color($light-theme);
-  @include mat.legacy-select-color($light-theme);
+  @include mat.dialog-color($light-theme);
+  @include mat.form-field-color($light-theme);
+  @include mat.list-color($light-theme);
+  @include mat.menu-color($light-theme);
+  @include mat.paginator-color($light-theme);
+  @include mat.select-color($light-theme);
+  @include mat.radio-color($light-theme);
   @include mat.sidenav-color($light-theme);
-  @include mat.legacy-snack-bar-color($light-theme);
-  @include mat.legacy-table-color($light-theme);
+  @include mat.snack-bar-color($light-theme);
+  @include mat.table-color($light-theme);
   @include mat.toolbar-color($light-theme);
-  @include mat.legacy-tooltip-color($light-theme);
+  @include mat.tooltip-color($light-theme);
 }
