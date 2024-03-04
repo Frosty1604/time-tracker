@@ -1,16 +1,17 @@
-<div
-  *ngIf="data$ | async as data"
-  class="relative block rounded-xl px-4 py-6 shadow-xl"
-  [ngClass]="data.colors ?? defaultBackground"
-  [matTooltip]="data.tooltip ?? ''"
->
-  <div class="text-white flex justify-between items-center gap-4">
-    <div class="whitespace-nowrap">
-      <label class="text-gray-200">
-        {{ data.title }}
-      </label>
-      <h2 class="mt-2">{{ data.value }}</h2>
+@if (data$ | async; as data) {
+  <div
+    class="relative block rounded-xl px-4 py-6 shadow-xl"
+    [ngClass]="data.colors ?? defaultBackground"
+    [matTooltip]="data.tooltip ?? ''"
+    >
+    <div class="text-white flex justify-between items-center gap-4">
+      <div class="whitespace-nowrap">
+        <label class="text-gray-200">
+          {{ data.title }}
+        </label>
+        <h2 class="mt-2">{{ data.value }}</h2>
+      </div>
+      <mat-icon>{{ data.icon }}</mat-icon>
     </div>
-    <mat-icon>{{ data.icon }}</mat-icon>
   </div>
-</div>
+}

@@ -8,68 +8,69 @@
         matTooltip="Insert your usual times here, to preset the form."
         matTooltipPosition="right"
         >info</mat-icon
-      >
-    </div>
-    <div class="flex flex-wrap flex-row gap-2">
-      <mat-form-field class="flex-1">
-        <mat-label>Start</mat-label>
-        <input matInput type="time" step="300" formControlName="start" />
-      </mat-form-field>
-      <mat-form-field class="flex-1">
-        <mat-label>End</mat-label>
-        <input matInput type="time" step="300" formControlName="end" />
-      </mat-form-field>
-      <mat-form-field class="flex-1">
-        <mat-label>Pause</mat-label>
-        <input matInput type="time" step="300" formControlName="pause" />
-      </mat-form-field>
-    </div>
-    <h3 class="mb-2 text-lg">Working</h3>
-    <div
-      class="flex flex-row sm:max-h-[140px] gap-4 sm:gap-2 flex-wrap sm:flex-nowrap"
-    >
-      <div class="flex flex-col flex-wrap flex-1" formGroupName="workDays">
-        <mat-checkbox
-          *ngFor="let day of weekDays"
-          [formControlName]="day"
-          [value]="day"
-          >{{ day | titlecase }}</mat-checkbox
         >
       </div>
-      <div class="flex flex-col flex-1">
-        <mat-form-field>
-          <mat-label>Daily time</mat-label>
-          <input
-            matInput
-            formControlName="workTimePerDay"
-            type="time"
-            step="300"
-          />
+      <div class="flex flex-wrap flex-row gap-2">
+        <mat-form-field class="flex-1">
+          <mat-label>Start</mat-label>
+          <input matInput type="time" step="300" formControlName="start" />
         </mat-form-field>
-        <mat-form-field>
-          <mat-label>Vacation per year</mat-label>
-          <input matInput formControlName="vacationDaysPerYear" type="number" />
+        <mat-form-field class="flex-1">
+          <mat-label>End</mat-label>
+          <input matInput type="time" step="300" formControlName="end" />
+        </mat-form-field>
+        <mat-form-field class="flex-1">
+          <mat-label>Pause</mat-label>
+          <input matInput type="time" step="300" formControlName="pause" />
         </mat-form-field>
       </div>
-    </div>
-    <h3 class="mb-2 sm:mt-4 text-lg">
-      Remaining time/vacation of last year ({{ lastYear }})
-    </h3>
-    <div formGroupName="previousYear" class="flex flex-row flex-wrap sm:gap-2">
-      <mat-form-field class="flex-1">
-        <mat-label>Overtime</mat-label>
-        <input matInput type="time" step="300" formControlName="overtime" />
-      </mat-form-field>
-      <mat-form-field class="flex-1">
-        <mat-label>Vacation days</mat-label>
-        <input matInput type="number" formControlName="vacationDays" />
-      </mat-form-field>
-    </div>
-  </main>
-  <footer matDialogActions align="end" class="!pb-6 !px-6">
-    <button mat-flat-button type="button" [mat-dialog-close]="null">
-      Cancel
-    </button>
-    <button mat-raised-button color="primary" type="submit">Save</button>
-  </footer>
-</form>
+      <h3 class="mb-2 text-lg">Working</h3>
+      <div
+        class="flex flex-row sm:max-h-[140px] gap-4 sm:gap-2 flex-wrap sm:flex-nowrap"
+        >
+        <div class="flex flex-col flex-wrap flex-1" formGroupName="workDays">
+          @for (day of weekDays; track day) {
+            <mat-checkbox
+              [formControlName]="day"
+              [value]="day"
+              >{{ day | titlecase }}</mat-checkbox
+              >
+            }
+          </div>
+          <div class="flex flex-col flex-1">
+            <mat-form-field>
+              <mat-label>Daily time</mat-label>
+              <input
+                matInput
+                formControlName="workTimePerDay"
+                type="time"
+                step="300"
+                />
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Vacation per year</mat-label>
+              <input matInput formControlName="vacationDaysPerYear" type="number" />
+            </mat-form-field>
+          </div>
+        </div>
+        <h3 class="mb-2 sm:mt-4 text-lg">
+          Remaining time/vacation of last year ({{ lastYear }})
+        </h3>
+        <div formGroupName="previousYear" class="flex flex-row flex-wrap sm:gap-2">
+          <mat-form-field class="flex-1">
+            <mat-label>Overtime</mat-label>
+            <input matInput type="time" step="300" formControlName="overtime" />
+          </mat-form-field>
+          <mat-form-field class="flex-1">
+            <mat-label>Vacation days</mat-label>
+            <input matInput type="number" formControlName="vacationDays" />
+          </mat-form-field>
+        </div>
+      </main>
+      <footer matDialogActions align="end" class="!pb-6 !px-6">
+        <button mat-flat-button type="button" [mat-dialog-close]="null">
+          Cancel
+        </button>
+        <button mat-raised-button color="primary" type="submit">Save</button>
+      </footer>
+    </form>

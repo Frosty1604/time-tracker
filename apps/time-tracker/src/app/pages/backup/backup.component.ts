@@ -23,7 +23,7 @@ import {
   MatSnackBarModule,
 } from '@angular/material/snack-bar';
 import { map } from 'rxjs/operators';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 
 interface ViewModel {
   fileName: string;
@@ -37,9 +37,8 @@ interface ViewModel {
     MatInputModule,
     MatIconModule,
     MatSnackBarModule,
-    AsyncPipe,
-    NgIf,
-  ],
+    AsyncPipe
+],
   templateUrl: './backup.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

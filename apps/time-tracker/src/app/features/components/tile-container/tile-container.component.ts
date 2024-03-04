@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { TileDetailsComponent } from '../tile-details/tile-details.component';
 import { combineLatest, map, Observable, startWith, switchMap } from 'rxjs';
@@ -20,7 +20,7 @@ import { TileViewModel } from '../../interfaces/tile.view-model';
 @Component({
   selector: 'tt-tile-container',
   standalone: true,
-  imports: [AsyncPipe, MatCardModule, NgIf, TileDetailsComponent],
+  imports: [AsyncPipe, MatCardModule, TileDetailsComponent],
   templateUrl: './tile-container.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

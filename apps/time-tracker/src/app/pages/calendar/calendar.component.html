@@ -8,7 +8,7 @@
       [(viewDate)]="viewDate"
       mat-icon-button
       mwlCalendarPreviousView
-    >
+      >
       <mat-icon>chevron_left</mat-icon>
     </button>
     <button [(viewDate)]="viewDate" mat-icon-button mwlCalendarToday>
@@ -19,12 +19,12 @@
       [(viewDate)]="viewDate"
       mat-icon-button
       mwlCalendarNextView
-    >
+      >
       <mat-icon>chevron_right</mat-icon>
     </button>
   </div>
 </header>
-<ng-container *ngIf="events$ | async as events">
+@if (events$ | async; as events) {
   <mwl-calendar-week-view
     [viewDate]="viewDate"
     [events]="events"
@@ -32,6 +32,6 @@
     [dayEndHour]="20"
     [weekStartsOn]="1"
     [excludeDays]="[0, 6]"
-  >
+    >
   </mwl-calendar-week-view>
-</ng-container>
+}

@@ -13,14 +13,7 @@ import { WorkTime } from '../../../core/interfaces/work-time';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { WorkTimeFormComponent } from '../work-time-form/work-time-form.component';
 import { WorkTimeDataSource } from './work-time-datasource';
-import {
-  AsyncPipe,
-  DatePipe,
-  NgClass,
-  NgIf,
-  NgTemplateOutlet,
-  TitleCasePipe,
-} from '@angular/common';
+import { AsyncPipe, DatePipe, NgClass, NgTemplateOutlet, TitleCasePipe } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { TimePipe } from '../../../core/pipes/time/time.pipe';
@@ -53,11 +46,10 @@ import { toSignal } from '@angular/core/rxjs-interop';
     MatTableModule,
     MatTooltipModule,
     NgClass,
-    NgIf,
     NgTemplateOutlet,
     TimePipe,
-    TitleCasePipe,
-  ],
+    TitleCasePipe
+],
   providers: [
     {
       provide: MAT_PAGINATOR_DEFAULT_OPTIONS,

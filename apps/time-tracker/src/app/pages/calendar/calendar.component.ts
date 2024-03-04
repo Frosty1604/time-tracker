@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import {
   CalendarCommonModule,
   CalendarEvent,
@@ -53,9 +53,8 @@ const workTypeColors: Record<WorkType, EventColor> = {
     CalendarWeekModule,
     MatButtonModule,
     MatButtonToggleModule,
-    MatIconModule,
-    NgIf,
-  ],
+    MatIconModule
+],
   templateUrl: './calendar.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -1,14 +1,7 @@
-<div class="flex flex-row gap-5 mb-6 flex-wrap" *ngIf="hasEntries$ | async">
-  <tt-tile-details
-    class="flex-1 min-w-fit"
-    [data$]="tileOvertime$"
-  ></tt-tile-details>
-  <tt-tile-details
-    class="flex-1 min-w-fit"
-    [data$]="tileAverageWorkTime$"
-  ></tt-tile-details>
-  <tt-tile-details
-    class="flex-1 min-w-fit"
-    [data$]="tileVacationDays$"
-  ></tt-tile-details>
-</div>
+@if (hasEntries$ | async) {
+  <div class="flex flex-row gap-5 mb-6 flex-wrap">
+    <tt-tile-details class="flex-1 min-w-fit" [data$]="tileOvertime$" />
+    <tt-tile-details class="flex-1 min-w-fit" [data$]="tileAverageWorkTime$" />
+    <tt-tile-details class="flex-1 min-w-fit" [data$]="tileVacationDays$" />
+  </div>
+}

@@ -7,66 +7,70 @@
     [mode]="(isHandset$ | async) ? 'over' : 'side'"
     [opened]="(isHandset$ | async) === false"
     [class.handset]="(isHandset$ | async) === false"
-  >
+    >
     <div class="flex flex-col mt-4 mb-4 p-4 items-center text-3xl gap-2">
       <img alt="Logo" ngSrc="assets/logo.png" height="72" width="72" priority />
     </div>
     <div class="flex flex-col gap-4">
-      <a
-        *ngFor="let item of navListItems"
-        [routerLink]="item.link"
-        [routerLinkActiveOptions]="{ exact: true }"
-        routerLinkActive="active"
-        class="nav-list-item"
-        matRipple
-        [matRippleCentered]="true"
-        [matRippleUnbounded]="true"
-        [matRippleRadius]="60"
-      >
-        <mat-icon matListIcon>{{ item.icon }}</mat-icon>
-        <h4>{{ item.title }}</h4></a
-      >
-      <a
-        (click)="openSettingsDialog()"
-        class="nav-list-item cursor-pointer"
-        matRipple
-        [matRippleCentered]="true"
-        [matRippleUnbounded]="true"
-        [matRippleRadius]="60"
-      >
-        <mat-icon matListIcon>settings</mat-icon>
-        <h4>Settings</h4>
-      </a>
-    </div>
-  </mat-sidenav>
-  <mat-sidenav-content>
-    <mat-toolbar *ngIf="isHandset$ | async" class="gap-2">
-      <a
-        *ngFor="let item of navListItems"
-        [routerLink]="item.link"
-        [routerLinkActiveOptions]="{ exact: true }"
-        routerLinkActive="active"
-        class="nav-list-item"
-        matRipple
-        [matRippleCentered]="true"
-        [matRippleUnbounded]="true"
-        [matRippleRadius]="25"
-      >
-        <mat-icon matListIcon>{{ item.icon }}</mat-icon>
-        <h4>{{ item.title }}</h4>
-      </a>
-      <a
-        (click)="openSettingsDialog()"
-        class="nav-list-item cursor-pointer"
-        matRipple
-        [matRippleCentered]="true"
-        [matRippleUnbounded]="true"
-        [matRippleRadius]="25"
-      >
-        <mat-icon matListIcon>settings</mat-icon>
-        <h4>Settings</h4>
-      </a>
-    </mat-toolbar>
-    <ng-content></ng-content>
-  </mat-sidenav-content>
-</mat-sidenav-container>
+      @for (item of navListItems; track item) {
+        <a
+          [routerLink]="item.link"
+          [routerLinkActiveOptions]="{ exact: true }"
+          routerLinkActive="active"
+          class="nav-list-item"
+          matRipple
+          [matRippleCentered]="true"
+          [matRippleUnbounded]="true"
+          [matRippleRadius]="60"
+          >
+          <mat-icon matListIcon>{{ item.icon }}</mat-icon>
+          <h4>{{ item.title }}</h4></a
+          >
+        }
+        <a
+          (click)="openSettingsDialog()"
+          class="nav-list-item cursor-pointer"
+          matRipple
+          [matRippleCentered]="true"
+          [matRippleUnbounded]="true"
+          [matRippleRadius]="60"
+          >
+          <mat-icon matListIcon>settings</mat-icon>
+          <h4>Settings</h4>
+        </a>
+      </div>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      @if (isHandset$ | async) {
+        <mat-toolbar class="gap-2">
+          @for (item of navListItems; track item) {
+            <a
+              [routerLink]="item.link"
+              [routerLinkActiveOptions]="{ exact: true }"
+              routerLinkActive="active"
+              class="nav-list-item"
+              matRipple
+              [matRippleCentered]="true"
+              [matRippleUnbounded]="true"
+              [matRippleRadius]="25"
+              >
+              <mat-icon matListIcon>{{ item.icon }}</mat-icon>
+              <h4>{{ item.title }}</h4>
+            </a>
+          }
+          <a
+            (click)="openSettingsDialog()"
+            class="nav-list-item cursor-pointer"
+            matRipple
+            [matRippleCentered]="true"
+            [matRippleUnbounded]="true"
+            [matRippleRadius]="25"
+            >
+            <mat-icon matListIcon>settings</mat-icon>
+            <h4>Settings</h4>
+          </a>
+        </mat-toolbar>
+      }
+      <ng-content></ng-content>
+    </mat-sidenav-content>
+  </mat-sidenav-container>

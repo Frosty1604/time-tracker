@@ -16,7 +16,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
-import { AsyncPipe, NgForOf, NgIf, NgOptimizedImage } from '@angular/common';
+import { AsyncPipe, NgOptimizedImage } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import {
   MatDialog,
@@ -46,11 +46,9 @@ interface NavListItem {
     MatRippleModule,
     MatSidenavModule,
     MatToolbarModule,
-    NgForOf,
-    NgIf,
     NgOptimizedImage,
-    RouterModule,
-  ],
+    RouterModule
+],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavigationComponent implements AfterViewInit {

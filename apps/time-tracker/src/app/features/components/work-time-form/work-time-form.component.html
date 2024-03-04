@@ -8,13 +8,11 @@
         formControlName="type"
         class="flex flex-row flex-wrap gap-4 items-start mt-2 mb-4"
       >
-        <mat-radio-button
-          tabindex="-1"
-          *ngFor="let type of typeOptions"
-          [value]="type"
-          class="flex-1"
-          >{{ type | titlecase }}</mat-radio-button
-        >
+        @for (type of typeOptions; track type) {
+          <mat-radio-button tabindex="-1" [value]="type" class="flex-1">{{
+            type | titlecase
+          }}</mat-radio-button>
+        }
       </mat-radio-group>
       <mat-form-field hideRequiredMarker="true">
         <mat-label>Date</mat-label>
@@ -53,21 +51,21 @@
         ></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
         <mat-hint>DD.MM.YYYY</mat-hint>
-        <ng-container
-          *ngIf="date?.invalid && (date?.dirty || date?.touched)"
-          ngProjectAs="mat-error"
-        >
-          <mat-error
-            *ngIf="
+        @if (date.invalid && (date.dirty || date.touched)) {
+          <ng-container ngProjectAs="mat-error">
+            @if (
               date.getError('required') && !date.getError('matDatepickerParse')
-            "
-            >Date is required.
-          </mat-error>
-          <mat-error *ngIf="date.getError('matDatepickerParse')"
-            >"{{ date.getError('matDatepickerParse').text }}" is not a valid
-            date!
-          </mat-error>
-        </ng-container>
+            ) {
+              <mat-error>Date is required. </mat-error>
+            }
+            @if (date.getError('matDatepickerParse')) {
+              <mat-error
+                >"{{ date.getError('matDatepickerParse').text }}" is not a valid
+                date!
+              </mat-error>
+            }
+          </ng-container>
+        }
       </mat-form-field>
       <div class="flex flex-wrap gap-4">
         <mat-form-field hideRequiredMarker="true" class="flex-1">
@@ -80,9 +78,9 @@
             step="300"
           />
           <mat-hint>HH:mm</mat-hint>
-          <mat-error *ngIf="start?.getError('required')"
-            >Start time is required.</mat-error
-          >
+          @if (start.getError('required')) {
+            <mat-error>Start time is required.</mat-error>
+          }
         </mat-form-field>
         <mat-form-field hideRequiredMarker="true" class="flex-1">
           <mat-label>End Time</mat-label>
@@ -94,9 +92,9 @@
             step="300"
           />
           <mat-hint>HH:mm</mat-hint>
-          <mat-error *ngIf="end?.getError('required')"
-            >End time is required.</mat-error
-          >
+          @if (end.getError('required')) {
+            <mat-error>End time is required.</mat-error>
+          }
         </mat-form-field>
       </div>
       <mat-form-field hideRequiredMarker="true">
@@ -109,9 +107,9 @@
           step="300"
         />
         <mat-hint>HH:mm</mat-hint>
-        <mat-error *ngIf="pause?.getError('required')"
-          >Pause is required.
-        </mat-error>
+        @if (pause.getError('required')) {
+          <mat-error>Pause is required. </mat-error>
+        }
       </mat-form-field>
       <mat-form-field>
         <mat-label>Notes</mat-label>

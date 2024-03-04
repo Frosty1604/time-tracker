@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { NgForOf, TitleCasePipe } from '@angular/common';
+import { TitleCasePipe } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
@@ -26,10 +26,9 @@ import { weekDays } from '../../../utils/work-time.util';
     MatIconModule,
     MatInputModule,
     MatTooltipModule,
-    NgForOf,
     ReactiveFormsModule,
-    TitleCasePipe,
-  ],
+    TitleCasePipe
+],
   templateUrl: './settings-form.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

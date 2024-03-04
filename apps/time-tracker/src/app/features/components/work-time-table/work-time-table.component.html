@@ -1,12 +1,13 @@
 <header class="flex flex-row justify-end mb-3">
-  <button
-    *ngIf="!isSmall()"
-    mat-raised-button
-    color="accent"
-    (click)="addRow()"
-  >
-    Add entry
-  </button>
+  @if (!isSmall()) {
+    <button
+      mat-raised-button
+      color="accent"
+      (click)="addRow()"
+      >
+      Add entry
+    </button>
+  }
 </header>
 <div class="shadow-xl">
   <table [dataSource]="dataSource" mat-table class="w-full">
@@ -25,33 +26,41 @@
     <ng-container matColumnDef="start">
       <th *matHeaderCellDef mat-header-cell>Start</th>
       <td *matCellDef="let element" mat-cell>
-        <ng-container *ngIf="element.isWorkDay; else emptyState">
+        @if (element.isWorkDay) {
           {{ element.startTime | time: 'short' }}
-        </ng-container>
+        } @else {
+          -
+        }
       </td>
     </ng-container>
     <ng-container matColumnDef="end">
       <th *matHeaderCellDef mat-header-cell>End</th>
       <td *matCellDef="let element" mat-cell>
-        <ng-container *ngIf="element.isWorkDay; else emptyState">
+        @if (element.isWorkDay) {
           {{ element.endTime | time: 'short' }}
-        </ng-container>
+        } @else {
+          -
+        }
       </td>
     </ng-container>
     <ng-container matColumnDef="worked">
       <th *matHeaderCellDef mat-header-cell>Worked</th>
       <td *matCellDef="let element" mat-cell>
-        <ng-container *ngIf="element.isWorkDay; else emptyState">
+        @if (element.isWorkDay) {
           <span>{{ element.effectiveTime | time }}</span>
-        </ng-container>
+        } @else {
+          -
+        }
       </td>
     </ng-container>
     <ng-container matColumnDef="pause">
       <th *matHeaderCellDef mat-header-cell>Pause</th>
       <td *matCellDef="let element" mat-cell>
-        <ng-container *ngIf="element.isWorkDay; else emptyState">
+        @if (element.isWorkDay) {
           {{ element.pauseTime | time: 'short' }}
-        </ng-container>
+        } @else {
+          -
+        }
       </td>
     </ng-container>
     <ng-container matColumnDef="type">
@@ -65,9 +74,13 @@
     <ng-container matColumnDef="notes">
       <th *matHeaderCellDef mat-header-cell>Notes</th>
       <td *matCellDef="let element" mat-cell>
-        <ng-container *ngIf="element.notes; else emptyState">{{
+        @if (element.notes) {
+          {{
           element?.notes
-        }}</ng-container>
+          }}
+        } @else {
+          -
+        }
       </td>
     </ng-container>
     <ng-container matColumnDef="actions">
@@ -98,7 +111,6 @@
     [pageSizeOptions]="pageSizeOptions"
     (page)="changePage($event)"
     aria-label="Select page"
-  >
+    >
   </mat-paginator>
 </div>
-<ng-template #emptyState>-</ng-template>
