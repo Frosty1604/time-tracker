@@ -68,8 +68,14 @@ $scrollbar-size: 6px;
   input[type='time']::-webkit-calendar-picker-indicator {
     filter: invert(1);
   }
+
+  .mat-mdc-header-cell {
+    color: #ffffffb3;
+  }
 }
 
+/*
+TODO check if still needed
 button.mat-mdc-mini-fab .mat-icon {
   vertical-align: top;
 }
@@ -77,7 +83,7 @@ button.mat-mdc-mini-fab .mat-icon {
 th.mat-mdc-header-cell,
 td.mat-mdc-cell {
   user-select: none;
-}
+}*/
 
 input,
 textarea,
@@ -87,7 +93,7 @@ a {
   -webkit-tap-highlight-color: transparent;
 }
 
-// Style to fix the weird border with angular material
+// Style to fix the weird border with angular material and tailwind
 .mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field
   .mdc-notched-outline__notch {
   border-right-style: hidden;

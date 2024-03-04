@@ -30,7 +30,7 @@
   }
   &:hover {
     mat-icon {
-      @apply sm:animate-wiggle;
+      @apply animate-wiggle;
     }
   }
 }

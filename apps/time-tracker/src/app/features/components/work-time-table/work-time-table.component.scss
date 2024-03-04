@@ -1,5 +1,8 @@
 .chip-type {
   color: white;
+  &.normal {
+    background-color: #03a9f4;
+  }
   &.vacation {
     @apply bg-green-500;
   }

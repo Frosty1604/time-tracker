@@ -57,11 +57,9 @@
     <ng-container matColumnDef="type">
       <th *matHeaderCellDef mat-header-cell>Type</th>
       <td *matCellDef="let element" mat-cell>
-        <mat-chip-listbox>
-          <mat-chip-option class="chip-type" [ngClass]="element.type">{{
-            element.type | titlecase
-          }}</mat-chip-option>
-        </mat-chip-listbox>
+        <mat-chip class="chip-type" [ngClass]="element.type">{{
+          element.type | titlecase
+        }}</mat-chip>
       </td>
     </ng-container>
     <ng-container matColumnDef="notes">

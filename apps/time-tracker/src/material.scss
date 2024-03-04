@@ -1,13 +1,5 @@
 @use '@angular/material' as mat;
 
-// TODO(v15): As of v15 mat.legacy-core no longer includes default typography styles.
-//  The following line adds:
-//    1. Default typography styles for all components
-//    2. Styles for typography hierarchy classes (e.g. .mat-headline-1)
-//  If you specify typography styles for the components you use elsewhere, you should delete this line.
-//  If you don't need the default component typographies but still want the hierarchy styles,
-//  you can delete this line and instead use:
-//    `@include mat.legacy-typography-hierarchy(mat.define-typography-config());`
 @include mat.all-component-typographies();
 @include mat.core();
 
@@ -22,7 +14,7 @@ $light-theme: mat.define-light-theme(
     ),
     typograhpy:
       mat.define-typography-config(
-        $font-family: 'Roboto Condensed',
+        $font-family: 'Lato',
       ),
   )
 );
@@ -47,6 +39,7 @@ $dark-theme: mat.define-dark-theme(
             $line-height: 1,
             $letter-spacing: normal,
           ),
+        $button: mat.define-typography-level(14px),
       ),
   )
 );
@@ -73,12 +66,32 @@ $dark-theme: mat.define-dark-theme(
 @include mat.toolbar-theme($dark-theme);
 @include mat.tooltip-theme($dark-theme);
 
-// Component typography
-@include mat.chips-typography(
-  mat.define-typography-config(
-    $subtitle-2: mat.define-typography-level(12px, 12px, 500)
-  )
+// Component specific typography
+$chips-typography: mat.define-typography-config(
+  $font-family: 'Lato',
+  $body-2:
+    mat.define-typography-level(
+      $font-weight: 700,
+      $font-size: 0.75rem,
+      $line-height: 1,
+    ),
 );
+$menu-typography: mat.define-typography-config(
+  $font-family: 'Lato',
+  $body-1: mat.define-typography-level(0.875rem),
+);
+$table-typography: mat.define-typography-config(
+  $font-family: 'Lato',
+  $body-2:
+    mat.define-typography-level(
+      $font-weight: 700,
+      $font-size: 0.875rem,
+    ),
+  $subtitle-2: mat.define-typography-level(0.75rem),
+);
+@include mat.chips-typography($chips-typography);
+@include mat.menu-typography($menu-typography);
+@include mat.table-typography($table-typography);
 
 @media (prefers-color-scheme: light) {
   @include mat.core-color($light-theme);
