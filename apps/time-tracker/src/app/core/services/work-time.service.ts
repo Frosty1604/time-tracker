@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { DatabaseService } from './database.service';
 import { WorkTime, WorkTimePartial } from '../interfaces/work-time';
-import { from, merge, Observable, scan, Subject, tap } from 'rxjs';
+import { from, merge, Observable, scan, Subject } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 
 type Action = ActionInsert | ActionUpdate | ActionDelete;
@@ -39,8 +39,8 @@ export class WorkTimeService {
   ).pipe(shareReplay({ refCount: true, bufferSize: 1 }));
 
   readonly store$: Observable<WorkTime[]> = merge(
-    this.storeChange$.pipe(tap((value) => console.log('storeChange', value))),
-    from(this.find()).pipe(tap((value) => console.log('find', value))),
+    this.storeChange$,
+    from(this.find()),
   ).pipe(
     scan<WorkTime[] | Action, Map<number, WorkTime>>((acc, value) => {
       if (Array.isArray(value)) {
