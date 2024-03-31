@@ -3,7 +3,7 @@ export interface Settings {
   workDays: string[];
   vacationDaysPerYear: number;
   workTimePerDay: string;
-  previousYears: PreviousYear;
+  previousYears: PreviousYears;
 }
 
 interface DefaultTimes {
@@ -12,7 +12,7 @@ interface DefaultTimes {
   pause: string;
 }
 
-interface PreviousYear {
+interface PreviousYears {
   [year: number]: {
     remainingOvertime: string;
     remainingVacationDays: number;

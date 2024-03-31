@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { TitleCasePipe } from '@angular/common';
+import { JsonPipe, TitleCasePipe } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
@@ -15,6 +15,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { SettingsService } from '../../../core/services/settings.service';
 import { Settings } from '../../../core/interfaces/settings';
 import { weekDays } from '../../../utils/work-time.util';
+import { coerceNumberProperty } from '@angular/cdk/coercion';
 
 @Component({
   standalone: true,
@@ -27,8 +28,9 @@ import { weekDays } from '../../../utils/work-time.util';
     MatInputModule,
     MatTooltipModule,
     ReactiveFormsModule,
-    TitleCasePipe
-],
+    TitleCasePipe,
+    JsonPipe,
+  ],
   templateUrl: './settings-form.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -63,13 +65,24 @@ export class SettingsFormComponent {
     vacationDaysPerYear: [this.data?.vacationDaysPerYear ?? 25],
     previousYear: this.fb.group({
       overtime: [
-        this.data?.previousYears?.[this.lastYear].remainingOvertime ?? '00:00',
+        this.data?.previousYears?.[this.lastYear]?.remainingOvertime ?? '00:00',
       ],
       vacationDays: [
-        this.data?.previousYears?.[this.lastYear].remainingVacationDays ?? 0,
+        this.data?.previousYears?.[this.lastYear]?.remainingVacationDays ?? 0,
       ],
     }),
   });
+  readonly previousYears: {
+    year: number;
+    vacationDays: number;
+    overtime: string;
+  }[] = Object.entries(this.data?.previousYears || [])
+    .map(([year, { remainingOvertime, remainingVacationDays }]) => ({
+      year: coerceNumberProperty(year),
+      overtime: remainingOvertime,
+      vacationDays: coerceNumberProperty(remainingVacationDays),
+    }))
+    .filter((entry) => entry.year < new Date().getFullYear() - 1);
 
   async submit() {
     const formData = this.formGroup?.value;
@@ -92,9 +105,9 @@ export class SettingsFormComponent {
     };
 
     if (this.isEditMode) {
-      await this.settingsService.upsert(settings);
+      this.settingsService.upsert(settings);
     } else {
-      await this.settingsService.upsert(settings);
+      this.settingsService.upsert(settings);
     }
     this.dialogRef.close(settings);
   }

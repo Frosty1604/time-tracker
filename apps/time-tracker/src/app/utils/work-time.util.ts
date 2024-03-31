@@ -41,15 +41,19 @@ export function parseAvgWorkTime(avgTime: number): string {
 export function calculateVacationDays(
   items: WorkTime[],
   settings: Settings | undefined,
-  previousYear: number = new Date().getFullYear() - 1
+  previousYear: number = new Date().getFullYear() - 1,
 ): {
   total: number;
   taken: number;
   available: number;
 } {
+  const currentYear = new Date().getFullYear();
   const taken = items.reduce(
-    (prev, curr) => (curr.type === 'vacation' ? prev + 1 : prev),
-    0
+    (prev, curr) =>
+      curr.type === 'vacation' && curr.date.getFullYear() === currentYear
+        ? prev + 1
+        : prev,
+    0,
   );
   const remaining =
     settings?.previousYears?.[previousYear]?.remainingVacationDays ?? 0;
@@ -63,14 +67,14 @@ export function calculateVacationDays(
 export function calculateOvertime(
   items: WorkTime[],
   settings: Settings | undefined,
-  previousYear: number = new Date().getFullYear() - 1
+  previousYear: number = new Date().getFullYear() - 1,
 ) {
   let overtime = items
     .filter(({ type }) => type === 'normal' || type === 'remote')
     .reduce((prev, curr) => {
       const realWorkTimeInMinutes = differenceInMinutes(
         durationToDate(calculateWorkDuration(curr.start, curr.end)),
-        timeToDate(curr.pause)
+        timeToDate(curr.pause),
       );
       let isWorkDay = true;
       if (settings?.workDays) {
@@ -95,7 +99,7 @@ export function calculateOvertime(
     }, 0);
   if (settings?.previousYears?.[previousYear]) {
     overtime += timeToMinutes(
-      stringToTime(settings?.previousYears?.[previousYear]?.remainingOvertime)
+      stringToTime(settings?.previousYears?.[previousYear]?.remainingOvertime),
     );
   }
   return overtime;

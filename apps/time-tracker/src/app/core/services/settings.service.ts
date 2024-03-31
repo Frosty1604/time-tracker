@@ -37,6 +37,15 @@ export class SettingsService {
   }
 
   upsert(settings: Settings): void {
+    const savedSettings = this.get();
+
+    if (savedSettings) {
+      settings.previousYears = {
+        ...savedSettings.previousYears,
+        ...settings.previousYears,
+      };
+    }
+
     this.settingsChangedSubject.next(settings);
     localStorage.setItem(this.key, JSON.stringify(settings));
   }

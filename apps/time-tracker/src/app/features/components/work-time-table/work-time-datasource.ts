@@ -48,15 +48,15 @@ export class WorkTimeDataSource extends DataSource<WorkTimeViewModel> {
   connect(): Observable<WorkTimeViewModel[]> {
     const initialItems$ = this.changePageSubject.pipe(
       switchMap(({ pageIndex, pageSize }) =>
-        this.workTimeService.findPaged(pageIndex, pageSize)
-      )
+        this.workTimeService.findPaged(pageIndex, pageSize),
+      ),
     );
     const rowActionUpsert$ = this.upsertDataSubject.pipe(
-      map((workTime) => ({ action: 'upsert', workTime } as RowActionUpsert))
+      map((workTime) => ({ action: 'upsert', workTime }) as RowActionUpsert),
     );
     const rowActionDelete$ = this.removeDataSubject.pipe(
       switchMap((id) => this.workTimeService.delete(id)),
-      map((id) => ({ action: 'delete', id } as RowActionDelete))
+      map((id) => ({ action: 'delete', id }) as RowActionDelete),
     );
 
     return merge(rowActionUpsert$, rowActionDelete$, initialItems$).pipe(
@@ -75,9 +75,9 @@ export class WorkTimeDataSource extends DataSource<WorkTimeViewModel> {
       }, new Map<number, WorkTime>()),
       map((map) => Array.from(map.values())),
       map((workTimeItems) =>
-        workTimeItems.sort((a, b) => b.date.getTime() - a.date.getTime())
+        workTimeItems.sort((a, b) => b.date.getTime() - a.date.getTime()),
       ),
-      map((workTimeItems) => workTimeItems.map(this.workTimeToViewModel))
+      map((workTimeItems) => workTimeItems.map(this.workTimeToViewModel)),
     );
   }
 
@@ -103,7 +103,7 @@ export class WorkTimeDataSource extends DataSource<WorkTimeViewModel> {
     return merge(
       this.upsertDataSubject.pipe(map(() => 1)),
       this.removeDataSubject.pipe(map(() => -1)),
-      from(this.workTimeService.count())
+      from(this.workTimeService.count()),
     ).pipe(scan((acc, val) => acc + val));
   }
 
@@ -116,7 +116,7 @@ export class WorkTimeDataSource extends DataSource<WorkTimeViewModel> {
       date: workTime.date,
       effectiveTime: intervalToDuration({
         start: durationToDate(
-          calculateWorkDuration(workTime.start, workTime.end)
+          calculateWorkDuration(workTime.start, workTime.end),
         ),
         end: timeToDate(workTime.pause),
       }),

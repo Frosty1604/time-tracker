@@ -1,10 +1,6 @@
 <header class="flex flex-row justify-end mb-3">
   @if (!isSmall()) {
-    <button
-      mat-raised-button
-      color="accent"
-      (click)="addRow()"
-      >
+    <button mat-raised-button color="accent" (click)="addRow()">
       Add entry
     </button>
   }
@@ -17,9 +13,9 @@
         <ng-container
           [ngTemplateOutlet]="isSmall() ? short : long"
         ></ng-container>
-        <ng-template #long>{{
-          element.date | date: 'EE dd. LLLL YY'
-        }}</ng-template>
+        <ng-template #long
+          >{{ element.date | date: 'EE dd. LLLL YY' }}
+        </ng-template>
         <ng-template #short>{{ element.date | date: 'dd.MM.' }}</ng-template>
       </td>
     </ng-container>
@@ -66,18 +62,16 @@
     <ng-container matColumnDef="type">
       <th *matHeaderCellDef mat-header-cell>Type</th>
       <td *matCellDef="let element" mat-cell>
-        <mat-chip class="chip-type" [ngClass]="element.type">{{
-          element.type | titlecase
-        }}</mat-chip>
+        <mat-chip class="chip-type" [ngClass]="element.type"
+          >{{ element.type | titlecase }}
+        </mat-chip>
       </td>
     </ng-container>
     <ng-container matColumnDef="notes">
       <th *matHeaderCellDef mat-header-cell>Notes</th>
       <td *matCellDef="let element" mat-cell>
         @if (element.notes) {
-          {{
-          element?.notes
-          }}
+          {{ element?.notes }}
         } @else {
           -
         }
@@ -111,6 +105,5 @@
     [pageSizeOptions]="pageSizeOptions"
     (page)="changePage($event)"
     aria-label="Select page"
-    >
-  </mat-paginator>
+  />
 </div>
