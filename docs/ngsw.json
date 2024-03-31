@@ -1,0 +1,95 @@
+{
+  "configVersion": 1,
+  "timestamp": 1711919809928,
+  "index": "/time-tracker/index.html",
+  "assetGroups": [
+    {
+      "name": "app",
+      "installMode": "prefetch",
+      "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "urls": [
+        "/time-tracker/chunk-4FJIYHFN.js",
+        "/time-tracker/chunk-6OML64PC.js",
+        "/time-tracker/chunk-DEEZGI7K.js",
+        "/time-tracker/chunk-FFXYNVL2.js",
+        "/time-tracker/chunk-PA6BFKJI.js",
+        "/time-tracker/favicon.ico",
+        "/time-tracker/index.html",
+        "/time-tracker/main-2NQAYAPK.js",
+        "/time-tracker/manifest.webmanifest",
+        "/time-tracker/polyfills-XTOFW74M.js",
+        "/time-tracker/styles-356RL42F.css"
+      ],
+      "patterns": []
+    },
+    {
+      "name": "assets",
+      "installMode": "lazy",
+      "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "urls": [
+        "/time-tracker/assets/icons/icon-128x128.png",
+        "/time-tracker/assets/icons/icon-144x144.png",
+        "/time-tracker/assets/icons/icon-152x152.png",
+        "/time-tracker/assets/icons/icon-192x192.png",
+        "/time-tracker/assets/icons/icon-384x384.png",
+        "/time-tracker/assets/icons/icon-512x512.png",
+        "/time-tracker/assets/icons/icon-72x72.png",
+        "/time-tracker/assets/icons/icon-96x96.png",
+        "/time-tracker/assets/icons/icon.png",
+        "/time-tracker/assets/img/no_data.svg",
+        "/time-tracker/assets/logo.png"
+      ],
+      "patterns": []
+    }
+  ],
+  "dataGroups": [],
+  "hashTable": {
+    "/time-tracker/assets/icons/icon-128x128.png": "f303b14b638f4ebbffbc937cd52a65e8c7fca6cc",
+    "/time-tracker/assets/icons/icon-144x144.png": "160c94aae64d13d1a3c247ac522176301d2ba959",
+    "/time-tracker/assets/icons/icon-152x152.png": "5b96c9ac715eaa00df727d0c1e4a6c7b375c2c8f",
+    "/time-tracker/assets/icons/icon-192x192.png": "6f92f15ba6d9e5be18c725524b6f9876679ba07e",
+    "/time-tracker/assets/icons/icon-384x384.png": "94763eb36029f8e3230ae1c80f36e5b7b481eeed",
+    "/time-tracker/assets/icons/icon-512x512.png": "4d8c90b221c04e094ca9aa5f6013c850718f9b07",
+    "/time-tracker/assets/icons/icon-72x72.png": "9916877e6c99865af3afa667c2ebb1343d8f3b69",
+    "/time-tracker/assets/icons/icon-96x96.png": "ee3718a5a1875de978349ec3d5c6b51f7ee3e9b9",
+    "/time-tracker/assets/icons/icon.png": "2ce217a800a499134022608d77150cf88af3f199",
+    "/time-tracker/assets/img/no_data.svg": "ca1c19270ba480aa0f5ea503bb232c492a60907a",
+    "/time-tracker/assets/logo.png": "07b574581df58aebc3ad4114a54f0cd8a61981f7",
+    "/time-tracker/chunk-4FJIYHFN.js": "80237d929295d03be306ec199499f3c2238f6f06",
+    "/time-tracker/chunk-6OML64PC.js": "e8e259f9e012a8f25b33424f4d0dc40ab7fe94b1",
+    "/time-tracker/chunk-DEEZGI7K.js": "d5943de8a273bf3e9887d3141b7704eb0b904ab1",
+    "/time-tracker/chunk-FFXYNVL2.js": "5c612780f85dbfea3e064e258c7f2dc7737bb072",
+    "/time-tracker/chunk-PA6BFKJI.js": "a4b34396cae87933d76f7496e6c6e0eeceb59995",
+    "/time-tracker/favicon.ico": "30ee450f1056d1201e475a9f45fd66c99b14962a",
+    "/time-tracker/index.html": "5bd9a9c83208e609d43907a1144056b7bbaffb4c",
+    "/time-tracker/main-2NQAYAPK.js": "f401106c04a657dfd25e25515771f23a919bd35d",
+    "/time-tracker/manifest.webmanifest": "e4b183af1c25b54e545cc47244d3fbde6eb61478",
+    "/time-tracker/polyfills-XTOFW74M.js": "8ec4990f0e2d0ac1fa10a9be1904c6d06b16716a",
+    "/time-tracker/styles-356RL42F.css": "2a6b6c15167ad8ab5177134e68f38ea2963cd891"
+  },
+  "navigationUrls": [
+    {
+      "positive": true,
+      "regex": "^\\/.*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*\\.[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*\\/.*$"
+    }
+  ],
+  "navigationRequestStrategy": "performance"
+}
