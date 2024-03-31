@@ -1,7 +1,25 @@
 import { inject, Injectable } from '@angular/core';
 import { DatabaseService } from './database.service';
 import { WorkTime, WorkTimePartial } from '../interfaces/work-time';
-import { Subject } from 'rxjs';
+import { from, merge, Observable, scan, Subject, tap } from 'rxjs';
+import { map, shareReplay } from 'rxjs/operators';
+
+type Action = ActionInsert | ActionUpdate | ActionDelete;
+
+interface ActionInsert {
+  action: 'insert';
+  workTime: WorkTime;
+}
+
+interface ActionUpdate {
+  action: 'update';
+  workTime: WorkTime;
+}
+
+interface ActionDelete {
+  action: 'delete';
+  id: number;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -9,17 +27,47 @@ import { Subject } from 'rxjs';
 export class WorkTimeService {
   private readonly dbService = inject(DatabaseService);
   private readonly storeName = 'work-time';
-  private readonly storeChangedSubject = new Subject<void>();
-  readonly storeChange$ = this.storeChangedSubject.asObservable();
+
+  private readonly insertSubject = new Subject<ActionInsert>();
+  private readonly updateSubject = new Subject<ActionUpdate>();
+  private readonly deleteSubject = new Subject<ActionDelete>();
+
+  readonly storeChange$ = merge(
+    this.insertSubject,
+    this.updateSubject,
+    this.deleteSubject,
+  ).pipe(shareReplay({ refCount: true, bufferSize: 1 }));
+
+  readonly store$: Observable<WorkTime[]> = merge(
+    this.storeChange$.pipe(tap((value) => console.log('storeChange', value))),
+    from(this.find()).pipe(tap((value) => console.log('find', value))),
+  ).pipe(
+    scan<WorkTime[] | Action, Map<number, WorkTime>>((acc, value) => {
+      if (Array.isArray(value)) {
+        value.forEach((item) => acc.set(item.id, item));
+        return acc;
+      }
+      if (value.action === 'insert' || value.action === 'update') {
+        acc.set(value.workTime.id, value.workTime);
+      } else if (value.action === 'delete') {
+        acc.delete(value.id);
+      }
+      return acc;
+    }, new Map<number, WorkTime>()),
+    map((map) => Array.from(map.values())),
+    map((workTimeItems) =>
+      workTimeItems.sort((a, b) => b.date.getTime() - a.date.getTime()),
+    ),
+  );
 
   async find(
     query?: number | IDBKeyRange | null | undefined,
-    count?: number
+    count?: number,
   ): Promise<WorkTime[]> {
     const workTimes = await this.dbService.db.getAll(
       this.storeName,
       query,
-      count
+      count,
     );
     return workTimes as WorkTime[];
   }
@@ -27,7 +75,7 @@ export class WorkTimeService {
   async findPaged(
     pageIndex: number,
     pageSize: number,
-    sort: 'asc' | 'desc' = 'desc'
+    sort: 'asc' | 'desc' = 'desc',
   ): Promise<WorkTime[]> {
     const tx = this.dbService.db.transaction(this.storeName);
 
@@ -60,13 +108,19 @@ export class WorkTimeService {
   }
 
   async insert(workTime: WorkTimePartial): Promise<number> {
-    const id = this.dbService.db.add(this.storeName, {
+    const now = Date.now();
+    const newWorkTime: WorkTimePartial = {
       ...workTime,
-      created: Date.now(),
-      updated: Date.now(),
+      created: now,
+      updated: now,
+    };
+    newWorkTime.id = await this.dbService.db.add(this.storeName, newWorkTime);
+
+    this.insertSubject.next({
+      action: 'insert',
+      workTime: newWorkTime as WorkTime,
     });
-    this.storeChangedSubject.next();
-    return id;
+    return newWorkTime.id;
   }
 
   async update(workTime: WorkTime): Promise<number> {
@@ -74,17 +128,28 @@ export class WorkTimeService {
       ...workTime,
       updated: Date.now(),
     });
-    this.storeChangedSubject.next();
+    this.updateSubject.next({
+      action: 'update',
+      workTime,
+    });
     return id;
   }
 
   async delete(workTimeId: number): Promise<number> {
-    void this.dbService.db.delete(this.storeName, workTimeId);
-    this.storeChangedSubject.next();
+    await this.dbService.db.delete(this.storeName, workTimeId);
+    this.deleteSubject.next({ action: 'delete', id: workTimeId });
     return workTimeId;
   }
 
   count(): Promise<number> {
     return this.dbService.db.count(this.storeName);
+  }
+
+  count$(): Observable<number> {
+    return merge(
+      this.insertSubject.pipe(map(() => 1)),
+      this.deleteSubject.pipe(map(() => -1)),
+      from(this.count()),
+    ).pipe(scan((acc, val) => acc + val));
   }
 }

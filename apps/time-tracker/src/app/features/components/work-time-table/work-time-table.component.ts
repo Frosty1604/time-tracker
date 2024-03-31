@@ -1,5 +1,4 @@
 import {
-  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   computed,
@@ -8,12 +7,16 @@ import {
   ViewChild,
 } from '@angular/core';
 import { MatTable, MatTableModule } from '@angular/material/table';
-import { filter, first, Observable, startWith, Subject, tap } from 'rxjs';
+import { Observable, startWith, Subject, tap } from 'rxjs';
 import { WorkTime } from '../../../core/interfaces/work-time';
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { WorkTimeFormComponent } from '../work-time-form/work-time-form.component';
 import { WorkTimeDataSource } from './work-time-datasource';
-import { AsyncPipe, DatePipe, NgClass, NgTemplateOutlet, TitleCasePipe } from '@angular/common';
+import {
+  AsyncPipe,
+  DatePipe,
+  NgClass,
+  NgTemplateOutlet,
+  TitleCasePipe,
+} from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { TimePipe } from '../../../core/pipes/time/time.pipe';
@@ -29,6 +32,8 @@ import { map } from 'rxjs/operators';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { WorkTimeViewModel } from '../../interfaces/work-time.view-model';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { WorkTimeDialogService } from '../../../core/services/dialog.service';
+import { WorkTimeService } from '../../../core/services/work-time.service';
 
 @Component({
   selector: 'tt-work-time-table',
@@ -48,8 +53,8 @@ import { toSignal } from '@angular/core/rxjs-interop';
     NgClass,
     NgTemplateOutlet,
     TimePipe,
-    TitleCasePipe
-],
+    TitleCasePipe,
+  ],
   providers: [
     {
       provide: MAT_PAGINATOR_DEFAULT_OPTIONS,
@@ -58,13 +63,13 @@ import { toSignal } from '@angular/core/rxjs-interop';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class WorkTimeTableComponent implements AfterViewInit {
+export class WorkTimeTableComponent {
   @ViewChild(MatTable)
   readonly table!: MatTable<WorkTimeViewModel>;
 
   private readonly breakpointObserver = inject(BreakpointObserver);
-
-  private dialogConfig?: MatDialogConfig;
+  private readonly workTimeDialogService = inject(WorkTimeDialogService);
+  private readonly workTimeService = inject(WorkTimeService);
 
   isSmall = toSignal(
     this.breakpointObserver
@@ -81,83 +86,41 @@ export class WorkTimeTableComponent implements AfterViewInit {
 
   private readonly pageSizeKey = 'pageSize';
 
-  private readonly defaultPageSize = localStorage.getItem(this.pageSizeKey)
+  private readonly pageSize = localStorage.getItem(this.pageSizeKey)
     ? Number(localStorage.getItem(this.pageSizeKey))
     : this.pageSizeOptions[0];
 
+  private readonly pageEventSubject = new Subject<PageEvent>();
+
+  readonly pageSize$: Observable<number> = this.pageEventSubject.pipe(
+    map(({ pageSize }) => pageSize),
+    tap((pageSize) => this.savePageSize(pageSize)),
+    startWith(this.pageSize),
+  );
+
   readonly dataSource = new WorkTimeDataSource({
-    pageSize: this.defaultPageSize,
+    pageSize: this.pageSize,
     pageIndex: 0,
     length: 0,
   });
 
-  readonly length$ = this.dataSource.count$();
-
-  private readonly pageEventSubject = new Subject<PageEvent>();
-
-  readonly pageSize$: Observable<number> = this.pageEventSubject
-    .asObservable()
-    .pipe(
-      map(({ pageSize }) => pageSize),
-      tap((pageSize) => this.savePageSize(pageSize)),
-      startWith(this.defaultPageSize),
-    );
-  private readonly dialog = inject(MatDialog);
-
-  ngAfterViewInit(): void {
-    this.breakpointObserver
-      .observe(Breakpoints.Handset)
-      .pipe(
-        map((breakpoint) => breakpoint.matches),
-        map((isHandset) =>
-          isHandset
-            ? {
-                width: '95vw',
-                maxWidth: '95vw',
-                panelClass: 'mat-dialog-mobile',
-              }
-            : {},
-        ),
-      )
-      .subscribe((config) => {
-        this.dialogConfig = config;
-      });
-  }
+  readonly length$ = this.workTimeService.count$();
 
   addRow() {
-    this.openDialog().subscribe((workTime) =>
-      this.dataSource.addData(<WorkTime>workTime),
-    );
+    this.workTimeDialogService.openDialog().subscribe();
   }
 
   editRow(workTime: WorkTime) {
-    this.openDialog(workTime).subscribe((workTime) =>
-      this.dataSource.updateData(<WorkTime>workTime),
-    );
+    this.workTimeDialogService.openDialog(workTime).subscribe();
   }
 
-  deleteRow(workTime: WorkTime) {
-    this.dataSource.removeData(workTime.id);
+  async deleteRow(workTime: WorkTime) {
+    await this.workTimeService.delete(workTime.id);
   }
 
   changePage(pageEvent: PageEvent) {
     this.pageEventSubject.next(pageEvent);
     this.dataSource.changePage(pageEvent);
-  }
-
-  private openDialog(workTime?: WorkTime) {
-    const dialogRef = this.dialog.open<
-      WorkTimeFormComponent,
-      WorkTime,
-      WorkTime
-    >(WorkTimeFormComponent, {
-      data: workTime,
-      ...this.dialogConfig,
-    });
-    return dialogRef.afterClosed().pipe(
-      first(),
-      filter((value) => value != null),
-    );
   }
 
   private savePageSize(pageSize: number) {

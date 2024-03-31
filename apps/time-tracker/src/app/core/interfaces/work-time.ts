@@ -7,7 +7,7 @@ export interface WorkTimePartial extends Base {
   end: Time;
   pause: Time;
   type: WorkType;
-  notes?: string | undefined;
+  notes?: string;
 }
 
 export type WorkTime = Required<WorkTimePartial>;

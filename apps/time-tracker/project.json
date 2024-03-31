@@ -97,7 +97,7 @@
           "git branch gh-pages",
           "git checkout gh-pages",
           "nx build --prod --output-path docs --base-href=/time-tracker/",
-          "zx ./tools/scripts/build-gh-pages.mjs",
+          "zx ./tools/scripts/generate-gh-html.mjs",
           "git add .",
           "git commit -m \"deploy new version\"",
           "git push --set-upstream origin gh-pages --force"
