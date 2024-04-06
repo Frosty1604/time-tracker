@@ -48,8 +48,8 @@
           matSuffix
           [for]="picker"
           matTooltip="Open date picker"
-        ></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
+        />
+        <mat-datepicker #picker />
         <mat-hint>DD.MM.YYYY</mat-hint>
         @if (date.invalid && (date.dirty || date.touched)) {
           <ng-container ngProjectAs="mat-error">

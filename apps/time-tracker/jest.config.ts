@@ -2,6 +2,7 @@
 export default {
   displayName: 'time-tracker',
   preset: '../../jest.preset.js',
+  setupFiles: ['fake-indexeddb/auto'],
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   globals: {},
   coverageDirectory: '../../coverage/apps/time-tracker',

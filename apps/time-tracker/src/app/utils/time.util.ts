@@ -1,10 +1,11 @@
 import { Time } from '@angular/common';
 import {
+  Duration,
   intervalToDuration,
   lightFormat,
-  minutesInHour,
   minutesToHours,
 } from 'date-fns';
+import { minutesInHour } from 'date-fns/constants';
 
 export function timeToDate(time: Time) {
   return new Date(0, 0, 0, time.hours, time.minutes);
@@ -48,7 +49,7 @@ export function timeToMinutes(time: Time): number {
 
 export function calculateWorkDuration(
   start: Time | string,
-  end: Time | string
+  end: Time | string,
 ): Time {
   if (typeof start === 'string') {
     start = stringToTime(start);

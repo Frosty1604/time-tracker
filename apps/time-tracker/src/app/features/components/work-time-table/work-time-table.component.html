@@ -100,8 +100,8 @@
     <tr *matRowDef="let row; columns: displayedColumns()" mat-row></tr>
   </table>
   <mat-paginator
-    [length]="length$ | async"
-    [pageSize]="pageSize$ | async"
+    [length]="length()"
+    [pageSize]="pageSize()"
     [pageSizeOptions]="pageSizeOptions"
     (page)="changePage($event)"
     aria-label="Select page"

@@ -40,6 +40,14 @@ $scrollbar-size: 6px;
   background: #424242;
 }
 
+// Light specific theming
+@media (prefers-color-scheme: light) {
+  .mat-mdc-standard-chip:not(.mdc-evolution-chip--disabled)
+    .mdc-evolution-chip__text-label {
+    --mdc-chip-label-text-color: #ffffff;
+  }
+}
+
 // Dark specific theming
 @media (prefers-color-scheme: dark) {
   // Angular calendar

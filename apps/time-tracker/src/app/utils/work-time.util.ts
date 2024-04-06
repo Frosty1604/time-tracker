@@ -9,11 +9,11 @@ import {
   differenceInMinutes,
   formatDuration,
   hoursToMinutes,
-  minutesInHour,
   minutesToHours,
 } from 'date-fns';
 import { WorkTime } from '../core/interfaces/work-time';
 import { Settings } from '../core/interfaces/settings';
+import { minutesInHour } from 'date-fns/constants';
 
 export const weekDays = [
   'monday',

@@ -1,9 +1,9 @@
-@if (data$ | async; as data) {
+@if (tileDetails(); as data) {
   <div
     class="relative block rounded-xl px-4 py-6 shadow-xl"
     [ngClass]="data.colors ?? defaultBackground"
     [matTooltip]="data.tooltip ?? ''"
-    >
+  >
     <div class="text-white flex justify-between items-center gap-4">
       <div class="whitespace-nowrap">
         <label class="text-gray-200">

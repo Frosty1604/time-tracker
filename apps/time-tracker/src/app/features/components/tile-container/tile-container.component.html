@@ -1,7 +1,16 @@
-@if (hasEntries$ | async) {
+@if (state() && state()?.hasEntries) {
   <div class="flex flex-row gap-5 mb-6 flex-wrap">
-    <tt-tile-details class="flex-1 min-w-fit" [data$]="tileOvertime$" />
-    <tt-tile-details class="flex-1 min-w-fit" [data$]="tileAverageWorkTime$" />
-    <tt-tile-details class="flex-1 min-w-fit" [data$]="tileVacationDays$" />
+    <tt-tile-details
+      class="flex-1 min-w-fit"
+      [tileDetails]="state()!.tileOvertime"
+    />
+    <tt-tile-details
+      class="flex-1 min-w-fit"
+      [tileDetails]="state()!.tileAverageWorkTime"
+    />
+    <tt-tile-details
+      class="flex-1 min-w-fit"
+      [tileDetails]="state()!.tileVacationDays"
+    />
   </div>
 }

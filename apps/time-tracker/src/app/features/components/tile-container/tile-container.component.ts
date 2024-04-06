@@ -16,6 +16,7 @@ import {
 import { shareReplay } from 'rxjs/operators';
 import { Tile } from '../../interfaces/tile';
 import { TileViewModel } from '../../interfaces/tile.view-model';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'tt-tile-container',
@@ -39,36 +40,38 @@ export class TileContainerComponent {
     shareReplay({ refCount: false, bufferSize: 1 }),
   );
 
-  readonly hasEntries$ = this.tileViewModel$.pipe(
+  private readonly hasEntries$ = this.tileViewModel$.pipe(
     map((data) => data.items.length > 0),
   );
-  readonly tileAverageWorkTime$: Observable<Tile> = this.tileViewModel$.pipe(
-    map(({ items }) => calculateAvgWorkTime(items)),
-    map((avgTime) => parseAvgWorkTime(avgTime)),
-    map((value) =>
-      this.makeTileDetails('Average Hours/Day', 'functions', value, [
-        `from-purple-500`,
-        `to-pink-500`,
-      ]),
-    ),
-  );
-
-  readonly tileVacationDays$: Observable<Tile> = this.tileViewModel$.pipe(
-    map(({ items, settings }) =>
-      calculateVacationDays(items, settings, this.previousYear),
-    ),
-    map(({ available, total, taken }) =>
-      this.makeTileDetails(
-        'Vacation left',
-        'beach_access',
-        `${available} Days`,
-        [`from-red-500`, `to-orange-500`],
-        taken + ' of ' + total + ' days taken',
+  private readonly tileAverageWorkTime$: Observable<Tile> =
+    this.tileViewModel$.pipe(
+      map(({ items }) => calculateAvgWorkTime(items)),
+      map((avgTime) => parseAvgWorkTime(avgTime)),
+      map((value) =>
+        this.makeTileDetails('Average Hours/Day', 'functions', value, [
+          `from-purple-500`,
+          `to-pink-500`,
+        ]),
       ),
-    ),
-  );
+    );
 
-  readonly tileOvertime$: Observable<Tile> = this.tileViewModel$.pipe(
+  private readonly tileVacationDays$: Observable<Tile> =
+    this.tileViewModel$.pipe(
+      map(({ items, settings }) =>
+        calculateVacationDays(items, settings, this.previousYear),
+      ),
+      map(({ available, total, taken }) =>
+        this.makeTileDetails(
+          'Vacation left',
+          'beach_access',
+          `${available} Days`,
+          [`from-red-500`, `to-orange-500`],
+          taken + ' of ' + total + ' days taken',
+        ),
+      ),
+    );
+
+  private readonly tileOvertime$: Observable<Tile> = this.tileViewModel$.pipe(
     map(({ items, settings }) => calculateOvertime(items, settings)),
     map((overTimeInMinutes) => parseOvertime(overTimeInMinutes)),
     map((overtime) =>
@@ -79,6 +82,15 @@ export class TileContainerComponent {
         ['from-blue-500', 'to-teal-500'],
       ),
     ),
+  );
+
+  readonly state = toSignal(
+    combineLatest({
+      hasEntries: this.hasEntries$,
+      tileOvertime: this.tileOvertime$,
+      tileAverageWorkTime: this.tileAverageWorkTime$,
+      tileVacationDays: this.tileVacationDays$,
+    }),
   );
 
   private makeTileDetails(
