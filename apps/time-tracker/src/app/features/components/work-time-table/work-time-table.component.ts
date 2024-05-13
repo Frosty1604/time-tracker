@@ -4,10 +4,9 @@ import {
   computed,
   inject,
   Signal,
-  ViewChild,
+  viewChild,
 } from '@angular/core';
 import { MatTable, MatTableModule } from '@angular/material/table';
-import { Observable, startWith, Subject, tap } from 'rxjs';
 import { WorkTime } from '../../../core/interfaces/work-time';
 import { WorkTimeDataSource } from './work-time-datasource';
 import {
@@ -34,6 +33,7 @@ import { WorkTimeViewModel } from '../../interfaces/work-time.view-model';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { WorkTimeDialogService } from '../../../core/services/dialog.service';
 import { WorkTimeService } from '../../../core/services/work-time.service';
+import { PaginatorService } from '../../../apps/time-tracker/src/app/core/services/paginator.service';
 
 @Component({
   selector: 'tt-work-time-table',
@@ -60,51 +60,44 @@ import { WorkTimeService } from '../../../core/services/work-time.service';
       provide: MAT_PAGINATOR_DEFAULT_OPTIONS,
       useValue: { formFieldAppearance: 'outline' },
     },
+    PaginatorService,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WorkTimeTableComponent {
-  @ViewChild(MatTable)
-  readonly table!: MatTable<WorkTimeViewModel>;
-
   private readonly breakpointObserver = inject(BreakpointObserver);
   private readonly workTimeDialogService = inject(WorkTimeDialogService);
   private readonly workTimeService = inject(WorkTimeService);
+  private readonly paginatorService = inject(PaginatorService);
 
-  isSmall = toSignal(
+  readonly table = viewChild.required(MatTable<WorkTimeViewModel>);
+
+  readonly isSmall = toSignal(
     this.breakpointObserver
       .observe(Breakpoints.Handset)
       .pipe(map((breakpoint) => breakpoint.matches)),
   );
-  displayedColumns: Signal<string[]> = computed(() =>
+  readonly displayedColumns: Signal<string[]> = computed(() =>
     this.isSmall()
       ? ['date', 'start', 'end', 'pause', 'type', 'actions']
       : ['date', 'start', 'end', 'pause', 'worked', 'type', 'notes', 'actions'],
   );
 
-  readonly pageSizeOptions = [5, 10, 30, 60, 100] as const;
+  readonly pageSizeOptions = this.paginatorService.pageSizeOptions;
 
-  private readonly pageSizeKey = 'pageSize';
+  readonly pageSize = toSignal(this.paginatorService.pageSize$, {
+    initialValue: this.paginatorService.pageSizeInitial,
+  });
 
-  private readonly pageSize = localStorage.getItem(this.pageSizeKey)
-    ? Number(localStorage.getItem(this.pageSizeKey))
-    : this.pageSizeOptions[0];
-
-  private readonly pageEventSubject = new Subject<PageEvent>();
-
-  readonly pageSize$: Observable<number> = this.pageEventSubject.pipe(
-    map(({ pageSize }) => pageSize),
-    tap((pageSize) => this.savePageSize(pageSize)),
-    startWith(this.pageSize),
-  );
+  readonly length = toSignal(this.workTimeService.count$(), {
+    initialValue: 0,
+  });
 
   readonly dataSource = new WorkTimeDataSource({
-    pageSize: this.pageSize,
+    pageSize: this.paginatorService.pageSizeInitial,
     pageIndex: 0,
     length: 0,
   });
-
-  readonly length$ = this.workTimeService.count$();
 
   addRow() {
     this.workTimeDialogService.openDialog().subscribe();
@@ -119,11 +112,7 @@ export class WorkTimeTableComponent {
   }
 
   changePage(pageEvent: PageEvent) {
-    this.pageEventSubject.next(pageEvent);
     this.dataSource.changePage(pageEvent);
-  }
-
-  private savePageSize(pageSize: number) {
-    localStorage.setItem(this.pageSizeKey, pageSize.toString());
+    this.paginatorService.changePage(pageEvent);
   }
 }

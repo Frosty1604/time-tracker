@@ -1,5 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { Observable } from 'rxjs';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { AsyncPipe, NgClass } from '@angular/common';
@@ -14,8 +13,7 @@ import { Tile } from '../../interfaces/tile';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TileDetailsComponent {
-  @Input({ required: true })
-  data$!: Observable<Tile>;
+  tileDetails = input.required<Tile>();
 
   readonly defaultBackground = ['bg-white', 'dark:bg-neutral-700'];
 }

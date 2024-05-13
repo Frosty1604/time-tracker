@@ -1,9 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import {
-  MAT_DIALOG_DATA,
-  MatDialogRef,
-} from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {
   WorkTime,
   WorkTimePartial,
@@ -21,6 +18,10 @@ import { SettingsService } from '../../../core/services/settings.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WorkTimeFormComponent {
+  private readonly workTimeService = inject(WorkTimeService);
+  private readonly dialogRef = inject(MatDialogRef<WorkTimeFormComponent>);
+  private readonly settings = inject(SettingsService).get();
+
   readonly typeOptions: ReadonlyArray<WorkType> = workTypes;
 
   private readonly data = inject<WorkTimePartial>(MAT_DIALOG_DATA, {
@@ -28,8 +29,6 @@ export class WorkTimeFormComponent {
   });
 
   readonly isEditMode = this.data != null;
-
-  private readonly settings = inject(SettingsService).get();
 
   readonly formGroup = new FormGroup({
     date: new FormControl(this.data?.date ?? new Date(), {
@@ -40,13 +39,13 @@ export class WorkTimeFormComponent {
       this.data?.start
         ? timeToString(this.data.start)
         : this.settings.defaultTimes.start,
-      { validators: Validators.required, nonNullable: true }
+      { validators: Validators.required, nonNullable: true },
     ),
     end: new FormControl(
       this.data?.end
         ? timeToString(this.data.end)
         : this.settings.defaultTimes.end,
-      { validators: Validators.required, nonNullable: true }
+      { validators: Validators.required, nonNullable: true },
     ),
     pause: new FormControl(
       this.data?.pause
@@ -55,7 +54,7 @@ export class WorkTimeFormComponent {
       {
         validators: Validators.required,
         nonNullable: true,
-      }
+      },
     ),
     type: new FormControl<WorkType>(this.data?.type ?? 'normal', {
       validators: Validators.required,
@@ -66,12 +65,8 @@ export class WorkTimeFormComponent {
 
   readonly isFormInvalid$ = this.formGroup.statusChanges.pipe(
     map((status) => status !== 'VALID'),
-    distinctUntilChanged()
+    distinctUntilChanged(),
   );
-
-  private readonly workTimeService = inject(WorkTimeService);
-
-  private readonly dialogRef = inject(MatDialogRef<WorkTimeFormComponent>);
 
   get date() {
     return this.formGroup.controls.date;
