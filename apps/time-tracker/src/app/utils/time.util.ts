@@ -1,14 +1,16 @@
 import { Time } from '@angular/common';
 import {
   Duration,
+  hoursToMilliseconds,
   intervalToDuration,
   lightFormat,
   minutesToHours,
+  minutesToMilliseconds,
 } from 'date-fns';
 import { minutesInHour } from 'date-fns/constants';
 
-export function timeToDate(time: Time) {
-  return new Date(0, 0, 0, time.hours, time.minutes);
+export function timeToDate({ hours, minutes }: Time) {
+  return new Date(hoursToMilliseconds(hours) + minutesToMilliseconds(minutes));
 }
 
 export function durationToDate({
@@ -18,7 +20,15 @@ export function durationToDate({
   months = 0,
   years = 0,
 }: Duration) {
-  return new Date(years, months, days, hours, minutes);
+  const date = new Date(0);
+  date.setFullYear(
+    date.getFullYear() + years,
+    date.getMonth() + months,
+    date.getDate() + days,
+  );
+  date.setHours(date.getHours() + hours);
+  date.setMinutes(date.getMinutes() + minutes);
+  return date;
 }
 
 export function timeToString(time: Time) {

@@ -36,7 +36,7 @@ import { WorkTimeDialogService } from '../../core/services/dialog.service';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class OverviewComponent {
+export default class OverviewComponent {
   private readonly workTimeDialogService = inject(WorkTimeDialogService);
   private readonly workTimeService = inject(WorkTimeService);
 

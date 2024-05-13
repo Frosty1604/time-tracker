@@ -33,7 +33,7 @@ import { WorkTimeViewModel } from '../../interfaces/work-time.view-model';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { WorkTimeDialogService } from '../../../core/services/dialog.service';
 import { WorkTimeService } from '../../../core/services/work-time.service';
-import { PaginatorService } from '../../../apps/time-tracker/src/app/core/services/paginator.service';
+import { PaginatorService } from '../../../core/services/paginator.service';
 
 @Component({
   selector: 'tt-work-time-table',

@@ -52,10 +52,10 @@ export class WorkTimeDataSource extends DataSource<WorkTimeViewModel> {
     return {
       date: workTime.date,
       effectiveTime: intervalToDuration({
-        start: durationToDate(
+        start: timeToDate(workTime.pause),
+        end: durationToDate(
           calculateWorkDuration(workTime.start, workTime.end),
         ),
-        end: timeToDate(workTime.pause),
       }),
       startTime: workTime.start,
       endTime: workTime.end,

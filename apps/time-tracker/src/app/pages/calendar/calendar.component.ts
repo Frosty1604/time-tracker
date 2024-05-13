@@ -53,33 +53,33 @@ const workTypeColors: Record<WorkType, EventColor> = {
     CalendarWeekModule,
     MatButtonModule,
     MatButtonToggleModule,
-    MatIconModule
-],
+    MatIconModule,
+  ],
   templateUrl: './calendar.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CalendarComponent {
+export default class CalendarComponent {
   private workTimeService = inject(WorkTimeService);
   viewDate: Date = new Date();
   events$: Observable<CalendarEvent[]> = fromPromise(
-    this.workTimeService.find()
+    this.workTimeService.find(),
   ).pipe(
     map((workTimes) =>
       workTimes.map((workTime) => {
         return this.convertToEvent(workTime);
-      })
-    )
+      }),
+    ),
   );
 
   private convertToEvent(workTime: WorkTimePartial): CalendarEvent {
     return {
       start: addMinutes(
         addHours(startOfDay(workTime.date), workTime.start.hours),
-        workTime.start.minutes
+        workTime.start.minutes,
       ),
       end: addMinutes(
         addHours(startOfDay(workTime.date), workTime.end.hours),
-        workTime.end.minutes
+        workTime.end.minutes,
       ),
       title:
         workTime.type === 'normal' || workTime.type === 'remote'
@@ -87,7 +87,7 @@ export class CalendarComponent {
               calculateWorkDuration(workTime.start, workTime.end),
               {
                 format: ['hours', 'minutes'],
-              }
+              },
             )
           : workTime.type.toUpperCase(),
       allDay: workTime.type !== 'normal' && workTime.type !== 'remote',

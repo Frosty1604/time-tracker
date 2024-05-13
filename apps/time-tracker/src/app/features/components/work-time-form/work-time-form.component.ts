@@ -1,6 +1,18 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import {
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogActions,
+  MatDialogClose,
+  MatDialogContent,
+  MatDialogRef,
+  MatDialogTitle,
+} from '@angular/material/dialog';
 import {
   WorkTime,
   WorkTimePartial,
@@ -12,10 +24,53 @@ import { WorkTimeService } from '../../../core/services/work-time.service';
 import { distinctUntilChanged, map } from 'rxjs/operators';
 import { addDays, subDays } from 'date-fns';
 import { SettingsService } from '../../../core/services/settings.service';
+import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
+import { AsyncPipe, TitleCasePipe } from '@angular/common';
+import {
+  MatError,
+  MatFormField,
+  MatHint,
+  MatLabel,
+} from '@angular/material/form-field';
+import {
+  MatDatepicker,
+  MatDatepickerInput,
+  MatDatepickerToggle,
+} from '@angular/material/datepicker';
+import { MatIcon } from '@angular/material/icon';
+import { MatInput } from '@angular/material/input';
+import { MatButton, MatIconButton } from '@angular/material/button';
+import { MatTooltip } from '@angular/material/tooltip';
+import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 
 @Component({
   templateUrl: './work-time-form.component.html',
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    AsyncPipe,
+    CdkTextareaAutosize,
+    MatButton,
+    MatDatepicker,
+    MatDatepickerInput,
+    MatDatepickerToggle,
+    MatDialogActions,
+    MatDialogClose,
+    MatDialogContent,
+    MatDialogTitle,
+    MatError,
+    MatFormField,
+    MatHint,
+    MatIcon,
+    MatIconButton,
+    MatInput,
+    MatLabel,
+    MatRadioButton,
+    MatRadioGroup,
+    MatTooltip,
+    ReactiveFormsModule,
+    TitleCasePipe,
+  ],
 })
 export class WorkTimeFormComponent {
   private readonly workTimeService = inject(WorkTimeService);

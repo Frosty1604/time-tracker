@@ -18,10 +18,7 @@ import exportFromJSON from 'export-from-json';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { WorkTime, WorkTimePartial } from '../../core/interfaces/work-time';
-import {
-  MatSnackBar,
-  MatSnackBarModule,
-} from '@angular/material/snack-bar';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { map } from 'rxjs/operators';
 import { AsyncPipe } from '@angular/common';
 
@@ -33,16 +30,16 @@ interface ViewModel {
 @Component({
   standalone: true,
   imports: [
+    AsyncPipe,
     MatButtonModule,
     MatInputModule,
     MatIconModule,
     MatSnackBarModule,
-    AsyncPipe
-],
+  ],
   templateUrl: './backup.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BackupComponent {
+export default class BackupComponent {
   private readonly snackbarService = inject(MatSnackBar);
 
   private readonly workTimeService = inject(WorkTimeService);
@@ -54,17 +51,17 @@ export class BackupComponent {
   private readonly importSubject = new Subject<void>();
 
   private readonly fileName$: Observable<string> = this.fileSubject.pipe(
-    map((file) => file?.name ?? '')
+    map((file) => file?.name ?? ''),
   );
 
   private readonly disableImport$: Observable<boolean> = this.fileSubject.pipe(
     map((file) => file == null),
-    startWith(true)
+    startWith(true),
   );
 
   private readonly export$ = this.exportSubject.asObservable().pipe(
     switchMap(() => this.workTimeService.find()),
-    map((data) => this.export(data))
+    map((data) => this.export(data)),
   );
 
   private readonly import$ = zip([
@@ -79,20 +76,20 @@ export class BackupComponent {
           delete workTime.id;
           workTime.date = new Date(workTime.date);
           return this.workTimeService.insert(workTime);
-        })
-      )
+        }),
+      ),
     ),
     map((entries) => entries.length),
     tap((count) => {
       this.snackbarService.open(`Imported ${count} entries successfully`);
-    })
+    }),
   );
 
   readonly viewModel$: Observable<ViewModel> = merge(
     this.fileName$.pipe(map((fileName) => ({ fileName }))),
     this.disableImport$.pipe(map((disableImport) => ({ disableImport }))),
     this.export$.pipe(map(() => ({}))),
-    this.import$.pipe(map(() => ({ fileName: '', disableImport: true })))
+    this.import$.pipe(map(() => ({ fileName: '', disableImport: true }))),
   ).pipe(
     scan(
       (state: ViewModel, command: Partial<ViewModel>) => {
@@ -104,8 +101,8 @@ export class BackupComponent {
       {
         disableImport: true,
         fileName: '',
-      }
-    )
+      },
+    ),
   );
 
   exportData() {
