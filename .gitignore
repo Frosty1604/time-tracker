@@ -48,3 +48,4 @@ key.pem
 migrations.json
 
 .nx/cache
+.nx/workspace-data
