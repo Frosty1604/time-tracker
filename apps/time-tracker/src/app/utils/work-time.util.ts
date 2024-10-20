@@ -27,15 +27,19 @@ export const weekDays = [
 
 export function calculateAvgWorkTime(items: WorkTime[]) {
   const workingDays = items.filter(({ type }) => type === 'normal');
+  if (workingDays.length === 0) {
+    return 0;
+  }
   const workTimeSum = workingDays.reduce((prev, curr) => {
     const duration = calculateWorkDuration(curr.start, curr.end);
     return prev + hoursToMinutes(duration.hours ?? 0) + (duration.minutes ?? 0);
   }, 0);
+
   return workTimeSum / workingDays.length / minutesInHour;
 }
 
 export function parseAvgWorkTime(avgTime: number): string {
-  return avgTime.toPrecision(3) + ' hours';
+  return (avgTime !== 0 ? avgTime.toPrecision(3) : 0) + ' hours';
 }
 
 export function calculateVacationDays(
