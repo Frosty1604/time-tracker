@@ -10,7 +10,6 @@ import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideServiceWorker } from '@angular/service-worker';
-import { provideDateFnsAdapter } from '@angular/material-date-fns-adapter';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { de } from 'date-fns/locale';
 
@@ -22,7 +21,6 @@ void bootstrapApplication(AppComponent, {
   providers: [
     provideRouter(appRoutes),
     provideAnimations(),
-    provideDateFnsAdapter(),
     provideServiceWorker('ngsw-worker.js', {
       enabled: environment.production,
       // Register the ServiceWorker as soon as the application is stable

@@ -31,17 +31,19 @@ import {
   MatFormField,
   MatHint,
   MatLabel,
+  MatSuffix,
 } from '@angular/material/form-field';
 import {
   MatDatepicker,
   MatDatepickerInput,
   MatDatepickerToggle,
 } from '@angular/material/datepicker';
-import { MatIcon } from '@angular/material/icon';
 import { MatInput } from '@angular/material/input';
+import { MatIcon } from '@angular/material/icon';
 import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatTooltip } from '@angular/material/tooltip';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
+import { provideDateFnsAdapter } from '@angular/material-date-fns-adapter';
 
 @Component({
   templateUrl: './work-time-form.component.html',
@@ -67,10 +69,12 @@ import { CdkTextareaAutosize } from '@angular/cdk/text-field';
     MatLabel,
     MatRadioButton,
     MatRadioGroup,
+    MatSuffix,
     MatTooltip,
     ReactiveFormsModule,
     TitleCasePipe,
   ],
+  providers: [provideDateFnsAdapter()],
 })
 export class WorkTimeFormComponent {
   private readonly workTimeService = inject(WorkTimeService);
