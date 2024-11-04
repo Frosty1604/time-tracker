@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Settings } from '../interfaces/settings';
+import { defaultSettings, Settings } from '../interfaces/settings';
 import { startWith, Subject } from 'rxjs';
 
 @Injectable({
@@ -11,27 +11,11 @@ export class SettingsService {
   readonly settings$ = this.settingsChangedSubject
     .asObservable()
     .pipe(startWith(this.get()));
-  private readonly defaultSettings: Settings = {
-    defaultTimes: {
-      start: '09:00',
-      end: '17:30',
-      pause: '00:30',
-    },
-    previousYears: {
-      [new Date().getFullYear() - 1]: {
-        remainingOvertime: '00:00',
-        remainingVacationDays: 0,
-      },
-    },
-    vacationDaysPerYear: 24,
-    workDays: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'],
-    workTimePerDay: '08:00',
-  };
 
   get(): Settings {
     const settings = localStorage.getItem(this.key);
     if (!settings) {
-      return this.defaultSettings;
+      return defaultSettings;
     }
     return JSON.parse(settings);
   }

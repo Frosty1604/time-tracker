@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { JsonPipe, TitleCasePipe } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import {
   MAT_DIALOG_DATA,
   MatDialogModule,
@@ -13,9 +13,10 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { SettingsService } from '../../../core/services/settings.service';
-import { Settings } from '../../../core/interfaces/settings';
+import { defaultSettings, Settings } from '../../../core/interfaces/settings';
 import { weekDays } from '../../../utils/work-time.util';
 import { coerceNumberProperty } from '@angular/cdk/coercion';
+import { stringToTime, timeToString } from '../../../utils/time.util';
 
 @Component({
   standalone: true,
@@ -48,11 +49,23 @@ export class SettingsFormComponent {
 
   readonly isEditMode = this.data != null;
 
-  readonly formGroup: FormGroup = this.fb.group({
-    start: [this.data?.defaultTimes.start ?? '08:30'],
-    end: [this.data?.defaultTimes.end ?? '17:15'],
-    pause: [this.data?.defaultTimes.pause ?? '00:45'],
-    workDays: this.fb.group({
+  readonly formGroup = this.fb.nonNullable.group({
+    start: [
+      timeToString(
+        this.data?.defaultTimes.start ?? defaultSettings.defaultTimes.start,
+      ),
+    ],
+    end: [
+      timeToString(
+        this.data?.defaultTimes.end ?? defaultSettings.defaultTimes.end,
+      ),
+    ],
+    pause: [
+      timeToString(
+        this.data?.defaultTimes.pause ?? defaultSettings.defaultTimes.pause,
+      ),
+    ],
+    workDays: this.fb.nonNullable.group({
       monday: [this.data?.workDays.includes('monday') ?? true],
       tuesday: [this.data?.workDays.includes('tuesday') ?? true],
       wednesday: [this.data?.workDays.includes('wednesday') ?? true],
@@ -61,17 +74,25 @@ export class SettingsFormComponent {
       saturday: [this.data?.workDays.includes('saturday') ?? false],
       sunday: [this.data?.workDays.includes('sunday') ?? false],
     }),
-    workTimePerDay: [this.data?.workTimePerDay ?? '08:00'],
+    workTimePerDay: [
+      timeToString(this.data?.workTimePerDay ?? defaultSettings.workTimePerDay),
+    ],
     vacationDaysPerYear: [this.data?.vacationDaysPerYear ?? 25],
     previousYear: this.fb.group({
       overtime: [
-        this.data?.previousYears?.[this.lastYear]?.remainingOvertime ?? '00:00',
+        timeToString(
+          this.data?.previousYears?.[this.lastYear]?.remainingOvertime ?? {
+            minutes: 0,
+            hours: 0,
+          },
+        ),
       ],
       vacationDays: [
         this.data?.previousYears?.[this.lastYear]?.remainingVacationDays ?? 0,
       ],
     }),
   });
+
   readonly previousYears: {
     year: number;
     vacationDays: number;
@@ -88,18 +109,18 @@ export class SettingsFormComponent {
     const formData = this.formGroup?.value;
 
     const settings: Settings = {
-      workTimePerDay: formData.workTimePerDay,
+      workTimePerDay: stringToTime(formData.workTimePerDay),
       defaultTimes: {
-        start: formData.start,
-        end: formData.end,
-        pause: formData.pause,
+        start: stringToTime(formData.start),
+        end: stringToTime(formData.end),
+        pause: stringToTime(formData.pause),
       },
-      workDays: weekDays.filter((day) => formData.workDays[day]),
-      vacationDaysPerYear: formData.vacationDaysPerYear,
+      workDays: weekDays.filter((day) => !!formData?.workDays?.[day]),
+      vacationDaysPerYear: formData.vacationDaysPerYear!,
       previousYears: {
         [this.lastYear]: {
-          remainingOvertime: formData.previousYear.overtime,
-          remainingVacationDays: formData.previousYear.vacationDays,
+          remainingOvertime: stringToTime(formData?.previousYear?.overtime),
+          remainingVacationDays: formData.previousYear!.vacationDays!,
         },
       },
     };

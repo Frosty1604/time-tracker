@@ -9,12 +9,12 @@ import {
 } from 'rxjs';
 import { inject } from '@angular/core';
 import { WorkTimeService } from '../../../core/services/work-time.service';
-import { intervalToDuration } from 'date-fns';
 import {
-  calculateWorkDuration,
-  durationToDate,
-  timeToDate,
-} from '../../../utils/time.util';
+  hoursToMilliseconds,
+  intervalToDuration,
+  minutesToMilliseconds,
+  subMilliseconds,
+} from 'date-fns';
 import { WorkTimeViewModel } from '../../interfaces/work-time.view-model';
 import { PageEvent } from '@angular/material/paginator';
 import { map } from 'rxjs/operators';
@@ -52,13 +52,15 @@ export class WorkTimeDataSource extends DataSource<WorkTimeViewModel> {
     return {
       date: workTime.date,
       effectiveTime: intervalToDuration({
-        start: timeToDate(workTime.pause),
-        end: durationToDate(
-          calculateWorkDuration(workTime.start, workTime.end),
+        start: workTime.start,
+        end: subMilliseconds(
+          workTime.end,
+          hoursToMilliseconds(workTime.pause.hours) +
+            minutesToMilliseconds(workTime.pause.minutes),
         ),
       }),
-      startTime: workTime.start,
-      endTime: workTime.end,
+      startDate: workTime.start,
+      endDate: workTime.end,
       pauseTime: workTime.pause,
       type: workTime.type,
       isWorkDay: workTime.type === 'normal' || workTime.type === 'remote',

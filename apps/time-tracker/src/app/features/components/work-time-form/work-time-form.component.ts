@@ -19,7 +19,6 @@ import {
   WorkType,
   workTypes,
 } from '../../../core/interfaces/work-time';
-import { stringToTime, timeToString } from '../../../utils/time.util';
 import { WorkTimeService } from '../../../core/services/work-time.service';
 import { distinctUntilChanged, map } from 'rxjs/operators';
 import { addDays, subDays } from 'date-fns';
@@ -44,6 +43,7 @@ import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatTooltip } from '@angular/material/tooltip';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { provideDateFnsAdapter } from '@angular/material-date-fns-adapter';
+import { timeToDate } from '../../../utils/time.util';
 
 @Component({
   templateUrl: './work-time-form.component.html',
@@ -95,21 +95,19 @@ export class WorkTimeFormComponent {
       nonNullable: true,
     }),
     start: new FormControl(
-      this.data?.start
-        ? timeToString(this.data.start)
-        : this.settings.defaultTimes.start,
+      this.data?.start ??
+        timeToDate(this.settings.defaultTimes.start, new Date()),
       { validators: Validators.required, nonNullable: true },
     ),
     end: new FormControl(
-      this.data?.end
-        ? timeToString(this.data.end)
-        : this.settings.defaultTimes.end,
-      { validators: Validators.required, nonNullable: true },
+      this.data?.end ?? timeToDate(this.settings.defaultTimes.end, new Date()),
+      {
+        validators: Validators.required,
+        nonNullable: true,
+      },
     ),
     pause: new FormControl(
-      this.data?.pause
-        ? timeToString(this.data.pause)
-        : this.settings.defaultTimes.pause,
+      this.data?.pause ?? this.settings.defaultTimes.pause,
       {
         validators: Validators.required,
         nonNullable: true,
@@ -153,9 +151,9 @@ export class WorkTimeFormComponent {
 
   async submit() {
     const workTime: WorkTimePartial = {
-      start: stringToTime(this.start.value),
-      end: stringToTime(this.end.value),
-      pause: stringToTime(this.pause.value),
+      start: this.start.value,
+      end: this.end.value,
+      pause: this.pause.value,
       date: this.date.value,
       type: this.type.value,
       notes: this.notes.value ?? undefined,

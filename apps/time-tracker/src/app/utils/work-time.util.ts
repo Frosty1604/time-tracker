@@ -1,14 +1,9 @@
-import {
-  calculateWorkDuration,
-  durationToDate,
-  stringToTime,
-  timeToDate,
-  timeToMinutes,
-} from './time.util';
+import { durationToDate, timeToMinutes } from './time.util';
 import {
   differenceInMinutes,
   formatDuration,
   hoursToMinutes,
+  intervalToDuration,
   minutesToHours,
 } from 'date-fns';
 import { WorkTime } from '../core/interfaces/work-time';
@@ -31,7 +26,7 @@ export function calculateAvgWorkTime(items: WorkTime[]) {
     return 0;
   }
   const workTimeSum = workingDays.reduce((prev, curr) => {
-    const duration = calculateWorkDuration(curr.start, curr.end);
+    const duration = intervalToDuration({ start: curr.start, end: curr.end });
     return prev + hoursToMinutes(duration.hours ?? 0) + (duration.minutes ?? 0);
   }, 0);
 
@@ -73,12 +68,14 @@ export function calculateOvertime(
   settings: Settings | undefined,
   previousYear: number = new Date().getFullYear() - 1,
 ) {
-  let overtime = items
+  let overtimeInMinutes = items
     .filter(({ type }) => type === 'normal' || type === 'remote')
     .reduce((prev, curr) => {
       const realWorkTimeInMinutes = differenceInMinutes(
-        durationToDate(calculateWorkDuration(curr.start, curr.end)),
-        timeToDate(curr.pause),
+        durationToDate(
+          intervalToDuration({ start: curr.start, end: curr.end }),
+        ),
+        durationToDate(curr.pause),
       );
       let isWorkDay = true;
       if (settings?.workDays) {
@@ -96,17 +93,17 @@ export function calculateOvertime(
 
       let minutesPerDay = 8 * minutesInHour;
       if (settings?.workTimePerDay) {
-        const { hours, minutes } = stringToTime(settings.workTimePerDay);
+        const { hours, minutes } = settings.workTimePerDay;
         minutesPerDay = hours * minutesInHour + minutes;
       }
       return prev + realWorkTimeInMinutes - minutesPerDay;
     }, 0);
   if (settings?.previousYears?.[previousYear]) {
-    overtime += timeToMinutes(
-      stringToTime(settings?.previousYears?.[previousYear]?.remainingOvertime),
+    overtimeInMinutes += timeToMinutes(
+      settings?.previousYears?.[previousYear]?.remainingOvertime,
     );
   }
-  return overtime;
+  return overtimeInMinutes;
 }
 
 export function parseOvertime(overtime: Minutes) {

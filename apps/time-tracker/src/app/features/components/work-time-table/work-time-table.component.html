@@ -23,7 +23,7 @@
       <th *matHeaderCellDef mat-header-cell>Start</th>
       <td *matCellDef="let element" mat-cell>
         @if (element.isWorkDay) {
-          {{ element.startTime | time: 'short' }}
+          {{ element.startDate | date: 'HH:mm' }}
         } @else {
           -
         }
@@ -33,7 +33,7 @@
       <th *matHeaderCellDef mat-header-cell>End</th>
       <td *matCellDef="let element" mat-cell>
         @if (element.isWorkDay) {
-          {{ element.endTime | time: 'short' }}
+          {{ element.endDate | date: 'HH:mm' }}
         } @else {
           -
         }

@@ -1,4 +1,3 @@
-import { Time } from '@angular/common';
 import {
   Duration,
   hoursToMilliseconds,
@@ -7,9 +6,19 @@ import {
   minutesToHours,
   minutesToMilliseconds,
 } from 'date-fns';
-import { minutesInHour } from 'date-fns/constants';
+import {
+  millisecondsInHour,
+  millisecondsInMinute,
+  minutesInHour,
+} from 'date-fns/constants';
+import { Time } from '../core/interfaces/work-time';
 
-export function timeToDate({ hours, minutes }: Time) {
+export function timeToDate({ hours, minutes }: Time, baseDate?: Date) {
+  if (baseDate) {
+    baseDate.setHours(hours);
+    baseDate.setMinutes(minutes);
+    return baseDate;
+  }
   return new Date(hoursToMilliseconds(hours) + minutesToMilliseconds(minutes));
 }
 
@@ -20,22 +29,14 @@ export function durationToDate({
   months = 0,
   years = 0,
 }: Duration) {
-  const date = new Date(0);
-  date.setFullYear(
-    date.getFullYear() + years,
-    date.getMonth() + months,
-    date.getDate() + days,
-  );
-  date.setHours(date.getHours() + hours);
-  date.setMinutes(date.getMinutes() + minutes);
-  return date;
+  return new Date(years, months, days, hours, minutes);
 }
 
 export function timeToString(time: Time) {
   return lightFormat(timeToDate(time), 'HH:mm');
 }
 
-export function stringToTime(time: string): Time {
+export function stringToTime(time: string | undefined | null): Time {
   if (!time || time === '') {
     throw new Error();
   }
@@ -56,6 +57,9 @@ export function timeToMinutes(time: Time): number {
   }
   return time.minutes + time.hours * minutesInHour;
 }
+
+export const timeToMilliseconds = (time: Time): number =>
+  time.minutes * millisecondsInMinute + time.hours * millisecondsInHour;
 
 export function calculateWorkDuration(
   start: Time | string,

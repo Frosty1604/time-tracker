@@ -1,10 +1,12 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import {
+  catchError,
   exhaustMap,
   filter,
   forkJoin,
   merge,
   Observable,
+  of,
   scan,
   startWith,
   Subject,
@@ -21,6 +23,9 @@ import { WorkTime, WorkTimePartial } from '../../core/interfaces/work-time';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { map } from 'rxjs/operators';
 import { AsyncPipe } from '@angular/common';
+import { DBExport } from '../../core/interfaces/db-export';
+import { Settings } from '../../core/interfaces/settings';
+import { DB_VERSION } from '../../core/services/database.service';
 
 interface ViewModel {
   fileName: string;
@@ -61,7 +66,16 @@ export default class BackupComponent {
 
   private readonly export$ = this.exportSubject.asObservable().pipe(
     switchMap(() => this.workTimeService.find()),
-    map((data) => this.export(data)),
+    map((entries) => {
+      const settings = localStorage.getItem('settings')
+        ? JSON.parse(localStorage.getItem('settings')!)
+        : null;
+      this.export(entries, settings);
+    }),
+    catchError((error: Error) => {
+      console.error(error);
+      return of(null);
+    }),
   );
 
   private readonly import$ = zip([
@@ -92,12 +106,10 @@ export default class BackupComponent {
     this.import$.pipe(map(() => ({ fileName: '', disableImport: true }))),
   ).pipe(
     scan(
-      (state: ViewModel, command: Partial<ViewModel>) => {
-        return {
-          ...state,
-          ...command,
-        };
-      },
+      (state: ViewModel, command: Partial<ViewModel>) => ({
+        ...state,
+        ...command,
+      }),
       {
         disableImport: true,
         fileName: '',
@@ -120,9 +132,9 @@ export default class BackupComponent {
     }
   }
 
-  private export(data: WorkTime[]) {
+  private export(workTimeEntries: WorkTime[], settings?: Settings) {
     exportFromJSON({
-      data,
+      data: { workTimeEntries, settings, dbVersion: DB_VERSION } as DBExport,
       fileName: 'timetracker-db',
       exportType: 'json',
       fileNameFormatter: (name) => `${new Date().toLocaleDateString()}-${name}`,

@@ -1,10 +1,25 @@
 import { Base } from './base';
-import { Time } from '@angular/common';
 
-export interface WorkTimePartial extends Base {
+export interface Time {
+  hours: number;
+  minutes: number;
+}
+
+export interface OldWorkTimePartial extends Base {
   date: Date;
   start: Time;
   end: Time;
+  pause: Time;
+  type: WorkType;
+  notes?: string;
+}
+
+export type OldWorkTime = Required<OldWorkTimePartial>;
+
+export interface WorkTimePartial extends Base {
+  date: Date;
+  start: Date;
+  end: Date;
   pause: Time;
   type: WorkType;
   notes?: string;
